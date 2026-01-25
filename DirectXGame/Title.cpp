@@ -34,6 +34,7 @@ void Title::Update()
 			fade_->Start(Fade::Status::FadeOut, 1.0f);
 			finishedTitle_ = true;
 		}
+		/*
 		if (Input::GetInstance()->TriggerKey(DIK_T))
 		{
 			//Audio::GetInstance()->PlayWave(Botan_);
@@ -41,7 +42,7 @@ void Title::Update()
 			phase_ = Phase::kFadeOut;
 			fade_->Start(Fade::Status::FadeOut, 1.0f);
 			finishedTitle2_ = true;
-		}
+		}*/
 		break;
 	case Phase::kFadeIn:
 		// フェード
@@ -57,10 +58,10 @@ void Title::Update()
 		if (fade_->IsFinished()) 
 		{
 			finishedTitle_ = true;
-		} else 
+		} /* else 
 		{
 			finishedTitle2_ = true;
-		}
+		}*/
 		break;
 	}
 }

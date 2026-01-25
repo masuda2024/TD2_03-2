@@ -28,6 +28,11 @@ void Game::Initialize()
 	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 
+
+
+
+
+
 #pragma region スカイドーム
 
 	modelskydome_ = Model::CreateFromOBJ("SkyDome", true);
@@ -183,6 +188,7 @@ void Game::Update()
 
 
 
+	
 
 	
 
@@ -226,7 +232,7 @@ void Game::Update()
 		pointSprite_->SetSize({enemyHpRatio * 1280.0f, 30.0f}); // 幅200px、高さ20px
 		pointSprite_->SetPosition({0, 0});                 // 左上少し下に表示
 		
-
+		
 	}
 	
 
@@ -490,6 +496,8 @@ void Game::Draw()
 	Sprite::PreDraw();
 
 	pointSprite_->Draw();
+
+
 
 	Sprite::PostDraw();
 

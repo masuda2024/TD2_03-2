@@ -83,7 +83,10 @@ private:
 	// 得点テクスチャハンドル
 	uint32_t pointHandle_ = 0;
 	// スプライト
-	Sprite* pointSprite_ = nullptr;
+	KamataEngine::Sprite* pointSprite_ = nullptr;
+
+
+	
 
 
 

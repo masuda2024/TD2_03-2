@@ -15,10 +15,10 @@ public:
 	// 終了フラグ
 	bool finishedTitle_ = false;
 	bool IsFinishedT() const { return finishedTitle_; }
-
+	/*
 	bool finishedTitle2_ = false;
 	bool IsFinishedT2() const { return finishedTitle2_; }
-
+*/
 	void Initialize();
 	void Update();
 	void Draw();

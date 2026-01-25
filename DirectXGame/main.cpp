@@ -171,15 +171,15 @@ void ChangeScene()
 			//Audio::GetInstance()->StopWave(TvoiceHandle_);
 
 			// シーンの変更
-			scene = Scene::kGame;
+			scene = Scene::kTutorial;
 			// 新シーンの生成と初期化
-			gameScene = new Game();
-			gameScene->Initialize();
+			tutorial = new Tutorial();
+			tutorial->Initialize();
 
 			// ゲームシーンの音楽を再生
 			//GVoiceHandle_ = Audio::GetInstance()->PlayWave(gameHandle_, true);
 		}
-
+		/*
 		if (title->IsFinishedT2())
 		{
 
@@ -191,7 +191,7 @@ void ChangeScene()
 			// 新シーンの生成と初期化
 			tutorial = new Tutorial();
 			tutorial->Initialize();
-		}
+		}*/
 
 		break;
 	case Scene::kTutorial:
@@ -199,14 +199,14 @@ void ChangeScene()
 		{
 
 			// シーンの変更
-			scene = Scene::kTitle;
+			scene = Scene::kGame;
 			// 旧シーンの解放
 			delete tutorial;
 			tutorial = nullptr;
 			title = nullptr;
 			// 新シーンの生成と初期化
-			title = new Title();
-			title->Initialize();
+			gameScene = new Game();
+			gameScene->Initialize();
 		}
 		break;
 
