@@ -179,20 +179,7 @@ void ChangeScene()
 			// ゲームシーンの音楽を再生
 			//GVoiceHandle_ = Audio::GetInstance()->PlayWave(gameHandle_, true);
 		}
-		/*
-		if (title->IsFinishedT2())
-		{
-
-			// シーンの変更
-			scene = Scene::kTutorial;
-			// 旧シーンの解放
-			delete title;
-			title = nullptr;
-			// 新シーンの生成と初期化
-			tutorial = new Tutorial();
-			tutorial->Initialize();
-		}*/
-
+		
 		break;
 	case Scene::kTutorial:
 		if (tutorial->IsFinishedTU())

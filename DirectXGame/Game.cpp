@@ -32,6 +32,48 @@ void Game::Initialize()
 
 
 
+	numberGraphs[0] = TextureManager::Load("0.png");
+	numberSprites[0] = KamataEngine::Sprite::Create(numberGraphs[0], {0, 0});
+
+	numberGraphs[1] = TextureManager::Load("1.png");
+	numberSprites[1] = KamataEngine::Sprite::Create(numberGraphs[1], {0, 0});
+
+	numberGraphs[2] = TextureManager::Load("2.png");
+	numberSprites[2] = KamataEngine::Sprite::Create(numberGraphs[2], {0, 0});
+
+
+
+
+	
+	// 100の位のみを求めて代入
+	numberArray[0] = number / 100;
+	// 100の位以下の余りを求める
+	number %= 100;
+
+	// 10の位代入
+	numberArray[1] = number / 10;
+	// 100の位以下の余りを求める
+	number %= 10;
+
+	// 1の位代入
+	numberArray[2] = number;
+
+	// 数字
+	number = score;
+
+
+	for (int i = 0; i < 3; i++)
+	{
+        numberSprites[i]->SetPosition({10.0f + graphWidth * i, 10.0f});
+		int NA = numberGraphs[numberArray[i]];
+		numberSprites[i]->SetTextureHandle(NA);
+	}
+	
+
+	
+
+
+
 
 #pragma region スカイドーム
 
@@ -113,6 +155,8 @@ void Game::Initialize()
 		pos.y = static_cast<float>(rand() % mapHeight); // 0 ～ mapHeight-1
 
 		enemyTilePositions.push_back(pos);
+
+
 	}
     /*
 	    // 敵座標をマップチップ番号で指定
@@ -190,8 +234,6 @@ void Game::Update()
 
 	
 
-	
-
 
 
 
@@ -233,6 +275,7 @@ void Game::Update()
 		pointSprite_->SetPosition({0, 0});                 // 左上少し下に表示
 		
 		
+
 	}
 	
 
@@ -271,14 +314,14 @@ void Game::Update()
 			if (enemy->IsEnemyDead() == true)
 			{
 				
+				
+				score += 100;
 
 
 				std::vector<KamataEngine::Vector2> enemyTilePositions;
 
 				// 敵の座標を取得
 				const KamataEngine::Vector3 E_deathParticlesPosition = enemy->GetWorldPosition();
-
-
 
 
 
@@ -496,7 +539,12 @@ void Game::Draw()
 	Sprite::PreDraw();
 
 	pointSprite_->Draw();
-
+	for (int i = 0; i < 3; i++) 
+	{
+		int NA = numberGraphs[numberArray[i]];
+		numberSprites[i]->SetTextureHandle(NA);
+		numberSprites[i]->Draw();
+	}
 
 
 	Sprite::PostDraw();

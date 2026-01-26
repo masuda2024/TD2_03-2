@@ -194,6 +194,7 @@ void Enemy::OnCollition(const P_Bullet* playerBullet)
 	(void)playerBullet;
 	isenemyDead_=true;
 	point += 100;
+	
 }
 
 #pragma endregion

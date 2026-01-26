@@ -63,6 +63,8 @@ public:
 	bool IsEnemyDead() const { return isenemyDead_; }
 	bool IsEnemyDead2() const { return isenemyDead2_; }
 
+	
+
 private:
 	///////////////
 	// 敵左右移動//
@@ -104,7 +106,7 @@ private:
 	int maxHP_ = 10000;
 	int hp_ = maxHP_;
 
-
+	
 
 	int point = 0;
 };
