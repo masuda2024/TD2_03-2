@@ -29,7 +29,10 @@ void Game::Initialize()
 	worldTransform_.Initialize();
 
 
-
+	// マップチップフィールドの生成
+	mapChipField_ = new MapChipField;
+	// マップチップフィールドの初期化
+	mapChipField_->LoadMapchipCsv("Resources/blocks.csv");
 
 
 	numberGraphs[0] = TextureManager::Load("0.png");
@@ -99,8 +102,12 @@ void Game::Initialize()
 	player_ = new Player();
 
 	// プレイヤーの座標を指定
-	KamataEngine::Vector3 playerPosition = {0, 0, 0};
+	//Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(6, 30);
+	KamataEngine::Vector3 playerPosition = {0,0, 0};
 	player_->Initialize(modelPlayer_, &camera_, playerPosition);
+	player_->SetMapChipField(mapChipField_);
+
+
 
 	// プレイヤーの弾
 	for (int i = 0; i < 28; i++)
@@ -140,12 +147,12 @@ void Game::Initialize()
 
 	
 	// 初期化時に1回だけ
-	std::srand(static_cast<unsigned int>(std::time(nullptr)));
+	//std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
-	const int mapWidth = 50;
-	const int mapHeight = 20;
-	const int enemyCount = 7;
-
+	//const int mapWidth = 50;
+	//const int mapHeight = 20;
+	//const int enemyCount = 7;
+/*
 	std::vector<KamataEngine::Vector2> enemyTilePositions;
 
 	for (int i = 0; i < enemyCount; i++)
@@ -157,20 +164,20 @@ void Game::Initialize()
 		enemyTilePositions.push_back(pos);
 
 
-	}
-    /*
+	}*/
+    
 	    // 敵座標をマップチップ番号で指定
 	std::vector<KamataEngine::Vector2> enemyTilePositions = 
 	{
-	   
-	    {3,  5},
-	    {5,  10},
-	    {5, 5},
-        {2,  1},
-        {0,  7} 
 
-		
-	};*/
+	    {1, 0},
+	    {15, 11},
+		{25, 5},
+		{35, 8},
+		{45, 3},
+		{60, 10},
+        {75, 6 }
+	};
 
 
 
@@ -281,6 +288,8 @@ void Game::Update()
 
 #pragma endregion
 
+	// カメラコントロール
+	cameraController_->Update();
 	// デバッグカメラの更新
 	debugCamera_->Update();
 
@@ -400,6 +409,21 @@ void Game::Update()
 		break;
 	}
 
+
+	// ブロックの更新
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+			if (!worldTransformBlock)
+				continue;
+			// アフィン変換行列の作成
+			worldTransformBlock->matWorld_ = MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
+
+			// 定数バッファに転送する
+			worldTransformBlock->TransferMatrix();
+		}
+	}
+
+
 #ifdef _DEBUG
 	if (Input::GetInstance()->TriggerKey(DIK_0)) 
 	{
@@ -407,7 +431,7 @@ void Game::Update()
 	}
 
 #endif // _DEBUG
-
+	ChangePhase();
 	if (isDebugCameraActive_)
 	{
 		debugCamera_->Update();
@@ -416,6 +440,7 @@ void Game::Update()
 		camera_.TransferMatrix();
 	} else
 	{
+		camera_.TransferMatrix();
 		camera_.UpdateMatrix();
 	}
 }
@@ -551,15 +576,25 @@ void Game::Draw()
 
 	Model::PreDraw();
 
+
+
+
 skydome_->Draw();
 
 #pragma region プレイヤー
 
-	// 自キャラの描画 下記のフェーズのみ描画
+
+if (!player_->IsDead())
+{
+// 自キャラの描画 下記のフェーズのみ描画
 	if (phase_ == Phase::kPlay || phase_ == Phase::kFadeIn || phase_ == Phase::kEnemyDeath)
 	{
 		player_->Draw();
 	}
+}
+
+	
+
 	// パーティクル(プレイヤー)
 	if (phase_ == Phase::kDeath)
 	{
@@ -636,4 +671,15 @@ Game::~Game()
 
 	// デバッグカメラの解放
 	delete debugCamera_;
+
+	delete mapChipField_;
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) 
+	{
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) 
+		{
+			delete worldTransformBlock;
+		}
+	}
+	worldTransformBlocks_.clear();
+
 }

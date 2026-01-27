@@ -19,7 +19,7 @@ void CameraController::Update()
 	targetPosition_ = targetWorldTransform.translation_ + targetVelocity * kVelocityBias;
 
 	// 追従対象とオフセットと追従対象の速度からカメラの目標座標を計算
-	// targetPosition_ = targetWorldTransform.translation_ + targetOffset_ + targetVelocity * kVelocityBias;
+	//targetPosition_ = targetWorldTransform.translation_ + targetOffset_ + targetVelocity * kVelocityBias;
 
 	// 座標補間によりゆったり追従
 	camera_.translation_.x = Lerp(camera_.translation_.x, targetPosition_.x, kInterpolationRate);

@@ -42,7 +42,7 @@ public:
 
 	void ResetMapChipData();
 
-	void LoadMapChipCsv(const std::string& filePath);
+	void LoadMapchipCsv(const std::string& filePath);
 
 	// 1ブロックのサイズ
 	static inline const float kBlockWidth = 1.0f;

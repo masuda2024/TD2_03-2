@@ -50,7 +50,7 @@ Over* gameOver = nullptr;
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 {
 	// タイトルバー
-	KamataEngine::Initialize(L"TD2_03");
+	KamataEngine::Initialize(L"2368_回転道");
 	// ImGuiManagerインスタンスの取得
 	ImGuiManager* imguiManager = ImGuiManager::GetInstance();
 

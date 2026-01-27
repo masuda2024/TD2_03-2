@@ -4,6 +4,7 @@
 #include"P_Bullet.h"
 #include<list>
 
+class MapChipField;
 class Enemy;
 class Player
 {
@@ -80,6 +81,7 @@ public:
 	const KamataEngine::Vector3& GetRotation() const { return worldTransform_.rotation_; }
 
 
+	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
 
 
 	
@@ -139,6 +141,8 @@ private:
 	KamataEngine::Model* model_;
 
 	KamataEngine::Vector3 velocity_ = {};
+
+	MapChipField* mapChipField_ = nullptr;
 
 	int maxHP_ = 10;
 	int hp_ = maxHP_;
