@@ -106,13 +106,6 @@ public:
 
 #pragma endregion
 	
-	/*
-	void SetEnemy(bool enemy) { isEnemy_ = enemy; }
-	void SetEnemyPosition(const KamataEngine::Vector3& pos) { enemyPosition_ = pos; }
-	const KamataEngine::Vector3& GetGrabPosition() const { return enemyPosition_; }
-	
-	bool IsEnemy() const { return isEnemy_; }
-*/
 private:
 
 	// 攻撃のON/OFF
@@ -132,11 +125,9 @@ private:
 
 
 	float timer_ = 0.0f;
-	static inline const float kLifeTime = 3.0f;
+	static inline const float kLifeTime = 2.0f;
 	
-	//bool isEnemy_ = false;
-	//KamataEngine::Vector3 enemyPosition_;
-
+	
 
 	static inline const float kBlank = 0.1f;
 	MapChipField* mapChipField_ = nullptr;

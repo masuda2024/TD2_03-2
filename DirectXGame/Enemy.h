@@ -46,9 +46,7 @@ public:
 	void OnCollition(const P_Bullet* playerBullet);
 #pragma endregion
 
-	// 体力表示
-	int enemyHp;
-
+	
 	// 初期化
 	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, KamataEngine::Vector3& position);
 
@@ -59,38 +57,21 @@ public:
 	void Draw();
 
 	int E_GetHP() const { return point; }
-	int E_GetMaxHP() const { return maxHP_; }
+	int E_GetMaxHP() const { return maxP_; }
 	bool IsEnemyDead() const { return isenemyDead_; }
 	bool IsEnemyDead2() const { return isenemyDead2_; }
 
 	
 
 private:
-	///////////////
-	// 敵左右移動//
-	//////////////
-	enum class EnemyState 
-	{
-		IdleMove, // 上下に揺れる状態
-		MoveLeft, // 左へ移動
-		MoveRight // 右へ戻る
-	};
+	
 
-	EnemyState state_ = EnemyState::IdleMove;
-
-	// ランダムで行動するためのタイマー
+	// ラ/ンダムで行動するためのタイマー
 	float actionTimer_ = 0.0f;
 	float nextActionTime_ = 0.0f;
 	float setEnemy_ = 0.0f;
 
 	int respawnTimer = 120;
-
-
-
-	float startX_; // 初期位置X（戻るため）
-	//////////////////
-	// 敵左右移動終///
-	/////////////////
 
 	// ワールド変換データ
 	KamataEngine::WorldTransform worldTransform_;
@@ -103,10 +84,10 @@ private:
 
 	KamataEngine::Vector3 velocity_ = {};
 
-	int maxHP_ = 10000;
-	int hp_ = maxHP_;
+
+	int point = 0;
+	int maxP_ = 50000;
 
 	
 
-	int point = 0;
 };

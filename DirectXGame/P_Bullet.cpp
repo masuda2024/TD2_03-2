@@ -31,8 +31,6 @@ void P_Bullet::Initialize(KamataEngine::Model* model, Camera* camera, Player* pl
 
 	// ワールド変換データ初期化
 	worldTransform_.Initialize();
-
-	// Bulletvelocity_ = velocity;
 }
 
 void P_Bullet::Update() 
@@ -408,9 +406,6 @@ KamataEngine::Vector3 P_Bullet::GetWorldPosition()
 
 	return worldPos;
 }
-
-
-
 
 KamataEngine::Vector3 P_Bullet::CornerPosition(const KamataEngine::Vector3& center, Corner corner) 
 {

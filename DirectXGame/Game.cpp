@@ -14,6 +14,12 @@
 
 #include "Enemy.h"
 
+
+
+#include "imgui.h"
+
+
+
 using namespace KamataEngine;
 
 #pragma region
@@ -256,7 +262,7 @@ void Game::Update()
 
 
 
-	
+	ImGui::Text("Score %d", score);
 
 
 
@@ -293,13 +299,17 @@ void Game::Update()
 	{
 		enemy->Update();
 		// 敵HP
+		//float enemyHpRatio = (float)enemy->E_GetHP() / (float)enemy->E_GetMaxHP();
 		float enemyHpRatio = (float)enemy->E_GetHP() / (float)enemy->E_GetMaxHP();
 		enemyHpRatio = std::clamp(enemyHpRatio, 0.0f, 1.0f);
 		pointSprite_->SetSize({enemyHpRatio * 1280.0f, 30.0f}); // 幅200px、高さ20px
 		pointSprite_->SetPosition({0, 0});                 // 左上少し下に表示
-		
-		
 
+
+
+
+
+		
 	}
 	
 
@@ -337,12 +347,16 @@ void Game::Update()
 		}
 		for (Enemy* enemy : enemies_)
 		{
+
+
+
+
+
 			if (enemy->IsEnemyDead() == true)
 			{
 				
 				
-				score += 100;
-
+				
 
 				std::vector<KamataEngine::Vector2> enemyTilePositions;
 
@@ -428,8 +442,10 @@ void Game::Update()
 
 
 	// ブロックの更新
-	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) 
+	{
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
+		{
 			if (!worldTransformBlock)
 				continue;
 			// アフィン変換行列の作成
@@ -544,6 +560,7 @@ void Game::CheckAllCollisions()
 				// 自キャラの衝突時関数を呼び出す
 				bullet->OnCollition(enemy);
 				enemy->OnCollition(bullet);
+				
 			}
 		}
 	}
@@ -558,6 +575,7 @@ void Game::CheckAllCollisions()
 			{
 				enemy->OnCollition(bullet);
 				bullet->OnCollition(enemy);
+				
 			}
 		}
 	}
@@ -575,8 +593,6 @@ void Game::Draw()
 	//Model::PreDraw(dxCommon->GetCommandList());
 
 	
-
-
 
 	Sprite::PreDraw();
 
@@ -598,10 +614,6 @@ void Game::Draw()
 			modelBlock_->Draw(*worldTransformBlock, camera_);
 		}
 	}
-
-
-
-
 
 
 skydome_->Draw();

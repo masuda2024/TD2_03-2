@@ -27,21 +27,14 @@ void Enemy::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& posi
 	velocity_ = {-kWalkSpeed, 0, 0};
 
 	walkTimer_ = 0.0f;
-	enemyHp = 10000;
+	
 
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / -2.0f;
 
 	worldTransform_.Initialize();
 
 	
-	//敵左右移動
-	startX_ = position.x;
-
-	// 最初の「次の行動までの時間」を設定（2〜5秒）
-	nextActionTime_ = (rand() % 300) / 60.0f + 2.0f;
 	
-	//的のランダム配置
-	setEnemy_ = (rand() % 300) / 60.0f + 2.0f;
 	
 }
 
@@ -51,90 +44,9 @@ void Enemy::Update()
 	// 時間のカウンター
 	walkTimer_ += 5.0f / 60.0f; // フレームごとの時間増分
 
-	// 上下に揺れるように移動
-	//float amplitude = 20.0f; // 上下移動の幅（単位:座標）
-	//float speed = 0.1f;      // 速さ
+	
 
-	// Y方向にsinで移動
-	//worldTransform_.translation_.y = sin(walkTimer_ * speed) * amplitude;
-
-	/*
-#pragma region 敵の移動
-
-	// X,Y をいじるので一旦変数に出す
-	Vector3& pos = worldTransform_.translation_;
-	Vector3& rot = worldTransform_.rotation_;
-
-	// 状態ごとに処理を分ける
-	switch (state_) 
-	{
-
-	// ───────────────────────────────
-	// ① 上下に揺れる状態
-	// ───────────────────────────────
-	case EnemyState::IdleMove:
-		pos.y = sin(walkTimer_ * 0.1f) * 10.0f;
-		rot.x = sin(walkTimer_);
-
-		// ランダム行動タイマー
-		actionTimer_ += 1.0f / 60.0f;
-
-		// ランダム時間経過したら左移動へ
-		if (actionTimer_ >= nextActionTime_)
-		{
-			state_ = EnemyState::MoveLeft;
-			actionTimer_ = 0;
-			// 次の発生時間を再設定
-			nextActionTime_ = (rand() % 300) / 60.0f + 2.0f;
-		}
-
-		break;
-
-	// ───────────────────────────────
-	// ② 左に移動
-	// ───────────────────────────────
-	case EnemyState::MoveLeft:
-		pos.x -= 0.2f; // 左へ移動速度
-
-		if (pos.x <= startX_ - 15.0f)
-		{
-			// 100だけ左に行ったら右へ戻る
-			state_ = EnemyState::MoveRight;
-		}
-		break;
-
-	// ───────────────────────────────
-	// ③ 右に戻る
-	// ───────────────────────────────
-	case EnemyState::MoveRight:
-		pos.x += 0.2f;
-
-		if (pos.x >= startX_)
-		{ 
-			// 初期位置まで戻ったら Idle へ
-			pos.x = startX_;
-			state_ = EnemyState::IdleMove;
-		}
-		break;
-	}
-
-
-
-
-
-
-#pragma endregion
-	*/
-
-
-
-	if (enemyHp < 0) 
-	{
-		isenemyDead_ = true;
-	}
-
-
-	if (point >= 5000)
+	if (point >= maxP_)
 	{
 		isenemyDead2_ = true;
 	}
@@ -148,7 +60,7 @@ void Enemy::Draw()
 {
 	if (isenemyDead_)
 	{
-		/**/
+		
 		respawnTimer--;
 		if (respawnTimer <= 0)
 		{
@@ -192,8 +104,7 @@ AABB Enemy::GetAABB()
 void Enemy::OnCollition(const P_Bullet* playerBullet)
 {
 	(void)playerBullet;
-	isenemyDead_=true;
-	point += 100;
+	isenemyDead_=true;	
 	
 }
 
