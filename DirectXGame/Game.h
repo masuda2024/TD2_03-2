@@ -74,9 +74,15 @@ private:
 	// スプライト
 	KamataEngine::Sprite* sprite_ = nullptr;
 
+
+
+
+	//ブロック
+	KamataEngine::Model* modelBlock_;
 	// マップチップフィールド
 	MapChipField* mapChipField_;
-
+	
+	void GenerateBlocks();
 
 
 

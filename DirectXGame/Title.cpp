@@ -5,7 +5,10 @@ using namespace KamataEngine;
 
 void Title::Initialize()
 {
-	
+	textureHandle_ = TextureManager::Load("tdTitle.png");
+	titleSprite_ = KamataEngine::Sprite::Create(textureHandle_, {0, 0});
+
+
 	// カメラの初期化
 	camera_.Initialize();
 	// ワールド変換の初期化
@@ -34,15 +37,7 @@ void Title::Update()
 			fade_->Start(Fade::Status::FadeOut, 1.0f);
 			finishedTitle_ = true;
 		}
-		/*
-		if (Input::GetInstance()->TriggerKey(DIK_T))
-		{
-			//Audio::GetInstance()->PlayWave(Botan_);
-			// フェードアウト開始
-			phase_ = Phase::kFadeOut;
-			fade_->Start(Fade::Status::FadeOut, 1.0f);
-			finishedTitle2_ = true;
-		}*/
+		
 		break;
 	case Phase::kFadeIn:
 		// フェード
@@ -58,10 +53,7 @@ void Title::Update()
 		if (fade_->IsFinished()) 
 		{
 			finishedTitle_ = true;
-		} /* else 
-		{
-			finishedTitle2_ = true;
-		}*/
+		}
 		break;
 	}
 }
@@ -73,11 +65,11 @@ void Title::Draw()
 
 	
 
-	//Sprite::PreDraw();
+	Sprite::PreDraw();
 
-	//titleSprite_->Draw();
+	titleSprite_->Draw();
 
-	//Sprite::PostDraw();
+	Sprite::PostDraw();
 
 	// フェード
 	fade_->Draw();
@@ -89,5 +81,5 @@ Title::~Title()
 	//  フェード
 	delete fade_;
 	// タイトルのスプライト
-	//delete titleSprite_;
+	delete titleSprite_;
 }

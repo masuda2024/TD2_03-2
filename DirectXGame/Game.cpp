@@ -29,13 +29,24 @@ void Game::Initialize()
 	worldTransform_.Initialize();
 
 
+	//ブロック
+	modelBlock_ = Model::CreateFromOBJ("block");
 	// マップチップフィールドの生成
 	mapChipField_ = new MapChipField;
 	// マップチップフィールドの初期化
 	mapChipField_->LoadMapchipCsv("Resources/blocks.csv");
-
-
+	GenerateBlocks();
 	
+	
+
+
+
+
+
+
+
+
+
 
 
 
@@ -76,6 +87,7 @@ void Game::Initialize()
 	{
 		P_Bullet* bullet = new P_Bullet();
 		bullet->Initialize(modelPlayerBullet_, &camera_, player_);
+		bullet->SetMapChipField(mapChipField_);
 		bullets_.push_back(bullet);
 	}
 	// プレイヤーのデスパーティクル
@@ -193,6 +205,49 @@ void Game::Initialize()
 #pragma endregion
 
 }
+
+
+
+
+
+
+
+void Game::GenerateBlocks()
+{
+
+	// 要素数
+	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
+	uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
+
+	// 要素数を変更する
+	// 列数を設定
+	worldTransformBlocks_.resize(42);
+	for (uint32_t i = 0; i < 42; ++i) 
+	{
+		// 1列の要素数を設定
+		worldTransformBlocks_[i].resize(100);
+	}
+
+	// キューブの生成
+	for (uint32_t i = 0; i < numBlockVirtical; ++i)
+	{
+		for (uint32_t j = 0; j < numBlockHorizontal; ++j) 
+		{
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) 
+			{
+				WorldTransform* worldTransform = new WorldTransform();
+				worldTransform->Initialize();
+				worldTransformBlocks_[i][j] = worldTransform;
+				worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+			}
+		}
+	}
+}
+
+
+
+
+
 
 void Game::Update()
 {
@@ -531,6 +586,20 @@ void Game::Draw()
 	Sprite::PostDraw();
 
 	Model::PreDraw();
+
+
+		// ブロックの描画
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_)
+	{
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
+		{
+			if (!worldTransformBlock)
+				continue;
+			modelBlock_->Draw(*worldTransformBlock, camera_);
+		}
+	}
+
+
 
 
 

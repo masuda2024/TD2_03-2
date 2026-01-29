@@ -31,7 +31,7 @@ public:
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0;
 	// スプライト
-	//KamataEngine::Sprite* titleSprite_ = nullptr;
+	KamataEngine::Sprite* titleSprite_ = nullptr;
 
 	// 自キャラ
 	//Player* player_ = nullptr;

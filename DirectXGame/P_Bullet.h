@@ -6,9 +6,35 @@ class Enemy;
 
 class Player;
 
+
+class MapChipField;
+
 class P_Bullet
 {
+
+	enum Corner 
+	{
+		kRightBottom,
+		kLeftBottom,
+		kRightTop,
+		kLeftTop,
+
+		kNumCorner
+	};
+
 public:
+
+	struct CollisionMapInfo
+	{
+		bool ceiling = false;
+		bool landing = false;
+		bool hitLeftWall = false;
+		bool hitRightWall = false;
+		KamataEngine::Vector3 move;
+	};
+
+
+
 	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, Player* player);
 
 	void Update();
@@ -42,6 +68,7 @@ public:
 	// ワールド座標を取得
 	KamataEngine::Vector3 GetWorldPosition();
 
+	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
 
 
 
@@ -50,6 +77,23 @@ public:
 	float sinValue_ = 0.0f;
 	
 
+#pragma region 弾とブロックの衝突
+
+
+	// 弾の反射用
+
+	void CheckMapCollision(CollisionMapInfo& info);
+
+	void CheckMapCollisionUp(CollisionMapInfo& info);
+	void CheckMapCollisionDown(CollisionMapInfo& info);
+	void CheckMapCollisionRight(CollisionMapInfo& info);
+	void CheckMapCollisionLeft(CollisionMapInfo& info);
+
+	void CheckMapHit(CollisionMapInfo& info);
+
+	KamataEngine::Vector3 CornerPosition(const KamataEngine::Vector3& center, Corner corner);
+
+#pragma endregion
 
 
 
@@ -92,4 +136,9 @@ private:
 	
 	//bool isEnemy_ = false;
 	//KamataEngine::Vector3 enemyPosition_;
+
+
+	static inline const float kBlank = 0.1f;
+	MapChipField* mapChipField_ = nullptr;
+	
 };

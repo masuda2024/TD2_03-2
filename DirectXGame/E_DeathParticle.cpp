@@ -42,7 +42,8 @@ void E_DeathParticle::Initialize(KamataEngine::Model* model, KamataEngine::Camer
 
 void E_DeathParticle::Update()
 {
-	for (KamataEngine::WorldTransform& worldTransform : WorldTransforms_) {
+	for (KamataEngine::WorldTransform& worldTransform : WorldTransforms_) 
+	{
 		// アフィン変換行列
 		worldTransform.matWorld_ = MakeAffineMatrix(worldTransform.scale_, worldTransform.rotation_, worldTransform.translation_);
 		worldTransform.TransferMatrix(); // プレイヤーの座標の計算
