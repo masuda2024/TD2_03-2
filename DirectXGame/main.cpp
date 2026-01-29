@@ -86,6 +86,9 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 		// シーン切り替え
 		ChangeScene();
 
+
+
+
 		imguiManager->Begin();
 
 		// 現在シーン更新
