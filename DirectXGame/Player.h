@@ -9,6 +9,23 @@ class Enemy;
 class Player
 {
 public:
+
+
+
+	// 初期化
+	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, KamataEngine::Vector3& position);
+
+	// 更新
+	void Update();
+
+	// 描画
+	void Draw();
+
+
+
+
+
+
 	// デスフラグ
 	bool isDead_ = false;
 	// デスフラグのgetter
@@ -85,14 +102,7 @@ public:
 
 
 	
-	// 初期化
-	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, KamataEngine::Vector3& position);
-
-	// 更新
-	void Update();
-
-	// 描画
-	void Draw();
+	
 
 
 	#pragma region 回転
