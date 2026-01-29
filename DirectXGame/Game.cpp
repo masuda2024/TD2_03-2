@@ -35,44 +35,6 @@ void Game::Initialize()
 	mapChipField_->LoadMapchipCsv("Resources/blocks.csv");
 
 
-	numberGraphs[0] = TextureManager::Load("0.png");
-	numberSprites[0] = KamataEngine::Sprite::Create(numberGraphs[0], {0, 0});
-
-	numberGraphs[1] = TextureManager::Load("1.png");
-	numberSprites[1] = KamataEngine::Sprite::Create(numberGraphs[1], {0, 0});
-
-	numberGraphs[2] = TextureManager::Load("2.png");
-	numberSprites[2] = KamataEngine::Sprite::Create(numberGraphs[2], {0, 0});
-
-
-
-
-	
-	// 100の位のみを求めて代入
-	numberArray[0] = number / 100;
-	// 100の位以下の余りを求める
-	number %= 100;
-
-	// 10の位代入
-	numberArray[1] = number / 10;
-	// 100の位以下の余りを求める
-	number %= 10;
-
-	// 1の位代入
-	numberArray[2] = number;
-
-	// 数字
-	number = score;
-
-
-	for (int i = 0; i < 3; i++)
-	{
-        numberSprites[i]->SetPosition({10.0f + graphWidth * i, 10.0f});
-		int NA = numberGraphs[numberArray[i]];
-		numberSprites[i]->SetTextureHandle(NA);
-	}
-	
-
 	
 
 
@@ -564,13 +526,7 @@ void Game::Draw()
 	Sprite::PreDraw();
 
 	pointSprite_->Draw();
-	for (int i = 0; i < 3; i++) 
-	{
-		int NA = numberGraphs[numberArray[i]];
-		numberSprites[i]->SetTextureHandle(NA);
-		numberSprites[i]->Draw();
-	}
-
+	
 
 	Sprite::PostDraw();
 

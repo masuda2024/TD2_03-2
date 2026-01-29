@@ -89,24 +89,12 @@ private:
 
 
 
-	// 数字の画像10枚
-	int numberGraphs[10] = {0};
-	KamataEngine::Sprite* numberSprites[10] = {nullptr};
-	// 画像の横幅
-	const int graphWidth = 71;
-	// 数字の桁
-	int numberArray[3]{};
-	//int number = 0;
+	
 	// スコア
 	int score = 0;
 
 
 	
-	int number = score;
-
-
-
-
 
 
 
