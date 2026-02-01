@@ -12,6 +12,7 @@ public:
 	// デスフラグ
 	bool isenemyDead_ = false;
 	bool isenemyDead2_ = false;
+	bool iscollition = false;
 	// デスフラグのgetter
 	// bool IsEnemyDead() const { return isenemyDead_; }
 
@@ -60,7 +61,7 @@ public:
 	int E_GetMaxHP() const { return maxP_; }
 	bool IsEnemyDead() const { return isenemyDead_; }
 	bool IsEnemyDead2() const { return isenemyDead2_; }
-
+	bool E_Collition() const { return iscollition; }
 	
 
 private:

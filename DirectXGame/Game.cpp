@@ -49,14 +49,6 @@ void Game::Initialize()
 
 
 
-
-
-
-
-
-
-
-
 #pragma region スカイドーム
 
 	modelskydome_ = Model::CreateFromOBJ("SkyDome", true);
@@ -252,17 +244,13 @@ void Game::GenerateBlocks()
 
 
 
-
-
+bool wasColliding = false;
 
 void Game::Update()
 {
 	// フェード
 	fade_->Update();
 
-
-
-	ImGui::Text("Score %d", score);
 
 
 
@@ -294,7 +282,7 @@ void Game::Update()
 #pragma endregion
 
 #pragma region 敵
-
+	
 	for (Enemy* enemy : enemies_)
 	{
 		enemy->Update();
@@ -304,14 +292,38 @@ void Game::Update()
 		enemyHpRatio = std::clamp(enemyHpRatio, 0.0f, 1.0f);
 		pointSprite_->SetSize({enemyHpRatio * 1280.0f, 30.0f}); // 幅200px、高さ20px
 		pointSprite_->SetPosition({0, 0});                 // 左上少し下に表示
-
-
-
-
-
 		
+		
+		/*
+		if (enemy->E_Collition())
+		{
+			score += 100;
+		} else if (!enemy->E_Collition())
+		{
+			score += 0;
+		}*/
+
+		bool isColliding = enemy->E_Collition();
+
+		// false → true に変わった瞬間
+		if (isColliding && !wasColliding)
+		{
+			score += 100;
+		}
+
+		wasColliding = isColliding;
+
+
+
+		if (score >= 127000)
+		{
+			phase_ = Phase::kEnemyDeath;
+		}
+
 	}
 	
+	
+	ImGui::Text("Score %d", score);
 
 #pragma endregion
 
@@ -350,13 +362,14 @@ void Game::Update()
 
 
 
-
+			
 
 			if (enemy->IsEnemyDead() == true)
 			{
 				
-				
-				
+
+
+
 
 				std::vector<KamataEngine::Vector2> enemyTilePositions;
 
@@ -366,16 +379,13 @@ void Game::Update()
 
 
 
-				// 初期化時に1回だけ
-				std::srand(static_cast<unsigned int>(std::time(nullptr)));
-
-
 
 
 				// パーティクル
 				E_Particles_ = new E_DeathParticle();
 				E_Particles_->Initialize(model_E_Particle_, &camera_, E_deathParticlesPosition);
-			}
+			} 
+
 
 			if (enemy->IsEnemyDead2() == true)
 			{
@@ -384,6 +394,7 @@ void Game::Update()
 		}
 		
 		
+
 
 
 		break;
