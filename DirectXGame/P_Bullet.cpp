@@ -353,7 +353,11 @@ void P_Bullet::CheckMapHit(CollisionMapInfo& info)
 		velocity_.y = -std::abs(velocity_.y);
 	if (info.landing)
 		velocity_.y = std::abs(velocity_.y);
+
+	
+	
 }
+
 
 #pragma endregion 
 

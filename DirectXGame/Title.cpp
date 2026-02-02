@@ -7,6 +7,8 @@ void Title::Initialize()
 {
 	textureHandle_ = TextureManager::Load("tdTitle.png");
 	titleSprite_ = KamataEngine::Sprite::Create(textureHandle_, {0, 0});
+	
+	Botan_ = Audio::GetInstance()->LoadWave("Sounds/Decision2.mp3");
 
 
 	// カメラの初期化
@@ -31,7 +33,7 @@ void Title::Update()
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE))
 		{
 
-			//Audio::GetInstance()->PlayWave(Botan_);
+			Audio::GetInstance()->PlayWave(Botan_);
 			// フェードアウト開始
 			phase_ = Phase::kFadeOut;
 			fade_->Start(Fade::Status::FadeOut, 1.0f);

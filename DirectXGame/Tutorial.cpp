@@ -4,10 +4,10 @@ using namespace KamataEngine;
 void Tutorial::Initialize()
 {
 	// チュートリアルのスプライト
-	//textureHandle_ = TextureManager::Load("explanation.png");
-	//tutorialSprite_ = KamataEngine::Sprite::Create(textureHandle_, {0, 0});
+	t_Handle_ = TextureManager::Load("tdTutorial.png");
+	tutorialSprite_ = KamataEngine::Sprite::Create(t_Handle_, {0, 0});
 
-	//Botan_ = Audio::GetInstance()->LoadWave("Sounds/BossBotan.mp3");
+	Botan_ = Audio::GetInstance()->LoadWave("Sounds/Decision2.mp3");
 
 	// カメラの初期化
 	camera_.Initialize();
@@ -30,7 +30,7 @@ void Tutorial::Update()
 		// タイトルシーンの終了条件
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE))
 		{
-			//Audio::GetInstance()->PlayWave(Botan_);
+			Audio::GetInstance()->PlayWave(Botan_);
 			// フェードアウト開始
 			phase_ = Phase::kFadeOut;
 			fade_->Start(Fade::Status::FadeOut, 1.0f);
@@ -64,7 +64,7 @@ void Tutorial::Draw()
 
 	Sprite::PreDraw(dxCommon->GetCommandList());
 
-	//tutorialSprite_->Draw();
+	tutorialSprite_->Draw();
 
 	Sprite::PostDraw();
 
@@ -79,9 +79,6 @@ Tutorial::~Tutorial()
 		delete fade_;
 		fade_ = nullptr;
 	}
+	delete tutorialSprite_;
 	
-	//if (tutorialSprite_) 
-	//{
-	//	delete tutorialSprite_;
-	//}
 }

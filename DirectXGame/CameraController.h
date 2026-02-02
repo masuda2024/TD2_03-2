@@ -5,7 +5,8 @@ using namespace KamataEngine;
 using namespace MathUtility;
 
 class Player;
-class CameraController {
+class CameraController 
+{
 public:
 	void Initialize();
 
@@ -23,7 +24,8 @@ public:
 	const KamataEngine::Camera& GetViewProjection() const { return camera_; }
 
 	// 矩形
-	struct Rect {
+	struct Rect
+	{
 		float left = 0.0f;   // 左端
 		float right = 1.0f;  // 右端
 		float bottom = 0.0f; // 下端

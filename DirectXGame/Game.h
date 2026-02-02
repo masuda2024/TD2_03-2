@@ -99,7 +99,14 @@ private:
 	// スコア
 	
 	int score = 0;
-	
+	int MaxScore = 1000000;
+
+
+
+
+
+	int maxtime = 100000;
+	int time = maxtime;
 
 
 	// 天球
@@ -175,7 +182,7 @@ private:
 
 	// 全ての当たり判定
 	void CheckAllCollisions();
-
+	
 #pragma region フェーズ・フェード
 
 	// ゲームのフェーズ(型)

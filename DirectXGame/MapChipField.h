@@ -3,19 +3,23 @@
 
 enum class MapChipType { kBlank, kBlock };
 
-struct MapChipData {
+struct MapChipData 
+{
 
 	std::vector<std::vector<MapChipType>> data;
 };
 
-class MapChipField {
+class MapChipField 
+{
 public:
-	struct IndexSet {
+	struct IndexSet 
+	{
 		uint32_t xIndex;
 		uint32_t yIndex;
 	};
 
-	struct Rect {
+	struct Rect
+	{
 		float left;
 		float right;
 		float bottom;

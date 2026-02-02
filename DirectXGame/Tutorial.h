@@ -28,8 +28,7 @@ public:
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0;
 	// スプライト
-	//KamataEngine::Sprite* tutorialSprite_ = nullptr;
-
+	
 	// マップチップフィールド
 	//MapChipField* mapChipField_;
 
@@ -49,5 +48,9 @@ private:
 	// 現在のフェーズ
 	Phase phase_ = Phase::kFadeIn;
 
+	
+	uint32_t t_Handle_ = 0;
+	KamataEngine::Sprite* tutorialSprite_ = nullptr;
+	
 	uint32_t Botan_ = 0;
 };

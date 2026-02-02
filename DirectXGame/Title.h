@@ -15,10 +15,7 @@ public:
 	// 終了フラグ
 	bool finishedTitle_ = false;
 	bool IsFinishedT() const { return finishedTitle_; }
-	/*
-	bool finishedTitle2_ = false;
-	bool IsFinishedT2() const { return finishedTitle2_; }
-*/
+
 	void Initialize();
 	void Update();
 	void Draw();
@@ -33,9 +30,7 @@ public:
 	// スプライト
 	KamataEngine::Sprite* titleSprite_ = nullptr;
 
-	// 自キャラ
-	//Player* player_ = nullptr;
-
+	
 private:
 	
 	// カメラ
@@ -49,5 +44,5 @@ private:
 	// 現在のフェーズ
 	Phase phase_ = Phase::kFadeIn;
 
-	//uint32_t Botan_ = 0;
+	uint32_t Botan_ = 0;
 };

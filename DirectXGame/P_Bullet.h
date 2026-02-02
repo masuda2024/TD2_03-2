@@ -91,6 +91,7 @@ public:
 
 	void CheckMapHit(CollisionMapInfo& info);
 
+
 	KamataEngine::Vector3 CornerPosition(const KamataEngine::Vector3& center, Corner corner);
 
 #pragma endregion

@@ -45,10 +45,6 @@ void Game::Initialize()
 	
 	
 
-
-
-
-
 #pragma region スカイドーム
 
 	modelskydome_ = Model::CreateFromOBJ("SkyDome", true);
@@ -81,13 +77,14 @@ void Game::Initialize()
 
 
 	// プレイヤーの弾
-	for (int i = 0; i < 28; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		P_Bullet* bullet = new P_Bullet();
 		bullet->Initialize(modelPlayerBullet_, &camera_, player_);
 		bullet->SetMapChipField(mapChipField_);
 		bullets_.push_back(bullet);
 	}
+
 	// プレイヤーのデスパーティクル
 	P_Particles_ = new P_DeathParticle();
 	P_Particles_->Initialize(model_P_Particle_, &camera_, playerPosition);
@@ -106,42 +103,10 @@ void Game::Initialize()
 	
 	model_E_Particle_ = Model::CreateFromOBJ("E_deathParticle", true);
 
-	// 敵の生成
-	//enemy_ = new Enemy();
-	//KamataEngine::Vector3 enemyPosition = {35, 5, 0};
-	//enemy_->Initialize(modelEnemy_, &camera_, enemyPosition);
-
-	// 敵の座標
-	
-	    // 敵生成
-	
-	/**/
-
-	
-	// 初期化時に1回だけ
-	//std::srand(static_cast<unsigned int>(std::time(nullptr)));
-
-	//const int mapWidth = 50;
-	//const int mapHeight = 20;
-	//const int enemyCount = 7;
-/*
-	std::vector<KamataEngine::Vector2> enemyTilePositions;
-
-	for (int i = 0; i < enemyCount; i++)
-	{
-		KamataEngine::Vector2 pos;
-		pos.x = static_cast<float>(rand() % mapWidth);  // 0 ～ mapWidth-1
-		pos.y = static_cast<float>(rand() % mapHeight); // 0 ～ mapHeight-1
-
-		enemyTilePositions.push_back(pos);
-
-
-	}*/
     
 	    // 敵座標をマップチップ番号で指定
 	std::vector<KamataEngine::Vector2> enemyTilePositions = 
 	{
-
 	    {1, 0},
 	    {15, 11},
 		{25, 5},
@@ -150,12 +115,6 @@ void Game::Initialize()
 		{60, 10},
         {75, 6 }
 	};
-
-
-
-
-
-
 
 	// 敵座標をマップチップ番号で指定
 	for (const auto& tilePos : enemyTilePositions)
@@ -206,10 +165,6 @@ void Game::Initialize()
 
 
 
-
-
-
-
 void Game::GenerateBlocks()
 {
 
@@ -244,18 +199,16 @@ void Game::GenerateBlocks()
 
 
 
-bool wasColliding = false;
+
 
 void Game::Update()
 {
 	// フェード
 	fade_->Update();
 
+	time -= 100;
 
 
-
-
-	
 	// 天球の更新
 	skydome_->Update();
 #pragma region プレイヤー
@@ -288,38 +241,35 @@ void Game::Update()
 		enemy->Update();
 		// 敵HP
 		//float enemyHpRatio = (float)enemy->E_GetHP() / (float)enemy->E_GetMaxHP();
+		/*
 		float enemyHpRatio = (float)enemy->E_GetHP() / (float)enemy->E_GetMaxHP();
 		enemyHpRatio = std::clamp(enemyHpRatio, 0.0f, 1.0f);
 		pointSprite_->SetSize({enemyHpRatio * 1280.0f, 30.0f}); // 幅200px、高さ20px
 		pointSprite_->SetPosition({0, 0});                 // 左上少し下に表示
-		
-		
+		*/
 		/*
-		if (enemy->E_Collition())
+		float scoreRatio = (float)score / (float)MaxScore;
+		scoreRatio = std::clamp(scoreRatio, 0.0f, 1.0f);
+		pointSprite_->SetSize({scoreRatio * 1280.0f, 30.0f}); // 幅200px、高さ20px
+		pointSprite_->SetPosition({0, 0});           
+*/
+
+		float scoreRatio = (float)time / (float)maxtime;
+		scoreRatio = std::clamp(scoreRatio, 0.0f, 1.0f);
+		pointSprite_->SetSize({scoreRatio * 1280.0f, 30.0f}); // 幅200px、高さ20px
+		pointSprite_->SetPosition({0, 0});           
+
+		/*
+		if (score >= MaxScore)
 		{
-			score += 100;
-		} else if (!enemy->E_Collition())
-		{
-			score += 0;
+			phase_ = Phase::kEnemyDeath;
 		}*/
 
-		bool isColliding = enemy->E_Collition();
 
-		// false → true に変わった瞬間
-		if (isColliding && !wasColliding)
-		{
-			score += 100;
-		}
-
-		wasColliding = isColliding;
-
-
-
-		if (score >= 127000)
+		if (time <= 0)
 		{
 			phase_ = Phase::kEnemyDeath;
 		}
-
 	}
 	
 	
@@ -361,25 +311,12 @@ void Game::Update()
 		{
 
 
-
-			
-
 			if (enemy->IsEnemyDead() == true)
 			{
-				
-
-
-
-
 				std::vector<KamataEngine::Vector2> enemyTilePositions;
 
 				// 敵の座標を取得
 				const KamataEngine::Vector3 E_deathParticlesPosition = enemy->GetWorldPosition();
-
-
-
-
-
 
 				// パーティクル
 				E_Particles_ = new E_DeathParticle();
@@ -549,8 +486,6 @@ void Game::ChangePhase()
 
 void Game::CheckAllCollisions()
 {
-
-
 #pragma region プレイヤーの弾と敵
 	// 判定対象1と2の座標
 	AABB aabb1, aabb2;
@@ -572,7 +507,7 @@ void Game::CheckAllCollisions()
 				bullet->OnCollition(enemy);
 				enemy->OnCollition(bullet);
 				
-			}
+			} 
 		}
 	}
 	
@@ -586,25 +521,23 @@ void Game::CheckAllCollisions()
 			{
 				enemy->OnCollition(bullet);
 				bullet->OnCollition(enemy);
-				
+
+				score += 100;
 			}
 		}
 	}
 
 
 #pragma endregion
+	
 
 }
 
 
+
 void Game::Draw()
 {
-	//DirectXCommon* dxCommon = DirectXCommon::GetInstance();
-
-	//Model::PreDraw(dxCommon->GetCommandList());
-
 	
-
 	Sprite::PreDraw();
 
 	pointSprite_->Draw();

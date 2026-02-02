@@ -87,7 +87,8 @@ bool Fade::IsFinished() const
 		if (counter_ >= duration_)
 		{
 			return true;
-		} else {
+		} else 
+		{
 			return false;
 		}
 	}
