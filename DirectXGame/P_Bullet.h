@@ -48,6 +48,9 @@ public:
 	 // 有効かどうか
 	bool IsActive() const { return isActive_; }
 
+	//弾が反射したか
+	bool GetReflection() const { return reflection_; }
+	bool reflection_ = false;
 
 
 

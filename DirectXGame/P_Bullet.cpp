@@ -354,7 +354,7 @@ void P_Bullet::CheckMapHit(CollisionMapInfo& info)
 	if (info.landing)
 		velocity_.y = std::abs(velocity_.y);
 
-	
+	reflection_ = true;
 	
 }
 

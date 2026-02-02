@@ -53,6 +53,8 @@ public:
 	bool finishedGAME2_ = false;
 	bool IsFinishedGAME2() const { return finishedGAME2_; } ////ゲームクリア
 
+
+
 private:
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0;
@@ -91,20 +93,17 @@ private:
 	// スプライト
 	KamataEngine::Sprite* pointSprite_ = nullptr;
 
-
-
+	uint32_t timeHandle_ = 0;
+	KamataEngine::Sprite* timeSprite_ = nullptr;
 
 
 	
 	// スコア
-	
-	int score = 0;
 	int MaxScore = 1000000;
-
-
-
-
-
+	int score = 0;
+	
+	
+	//時間
 	int maxtime = 100000;
 	int time = maxtime;
 
@@ -191,7 +190,6 @@ private:
 		kFadeIn,       // フェードイン
 		kPlay,         // ゲームプレイ
 		kDeath,        // プレイヤーのデス演出
-		kBarrierDeath, // バリアのデス演出
 		kEnemyDeath,   // 敵のデス演出
 		kFadeOut,      // フェードアウト(オーバー)
 		kFadeOut2,     // フェードアウト(クリア)
@@ -208,5 +206,4 @@ private:
 #pragma endregion
 
 	
-
 };

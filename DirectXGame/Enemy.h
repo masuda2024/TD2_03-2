@@ -64,6 +64,7 @@ public:
 	bool E_Collition() const { return iscollition; }
 	
 
+
 private:
 	
 

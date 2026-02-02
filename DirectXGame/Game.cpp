@@ -45,6 +45,11 @@ void Game::Initialize()
 	
 	
 
+
+
+	
+
+	
 #pragma region スカイドーム
 
 	modelskydome_ = Model::CreateFromOBJ("SkyDome", true);
@@ -89,8 +94,14 @@ void Game::Initialize()
 	P_Particles_ = new P_DeathParticle();
 	P_Particles_->Initialize(model_P_Particle_, &camera_, playerPosition);
 
+
+
+	//得点
 	pointHandle_ = TextureManager::Load("Point.png");
 	pointSprite_ = KamataEngine::Sprite::Create(pointHandle_, {0, 0});
+	//時間
+	timeHandle_ = TextureManager::Load("Time.png");
+	timeSprite_ = KamataEngine::Sprite::Create(timeHandle_, {0, 0});
 
 
 #pragma endregion
@@ -206,7 +217,33 @@ void Game::Update()
 	// フェード
 	fade_->Update();
 
-	time -= 100;
+	time -= 50;
+
+	float timeRatio = (float)time / (float)maxtime;
+	timeRatio = std::clamp(timeRatio, 0.0f, 1.0f);
+	timeSprite_->SetSize({timeRatio * 1280.0f, 30.0f}); // 幅200px、高さ20px
+	timeSprite_->SetPosition({0, 0});           
+
+
+
+	float scoreRatio = (float)score / (float)MaxScore;
+	scoreRatio = std::clamp(scoreRatio, 0.0f, 1.0f);
+	pointSprite_->SetSize({scoreRatio * 1280.0f, 30.0f}); // 幅200px、高さ20px
+	pointSprite_->SetPosition({0, 30});           
+
+
+
+	
+	if (time <= 0) 
+	{
+		phase_ = Phase::kDeath;
+	}
+
+	if (score >= MaxScore)
+	{
+		phase_ = Phase::kEnemyDeath;
+	}
+
 
 
 	// 天球の更新
@@ -231,6 +268,10 @@ void Game::Update()
 	for (P_Bullet* bullet : bullets_) 
 	{
 		bullet->Update();
+		if (bullet->GetReflection())
+		{
+			score += 200;
+		}
 	}
 #pragma endregion
 
@@ -254,22 +295,8 @@ void Game::Update()
 		pointSprite_->SetPosition({0, 0});           
 */
 
-		float scoreRatio = (float)time / (float)maxtime;
-		scoreRatio = std::clamp(scoreRatio, 0.0f, 1.0f);
-		pointSprite_->SetSize({scoreRatio * 1280.0f, 30.0f}); // 幅200px、高さ20px
-		pointSprite_->SetPosition({0, 0});           
+		
 
-		/*
-		if (score >= MaxScore)
-		{
-			phase_ = Phase::kEnemyDeath;
-		}*/
-
-
-		if (time <= 0)
-		{
-			phase_ = Phase::kEnemyDeath;
-		}
 	}
 	
 	
@@ -350,6 +377,8 @@ void Game::Update()
 
 		break;
 
+		
+	
 	case Phase::kEnemyDeath:
 
 		// デスパーティクルの更新
@@ -540,8 +569,10 @@ void Game::Draw()
 	
 	Sprite::PreDraw();
 
-	pointSprite_->Draw();
+	timeSprite_->Draw();
 	
+	pointSprite_->Draw();
+
 
 	Sprite::PostDraw();
 
@@ -628,7 +659,7 @@ if (!player_->IsDead())
 Game::~Game()
 {
 	delete sprite_;
-
+	
 	delete player_;
 	for (P_Bullet* bullet : bullets_)
 	{
@@ -663,4 +694,8 @@ Game::~Game()
 	}
 	worldTransformBlocks_.clear();
 
+
+
+	delete timeSprite_;
+	delete pointSprite_;
 }

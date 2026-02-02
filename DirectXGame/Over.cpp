@@ -7,7 +7,7 @@ void Over::Initialize()
 	textureHandle_ = TextureManager::Load("gameover.png");
 	overSprite_ = Sprite::Create(textureHandle_, {0, 0});
 
-	//Botan_ = Audio::GetInstance()->LoadWave("Sounds/BossBotan.mp3");
+	Botan_ = Audio::GetInstance()->LoadWave("Sounds/Decision2.mp3");
 
 	// カメラの初期化
 	camera_.Initialize();
@@ -28,9 +28,9 @@ void Over::Update()
 	case Phase::kMain:
 
 		// タイトルシーンの終了条件
-		if (Input::GetInstance()->TriggerKey(DIK_E))
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE))
 		{
-			//Audio::GetInstance()->PlayWave(Botan_);
+			Audio::GetInstance()->PlayWave(Botan_);
 			// フェードアウト開始
 			phase_ = Phase::kFadeOut;
 			fade_->Start(Fade::Status::FadeOut, 1.0f);
