@@ -7,7 +7,7 @@ void Tutorial::Initialize()
 	t_Handle_ = TextureManager::Load("tdTutorial.png");
 	tutorialSprite_ = KamataEngine::Sprite::Create(t_Handle_, {0, 0});
 
-	Botan_ = Audio::GetInstance()->LoadWave("Sounds/Decision2.mp3");
+	Botan_ = Audio::GetInstance()->LoadWave("Sounds/sound/Decision2.mp3");
 
 	// カメラの初期化
 	camera_.Initialize();

@@ -102,6 +102,7 @@ private:
 	int MaxScore = 1000000;
 	int score = 0;
 	
+
 	
 	//時間
 	int maxtime = 100000;
@@ -205,5 +206,5 @@ private:
 	Fade* fade_ = nullptr;
 #pragma endregion
 
-	
+	uint32_t P_Shot_ = 0;
 };

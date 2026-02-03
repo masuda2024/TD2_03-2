@@ -45,7 +45,7 @@ void Game::Initialize()
 	
 	
 
-
+	P_Shot_ = Audio::GetInstance()->LoadWave("Sounds/sound/Shot.mp3");
 
 	
 
@@ -82,7 +82,7 @@ void Game::Initialize()
 
 
 	// プレイヤーの弾
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 7; i++)
 	{
 		P_Bullet* bullet = new P_Bullet();
 		bullet->Initialize(modelPlayerBullet_, &camera_, player_);
@@ -120,21 +120,14 @@ void Game::Initialize()
 	{
 	    {1, 0},
 	    {15, 11},
-		{25, 50},
+		{25, 5},
 		{35, 8},
 		{45, 30},
 		{60, 10},
         {75, 6 },
-
-
-		{5, 51},
+		{5, 17},
 	    {2, 25 },
-	    {27, 48 },
-	    {42, 34 },
-	    {64, 10},
-
-
-
+	    {27, 8 },
 	};
 
 	// 敵座標をマップチップ番号で指定
@@ -227,7 +220,7 @@ void Game::Update()
 	// フェード
 	fade_->Update();
 
-	time -= 50;
+	time -= 20;
 
 	float timeRatio = (float)time / (float)maxtime;
 	timeRatio = std::clamp(timeRatio, 0.0f, 1.0f);
@@ -265,6 +258,7 @@ void Game::Update()
 	
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) 
 	{
+		Audio::GetInstance()->PlayWave(P_Shot_);
 		for (P_Bullet* bullet : bullets_)
 		{
 			if (!bullet->IsActive()) 
@@ -278,11 +272,14 @@ void Game::Update()
 	for (P_Bullet* bullet : bullets_) 
 	{
 		bullet->Update();
-		if (bullet->GetReflection())
+		if (!bullet->GetReflection() && bullet->IsActive())
 		{
 			score += 200;
-		}
+		} 
+		ImGui::Text("Score x 2 %d", bullet->GetReflection());
 	}
+
+
 #pragma endregion
 
 #pragma region 敵
@@ -290,27 +287,10 @@ void Game::Update()
 	for (Enemy* enemy : enemies_)
 	{
 		enemy->Update();
-		// 敵HP
-		//float enemyHpRatio = (float)enemy->E_GetHP() / (float)enemy->E_GetMaxHP();
-		/*
-		float enemyHpRatio = (float)enemy->E_GetHP() / (float)enemy->E_GetMaxHP();
-		enemyHpRatio = std::clamp(enemyHpRatio, 0.0f, 1.0f);
-		pointSprite_->SetSize({enemyHpRatio * 1280.0f, 30.0f}); // 幅200px、高さ20px
-		pointSprite_->SetPosition({0, 0});                 // 左上少し下に表示
-		*/
-		/*
-		float scoreRatio = (float)score / (float)MaxScore;
-		scoreRatio = std::clamp(scoreRatio, 0.0f, 1.0f);
-		pointSprite_->SetSize({scoreRatio * 1280.0f, 30.0f}); // 幅200px、高さ20px
-		pointSprite_->SetPosition({0, 0});           
-*/
-
-		
-
 	}
 	
 	
-	//ImGui::Text("Score %d", score);
+	ImGui::Text("Score %d", score);
 
 #pragma endregion
 
@@ -561,7 +541,7 @@ void Game::CheckAllCollisions()
 				enemy->OnCollition(bullet);
 				bullet->OnCollition(enemy);
 
-				score += 100;
+				score += 150;
 			}
 		}
 	}

@@ -73,7 +73,7 @@ private:
 	float nextActionTime_ = 0.0f;
 	float setEnemy_ = 0.0f;
 
-	int respawnTimer = 120;
+	int respawnTimer = 80;
 
 	// ワールド変換データ
 	KamataEngine::WorldTransform worldTransform_;

@@ -46,6 +46,21 @@ Over* gameOver = nullptr;
 
 
 
+uint32_t T_Handle_ = 0;
+uint32_t T_Voice_ = 0;
+
+uint32_t G_Handle_ = 0;
+uint32_t G_Voice_ = 0;
+
+uint32_t C_Handle_ = 0;
+uint32_t C_Voice_ = 0;
+
+uint32_t O_Handle_ = 0;
+uint32_t O_Voice_ = 0;
+
+
+
+
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
@@ -73,6 +88,18 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 	gameOver->Initialize();
 	//ゲームクリアシーンの初期化
 	gameClear->Initialize();
+
+
+
+	T_Handle_ = Audio::GetInstance()->LoadWave("Sounds/bgm/Future_1.mp3");
+	T_Voice_ = Audio::GetInstance()->PlayWave(T_Handle_, true);
+
+	G_Handle_=Audio::GetInstance()->LoadWave("Sounds/bgm/Shooting_01.mp3");
+	
+
+	C_Handle_ = Audio::GetInstance()->LoadWave("Sounds/bgm/Fusion_01.mp3");
+	O_Handle_ = Audio::GetInstance()->LoadWave("Sounds/bgm/Springin_Radio_Ending.mp3");
+
 
 
 
@@ -171,23 +198,24 @@ void ChangeScene()
 
 		if (title->IsFinishedT())
 		{
-			// 音声停止
-			//Audio::GetInstance()->StopWave(TvoiceHandle_);
-
+			
 			// シーンの変更
 			scene = Scene::kTutorial;
 			// 新シーンの生成と初期化
 			tutorial = new Tutorial();
 			tutorial->Initialize();
 
-			// ゲームシーンの音楽を再生
-			//GVoiceHandle_ = Audio::GetInstance()->PlayWave(gameHandle_, true);
+			
 		}
 		
 		break;
 	case Scene::kTutorial:
 		if (tutorial->IsFinishedTU())
 		{
+
+			// 音声停止
+			Audio::GetInstance()->StopWave(T_Voice_);
+
 
 			// シーンの変更
 			scene = Scene::kGame;
@@ -198,6 +226,10 @@ void ChangeScene()
 			// 新シーンの生成と初期化
 			gameScene = new Game();
 			gameScene->Initialize();
+
+			// ゲームシーンの音楽を再生
+			G_Voice_ = Audio::GetInstance()->PlayWave(G_Handle_, true);
+
 		}
 		break;
 
@@ -208,7 +240,7 @@ void ChangeScene()
 		{
 
 			// 音声停止
-			//Audio::GetInstance()->StopWave(GVoiceHandle_);
+			Audio::GetInstance()->StopWave(G_Voice_);
 
 			// シーンの変更
 			scene = Scene::kOver;
@@ -222,12 +254,12 @@ void ChangeScene()
 			gameOver->Initialize();
 
 			// ゲームオーバーシーンの音楽を再生
-			//GOVoiceHandle_ = Audio::GetInstance()->PlayWave(gameOHandle_, true);
+			O_Voice_ = Audio::GetInstance()->PlayWave(O_Handle_, true);
 
 		} else if (gameScene->IsFinishedGAME2())
 		{
 			// 音声停止
-			//Audio::GetInstance()->StopWave(GVoiceHandle_);
+			Audio::GetInstance()->StopWave(G_Voice_);
 
 			// プレイヤーが敵を倒した場合
 			// シーンの変更
@@ -243,7 +275,7 @@ void ChangeScene()
 			gameClear->Initialize();
 
 			// ゲームクリアシーンの音楽を再生
-			//GCVoiceHandle_ = Audio::GetInstance()->PlayWave(gameCHandle_, true);
+			C_Voice_ = Audio::GetInstance()->PlayWave(C_Handle_, true);
 		}
 		break;
 
@@ -252,7 +284,7 @@ void ChangeScene()
 		if (gameClear->IsFinishedC()) 
 		{
 			// 音声停止
-			//Audio::GetInstance()->StopWave(GCVoiceHandle_);
+			Audio::GetInstance()->StopWave(C_Voice_);
 
 			// シーンの変更
 			scene = Scene::kTitle;
@@ -267,7 +299,7 @@ void ChangeScene()
 			title->Initialize();
 
 			// タイトルの音楽を再生
-			//TvoiceHandle_ = Audio::GetInstance()->PlayWave(titleHandle_, true);
+			T_Voice_ = Audio::GetInstance()->PlayWave(T_Handle_, true);
 		}
 		break;
 
@@ -277,7 +309,7 @@ void ChangeScene()
 		{
 
 			// 音声停止
-			//Audio::GetInstance()->StopWave(GOVoiceHandle_);
+			Audio::GetInstance()->StopWave(O_Voice_);
 
 			// シーンの変更
 			scene = Scene::kTitle;
@@ -292,7 +324,7 @@ void ChangeScene()
 			title->Initialize();
 
 			// タイトルの音楽を再生
-			//TvoiceHandle_ = Audio::GetInstance()->PlayWave(titleHandle_, true);
+			T_Voice_ = Audio::GetInstance()->PlayWave(T_Handle_, true);
 		}
 		break;
 	}

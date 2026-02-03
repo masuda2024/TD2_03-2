@@ -8,7 +8,7 @@ void Title::Initialize()
 	textureHandle_ = TextureManager::Load("tdTitle.png");
 	titleSprite_ = KamataEngine::Sprite::Create(textureHandle_, {0, 0});
 	
-	Botan_ = Audio::GetInstance()->LoadWave("Sounds/Decision2.mp3");
+	Botan_ = Audio::GetInstance()->LoadWave("Sounds/sound/Decision2.mp3");
 
 
 	// カメラの初期化
