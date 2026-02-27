@@ -39,13 +39,14 @@ void Player::Update()
 	AnimateTurn();
 
 	// キャラクターの移動ベクトル
-	//Vector3 move = {0, 0, 0};
+	Vector3 move = {0, 0, 0};
 	// キャラクターの移動速度
-	//const float kCharacterSpeed = 0.2f;
+	const float kCharacterSpeed = 0.5f;
 
-	//Vector3 acceleration = {};
+	Vector3 acceleration = {};
 
 	// --- メンバ変数を更新 ---
+	/*
 	angle_ = worldTransform_.rotation_.x;
 	cosValue_ = std::cos(angle_);
 	sinValue_ = std::sin(angle_);
@@ -55,41 +56,41 @@ void Player::Update()
 	if (worldTransform_.rotation_.x > 6.2831853f) 
 	{
 		worldTransform_.rotation_.x -= 6.2831853f;
+	}*/
+
+	// 押した方向で移動ベクトルを変更(左右)
+	if (Input::GetInstance()->PushKey(DIK_A)) 
+	{
+		move.x -= kCharacterSpeed;
+	} else if (Input::GetInstance()->PushKey(DIK_D))
+	{
+		move.x += kCharacterSpeed;
+		if (velocity_.x < 0.0f) 
+		{
+			// 速度と逆方向に入力中は急ブレーキ
+			velocity_.x *= (1.0f - kAttenuation);
+		}
+		acceleration.x += kAccleration;
+		if (lrDirection_ != LRDirection::kRight)
+		{
+			lrDirection_ = LRDirection::kRight;
+			// 旋回開始時の角度を記録する
+			trunFirstRotationY_ = worldTransform_.rotation_.y;
+			// 旋回タイマーに時間を設定する
+			trunTimer_ = kTimeTurn;
+		}
+	}
+	// 押した方向で移動ベクトルを変更(上下)
+	if (Input::GetInstance()->PushKey(DIK_W))
+	{
+		move.y += kCharacterSpeed;
+	} else if (Input::GetInstance()->PushKey(DIK_S)) 
+	{
+		move.y -= kCharacterSpeed;
 	}
 
-	//// 押した方向で移動ベクトルを変更(左右)
-	//if (Input::GetInstance()->PushKey(DIK_A)) 
-	//{
-	//	move.x -= kCharacterSpeed;
-	//} else if (Input::GetInstance()->PushKey(DIK_D))
-	//{
-	//	move.x += kCharacterSpeed;
-	//	if (velocity_.x < 0.0f) 
-	//	{
-	//		// 速度と逆方向に入力中は急ブレーキ
-	//		velocity_.x *= (1.0f - kAttenuation);
-	//	}
-	//	acceleration.x += kAccleration;
-	//	if (lrDirection_ != LRDirection::kRight)
-	//	{
-	//		lrDirection_ = LRDirection::kRight;
-	//		// 旋回開始時の角度を記録する
-	//		trunFirstRotationY_ = worldTransform_.rotation_.y;
-	//		// 旋回タイマーに時間を設定する
-	//		trunTimer_ = kTimeTurn;
-	//	}
-	//}
-	//// 押した方向で移動ベクトルを変更(上下)
-	//if (Input::GetInstance()->PushKey(DIK_W))
-	//{
-	//	move.y += kCharacterSpeed;
-	//} else if (Input::GetInstance()->PushKey(DIK_S)) 
-	//{
-	//	move.y -= kCharacterSpeed;
-	//}
-
 	// 座標移動(ベクトルの加算)
-	//worldTransform_.translation_ += move;
+	worldTransform_.translation_ += move;
 
 	// アフィン変換行列
 	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);

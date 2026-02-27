@@ -75,7 +75,7 @@ void Game::Initialize()
 
 	// プレイヤーの座標を指定
 	//Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(6, 30);
-	KamataEngine::Vector3 playerPosition = {0,0, 0};
+	KamataEngine::Vector3 playerPosition = {-20, 0, 0};
 	player_->Initialize(modelPlayer_, &camera_, playerPosition);
 	player_->SetMapChipField(mapChipField_);
 
@@ -276,7 +276,7 @@ void Game::Update()
 		{
 			score += 200;
 		} 
-		ImGui::Text("Score x 2 %d", bullet->GetReflection());
+		//ImGui::Text("Score x 2 %d", bullet->GetReflection());
 	}
 
 
@@ -290,7 +290,7 @@ void Game::Update()
 	}
 	
 	
-	ImGui::Text("Score %d", score);
+	//ImGui::Text("Score %d", score);
 
 #pragma endregion
 
