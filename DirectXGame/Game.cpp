@@ -1,4 +1,4 @@
-﻿#include "Game.h"
+#include "Game.h"
 #include "MapChipField.h"
 #include "MyMath.h"
 
@@ -125,7 +125,7 @@ void Game::Initialize()
 		//{45, 30},
 		//{60, 10},
         //{75, 6 },
-		//{5, 17},
+		//{5,17},
 	    //{2, 25 },
 	    //{27, 8 },
 	};
