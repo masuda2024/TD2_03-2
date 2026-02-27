@@ -256,6 +256,22 @@ void Game::Update()
 	player_->Update();
 	// プレイヤーの攻撃を呼び出す
 	
+
+	if (Input::GetInstance()->IsTriggerMouse(0))
+	{
+		Audio::GetInstance()->PlayWave(P_Shot_);
+		for (P_Bullet* bullet : bullets_)
+		{
+			if (!bullet->IsActive())
+			{
+				bullet->StartAttack();
+				break;
+			}
+		}
+	}
+
+
+
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) 
 	{
 		Audio::GetInstance()->PlayWave(P_Shot_);

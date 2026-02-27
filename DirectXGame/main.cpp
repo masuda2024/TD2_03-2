@@ -61,7 +61,6 @@ uint32_t O_Voice_ = 0;
 
 
 
-
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 {
@@ -178,6 +177,13 @@ void UpdateScene()
 		
 	case Scene::kGame:
 		gameScene->Update();
+
+
+		
+
+
+
+
 		break;
 
 	case Scene::kClear:
