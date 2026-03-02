@@ -18,6 +18,14 @@ public:
 	// 描画
 	void Draw();
 
+  
+        // 位置を設定
+    void SetPosition(const KamataEngine::Vector3& position)
+	{
+		worldTransform_.translation_ = position;
+    }
+
+
 	// 敵の当たり判定サイズ
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;

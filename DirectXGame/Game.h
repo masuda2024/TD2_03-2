@@ -30,17 +30,13 @@
 
 using namespace KamataEngine;
 
-
-// マウスの移動量
-/**/
-struct MouseMove 
+/*
+struct MouseMove
 {
 	LONG lx;
-    LONG ly;
-    LONG lz;
-};
-
-
+	LONG ly;
+	LONG lz;
+};*/
 
 class Game
 {
@@ -65,6 +61,17 @@ public:
 	// 敵を倒した場合の(クリア)フラグ
 	bool finishedGAME2_ = false;
 	bool IsFinishedGAME2() const { return finishedGAME2_; } ////ゲームクリア
+
+
+
+	static int GetMouscePosition(int* positionX, int* positionY);
+
+
+
+
+
+
+
 
 private:
 	// テクスチャハンドル

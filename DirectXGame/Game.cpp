@@ -18,7 +18,13 @@
 
 #include "imgui.h"
 
+#include "Windows.h"
 
+struct MousePosition
+{
+	float x;
+	float y;
+};
 
 using namespace KamataEngine;
 
@@ -30,6 +36,17 @@ void Game::Initialize()
 #pragma region
 
 #pragma endregion
+
+	
+	//マウスカーソルの位置
+	//Input::GetInstance()->GetMousePosition();
+	
+	//Input::MouseMove mouseMove = Input::GetInstance()->GetMouseMove();
+
+
+
+
+
 
 	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
@@ -126,7 +143,6 @@ void Game::Initialize()
 	// カーソルの初期化
 	KamataEngine::Vector3 cursorPosition = {15, 0, 0};
 	//cursor_->Initialize(modelCursor_, &camera_, playerPosition);
-	
 	cursor_->Initialize(modelCursor_, &camera_, cursorPosition);
 	
 	//cursor_->SetMapChipField(mapChipField_);
@@ -250,6 +266,51 @@ void Game::Update()
 {
 	// フェード
 	fade_->Update();
+
+
+	//int CursorRock = true;
+	//int Cursor_ON_Mouse = false;
+
+#pragma region マウスカーソル位置
+	POINT mousePoint;
+	GetCursorPos(&mousePoint);
+
+	HWND hwnd = GetActiveWindow();
+
+	ScreenToClient(hwnd, &mousePoint);
+
+	int mouseX = mousePoint.x;
+	int mouseY = mousePoint.y;
+
+	ImGui::Text("mousePoint x  %d", mouseX);
+	ImGui::Text("mousePoint y  %d", mouseY);
+#pragma endregion
+
+
+	/*
+	if (Input::GetInstance()->TriggerKey(DIK_M))
+	{
+		Cursor_ON_Mouse = true;
+		CursorRock = false;
+	}
+	if (Input::GetInstance()->TriggerKey(DIK_P)) 
+	{
+		Cursor_ON_Mouse = false;
+		CursorRock = true;
+	}
+
+
+
+
+	if (Cursor_ON_Mouse)
+	{
+		cursor_->SetPosition({static_cast<float>(mouseX), static_cast<float>(mouseY)});
+	}
+*/
+	
+
+
+
 
 	time -= 20;
 
@@ -703,6 +764,10 @@ if (!player_->IsDead())
 
 	Model::PostDraw();
 }
+
+
+
+
 
 Game::~Game()
 {
