@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "KamataEngine.h"
 
 
@@ -10,6 +10,7 @@
 
 
 #include "Player.h"
+#include "Cursor.h"
 #include "P_DeathParticle.h"
 #include "P_Bullet.h"
 
@@ -28,6 +29,18 @@
 // ゲームシーン
 
 using namespace KamataEngine;
+
+
+// マウスの移動量
+/**/
+struct MouseMove 
+{
+	LONG lx;
+    LONG ly;
+    LONG lz;
+};
+
+
 
 class Game
 {
@@ -52,8 +65,6 @@ public:
 	// 敵を倒した場合の(クリア)フラグ
 	bool finishedGAME2_ = false;
 	bool IsFinishedGAME2() const { return finishedGAME2_; } ////ゲームクリア
-
-
 
 private:
 	// テクスチャハンドル
@@ -118,6 +129,13 @@ private:
 	// プレイヤー
 	Player* player_ = nullptr;
 	KamataEngine::Model* modelPlayer_ = nullptr;
+
+	//カーソル
+	Cursor* cursor_ = nullptr;
+	KamataEngine::Model* modelCursor_ = nullptr;
+
+
+
 
 #pragma region プレイヤーの弾
 	// 自キャラの弾

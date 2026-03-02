@@ -65,6 +65,9 @@ void Game::Initialize()
 	// プレイヤー
 	modelPlayer_ = Model::CreateFromOBJ("player", true);
 
+	
+
+
 	// プレイヤーの弾
 	modelPlayerBullet_ = Model::CreateFromOBJ("bullet", true);
 	// パーティクルの3Dモデルデータの生成
@@ -72,6 +75,8 @@ void Game::Initialize()
 
 	// プレイヤーの生成
 	player_ = new Player();
+	
+
 
 	// プレイヤーの座標を指定
 	//Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(6, 30);
@@ -79,6 +84,7 @@ void Game::Initialize()
 	player_->Initialize(modelPlayer_, &camera_, playerPosition);
 	player_->SetMapChipField(mapChipField_);
 
+	
 
 
 	// プレイヤーの弾
@@ -105,6 +111,31 @@ void Game::Initialize()
 
 
 #pragma endregion
+
+
+
+
+#pragma region カーソル
+	
+	// カーソル
+	modelCursor_ = Model::CreateFromOBJ("Cursor", true);
+	
+	// カーソル
+	cursor_ = new Cursor();
+	
+	// カーソルの初期化
+	KamataEngine::Vector3 cursorPosition = {15, 0, 0};
+	//cursor_->Initialize(modelCursor_, &camera_, playerPosition);
+	
+	cursor_->Initialize(modelCursor_, &camera_, cursorPosition);
+	
+	//cursor_->SetMapChipField(mapChipField_);
+
+#pragma endregion
+
+
+
+
 
 #pragma region 敵
 
@@ -254,6 +285,7 @@ void Game::Update()
 #pragma region プレイヤー
 
 	player_->Update();
+	
 	// プレイヤーの攻撃を呼び出す
 	
 
@@ -294,6 +326,16 @@ void Game::Update()
 		} 
 		//ImGui::Text("Score x 2 %d", bullet->GetReflection());
 	}
+
+
+#pragma endregion
+
+#pragma region カーソル
+
+
+	cursor_->Update();
+	Input::MouseMove mouseMove = Input::GetInstance()->GetMouseMove();
+	ImGui::Text("Mouse Move X: %ld, Y: %ld, Z: %ld", mouseMove.lX, mouseMove.lY, mouseMove.lZ);
 
 
 #pragma endregion
@@ -611,7 +653,7 @@ if (!player_->IsDead())
 	}
 }
 
-	
+	cursor_->Draw();
 
 	// パーティクル(プレイヤー)
 	if (phase_ == Phase::kDeath)
@@ -667,6 +709,7 @@ Game::~Game()
 	delete sprite_;
 	
 	delete player_;
+	delete cursor_;
 	for (P_Bullet* bullet : bullets_)
 	{
 		delete bullet;
