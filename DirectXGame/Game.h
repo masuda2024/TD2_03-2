@@ -232,4 +232,10 @@ private:
 #pragma endregion
 
 	uint32_t P_Shot_ = 0;
+
+
+	float t = 0.0f;
+
+
+
 };
