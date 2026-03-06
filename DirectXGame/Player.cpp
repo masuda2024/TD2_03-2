@@ -1,4 +1,4 @@
-﻿#include "Player.h"
+#include "Player.h"
 
 #include"KamataEngine.h"
 #include"Game.h"
@@ -14,6 +14,71 @@ using namespace KamataEngine;
 using namespace MathUtility;
 
 
+/*
+float Length(const Vector3& v)
+{
+	float result;
+	result = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+	return result;
+};
+
+
+Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
+	Matrix4x4 result{};
+
+	result.m[0][0] = m1.m[0][0] * m2.m[0][0] + m1.m[0][1] * m2.m[1][0] + m1.m[0][2] * m2.m[2][0] + m1.m[0][3] * m2.m[3][0];
+	result.m[0][1] = m1.m[0][0] * m2.m[0][1] + m1.m[0][1] * m2.m[1][1] + m1.m[0][2] * m2.m[2][1] + m1.m[0][3] * m2.m[3][1];
+	result.m[0][2] = m1.m[0][0] * m2.m[0][2] + m1.m[0][1] * m2.m[1][2] + m1.m[0][2] * m2.m[2][2] + m1.m[0][3] * m2.m[3][2];
+	result.m[0][3] = m1.m[0][0] * m2.m[0][3] + m1.m[0][1] * m2.m[1][3] + m1.m[0][2] * m2.m[2][3] + m1.m[0][3] * m2.m[3][3];
+
+	result.m[1][0] = m1.m[1][0] * m2.m[0][0] + m1.m[1][1] * m2.m[1][0] + m1.m[1][2] * m2.m[2][0] + m1.m[1][3] * m2.m[3][0];
+	result.m[1][1] = m1.m[1][0] * m2.m[0][1] + m1.m[1][1] * m2.m[1][1] + m1.m[1][2] * m2.m[2][1] + m1.m[1][3] * m2.m[3][1];
+	result.m[1][2] = m1.m[1][0] * m2.m[0][2] + m1.m[1][1] * m2.m[1][2] + m1.m[1][2] * m2.m[2][2] + m1.m[1][3] * m2.m[3][2];
+	result.m[1][3] = m1.m[1][0] * m2.m[0][3] + m1.m[1][1] * m2.m[1][3] + m1.m[1][2] * m2.m[2][3] + m1.m[1][3] * m2.m[3][3];
+
+	result.m[2][0] = m1.m[2][0] * m2.m[0][0] + m1.m[2][1] * m2.m[1][0] + m1.m[2][2] * m2.m[2][0] + m1.m[2][3] * m2.m[3][0];
+	result.m[2][1] = m1.m[2][0] * m2.m[0][1] + m1.m[2][1] * m2.m[1][1] + m1.m[2][2] * m2.m[2][1] + m1.m[2][3] * m2.m[3][1];
+	result.m[2][2] = m1.m[2][0] * m2.m[0][2] + m1.m[2][1] * m2.m[1][2] + m1.m[2][2] * m2.m[2][2] + m1.m[2][3] * m2.m[3][2];
+	result.m[2][3] = m1.m[2][0] * m2.m[0][3] + m1.m[2][1] * m2.m[1][3] + m1.m[2][2] * m2.m[2][3] + m1.m[2][3] * m2.m[3][3];
+
+	result.m[3][0] = m1.m[3][0] * m2.m[0][0] + m1.m[3][1] * m2.m[1][0] + m1.m[3][2] * m2.m[2][0] + m1.m[3][3] * m2.m[3][0];
+	result.m[3][1] = m1.m[3][0] * m2.m[0][1] + m1.m[3][1] * m2.m[1][1] + m1.m[3][2] * m2.m[2][1] + m1.m[3][3] * m2.m[3][1];
+	result.m[3][2] = m1.m[3][0] * m2.m[0][2] + m1.m[3][1] * m2.m[1][2] + m1.m[3][2] * m2.m[2][2] + m1.m[3][3] * m2.m[3][2];
+	result.m[3][3] = m1.m[3][0] * m2.m[0][3] + m1.m[3][1] * m2.m[1][3] + m1.m[3][2] * m2.m[2][3] + m1.m[3][3] * m2.m[3][3];
+
+	return result;
+}
+// ビューボート変換行列
+Matrix4x4 MakeViewportMatrix(float VpWidth, float VpHeight, float OffsetX, float OffsetY) {
+
+	Matrix4x4 result{};
+
+	result.m[0][0] = VpWidth / 2.0f;
+	result.m[0][1] = 0.0f;
+	result.m[0][2] = 0.0f;
+	result.m[0][3] = 0.0f;
+
+	result.m[1][0] = 0.0f;
+	result.m[1][1] = -(VpHeight / 2.0f);
+	result.m[1][2] = 0.0f;
+	result.m[1][3] = 0.0f;
+
+	result.m[2][0] = 0.0f;
+	result.m[2][1] = 0.0f;
+	result.m[2][2] = 1.0f;
+	result.m[2][3] = 0.0f;
+
+	result.m[3][0] = (VpWidth / 2.0f) + OffsetX;
+	result.m[3][1] = (VpHeight / 2.0f) + OffsetY;
+	result.m[3][2] = 0.0f;
+	result.m[3][3] = 1.0f;
+
+	return result;
+}
+
+
+*/
+
 
 void Player::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& position) 
 {
@@ -21,6 +86,9 @@ void Player::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& pos
 	assert(model);
 
 	model_ = model;
+
+
+	worldTransform3DReticle_.Initialize();
 
 	// textureHandle_ = textureHandle;
     worldTransform_.Initialize();
@@ -30,10 +98,93 @@ void Player::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& pos
 	camera_ = camera;
 
 	
+	//レティクル用テクスチャ取得
+	uint32_t textureReticle = TextureManager::Load("Cursor.png");
+	//スプライト生成
+	sprite2DReticle_ = Sprite::Create(textureReticle, {0, 0}, {1, 1, 1, 1}, {50, 50});
+
+
 }
 
 void Player::Update()
 {
+
+
+
+	/*
+	// 自機から3Dレティクルへの距離
+	const float kDistanceP_to_R = 50.0f;
+
+	// 前方向ベクトル
+	Vector3 offset = {0.0f, 0.0f, 1.0f};
+
+	// 自機の回転行列
+	Matrix4x4 rotateMatrix = MakeRotateMatrix(worldTransform_.rotation_);
+
+	// 回転を反映
+	offset = TransformNormal(offset, rotateMatrix);
+
+	// 正規化
+	offset = Normalize(offset);
+
+	// 3Dレティクル座標
+	worldTransform3DReticle_.translation_ = worldTransform_.translation_ + offset * kDistanceP_to_R;
+
+
+
+
+
+
+
+	Matrix4x4 viewMatrix;
+	Matrix4x4 projectionMatrix;
+	Matrix4x4 viewportMatrix;
+	
+
+
+	// マウス座標(スクリーン座標)を取得する
+	POINT mousePoint;
+	GetCursorPos(&mousePoint);
+
+	// クライアントエリア座標に変換する
+	HWND hwnd = WinApp::GetInstance()->GetHwnd();
+	ScreenToClient(hwnd, &mousePoint);
+	
+
+
+
+	// ビュープロジェクションビューポート合成行列
+	Matrix4x4 matVPV = Multiply(Multiply(viewMatrix, projectionMatrix), viewportMatrix);
+	
+	// 合成行列の逆行列
+	Matrix4x4 matInverceVPV = Inverse(matVPV);
+	
+	// スクリーン座標
+	KamataEngine::Vector3 posNear = KamataEngine::Vector3(static_cast<float>(mousePoint.x), static_cast<float>(mousePoint.y), 0.0f);
+	KamataEngine::Vector3 posFar = KamataEngine::Vector3(static_cast<float>(mousePoint.x), static_cast<float>(mousePoint.y), 1.0f);
+	
+	// スクリーン座標系からワールド座標系へ
+	posNear = Transform(posNear, matInverceVPV);
+	posFar = Transform(posFar, matInverceVPV);
+	
+	// マウスレイの方向
+	KamataEngine::Vector3 mouseDirection = posFar - posNear;
+	mouseDirection = Normalize(mouseDirection);
+	
+	// カメラから照準オブジェクトの距離
+	const float kDistanceTestObject = 100.0f;
+	worldTransform3DReticle_.translation_ = posNear + mouseDirection * kDistanceTestObject;
+	//worldTransform3DReticle_のワールド行列更新と転送
+	
+
+
+
+*/
+
+
+
+
+
 
 	// 7.旋回制御
 	AnimateTurn();
@@ -89,6 +240,14 @@ void Player::Update()
 		move.y -= kCharacterSpeed;
 	}
 
+
+
+
+
+
+
+
+
 	// 座標移動(ベクトルの加算)
 	worldTransform_.translation_ += move;
 
@@ -125,7 +284,10 @@ void Player::AnimateTurn()
 	}
 }
 
-Player::~Player() {}
+Player::~Player() 
+{ 
+	delete sprite2DReticle_; 
+}
 
 #pragma region プレイヤーの弾と敵の衝突
 

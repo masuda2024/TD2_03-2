@@ -94,7 +94,7 @@ Vector3 Nomalize(const Vector3& v)
 
 #pragma endregion
 
-
+/*
 // ビューボート変換行列
 Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth)
 {
@@ -119,6 +119,34 @@ Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, f
 	result.m[3][0] = left + (width / 2.0f);
 	result.m[3][1] = top + (height / 2.0f);
 	result.m[3][2] = minDepth;
+	result.m[3][3] = 1.0f;
+
+	return result;
+}
+
+// ビューボート変換行列
+Matrix4x4 MakeViewportMatrix(float VpWidth, float VpHeight, float OffsetX, float OffsetY) {
+
+	Matrix4x4 result{};
+
+	result.m[0][0] = VpWidth / 2.0f;
+	result.m[0][1] = 0.0f;
+	result.m[0][2] = 0.0f;
+	result.m[0][3] = 0.0f;
+
+	result.m[1][0] = 0.0f;
+	result.m[1][1] = -(VpHeight / 2.0f);
+	result.m[1][2] = 0.0f;
+	result.m[1][3] = 0.0f;
+
+	result.m[2][0] = 0.0f;
+	result.m[2][1] = 0.0f;
+	result.m[2][2] = 1.0f;
+	result.m[2][3] = 0.0f;
+
+	result.m[3][0] = (VpWidth / 2.0f) + OffsetX;
+	result.m[3][1] = (VpHeight / 2.0f) + OffsetY;
+	result.m[3][2] = 0.0f;
 	result.m[3][3] = 1.0f;
 
 	return result;
@@ -149,6 +177,8 @@ Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 
 	return result;
 }
+
+
 // 3次元アフィン変換行列
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
 	Matrix4x4 result{};
@@ -169,7 +199,7 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 
 
 
-
+*/
 
 
 
@@ -297,7 +327,7 @@ void Game::Initialize()
 #pragma endregion
 
 
-
+	TextureManager::Load("Cursor.png");
 
 
 #pragma region 敵
@@ -409,6 +439,9 @@ void Game::Update()
 	// フェード
 	fade_->Update();
 	
+
+
+	/*
 	Matrix4x4 viewMatrix;
 	Matrix4x4 projectionMatrix;
 	Matrix4x4 viewportMatrix;
@@ -467,21 +500,21 @@ void Game::Update()
 
 #pragma endregion
 	
+	*/
+
+
+
+
+
+
+/*
+
+
+
+
+
+
 	
-
-
-
-
-
-
-
-
-
-
-
-
-
-	/*
 	KamataEngine::Vector2 current_P = {0.0f, 0.0f};
 
 	for (P_Bullet* bullet : bullets_) 
@@ -888,7 +921,7 @@ void Game::Draw()
 	
 	pointSprite_->Draw();
 
-
+	
 	Sprite::PostDraw();
 
 	Model::PreDraw();

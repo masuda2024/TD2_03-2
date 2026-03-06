@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "KamataEngine.h"
 #include"MyMath.h"
 #include"P_Bullet.h"
@@ -138,9 +138,23 @@ public:
 	int GetMaxHP() const { return maxHP_; }
 	bool IsDead() const { return isDead_; }
 
+	//2Dレティクル用スプライト
+	KamataEngine::Sprite* sprite2DReticle_ = nullptr;
+
+	void DrawUI();
+
+
+
+
+
 private:
 	// ワールド変換データ
 	KamataEngine::WorldTransform worldTransform_;
+	// ワールド変換データ
+	KamataEngine::WorldTransform worldTransform3DReticle_;
+
+
+
 
 	// カメラ
 	KamataEngine::Camera* camera_;
