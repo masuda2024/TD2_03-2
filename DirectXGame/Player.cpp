@@ -1,5 +1,5 @@
-#include "Player.h"
-
+#include"Player.h"
+#include"Cursor.h"
 #include"KamataEngine.h"
 #include"Game.h"
 #include"cassert"
@@ -87,8 +87,8 @@ void Player::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& pos
 
 	model_ = model;
 
-
-	worldTransform3DReticle_.Initialize();
+	//3Dレティクルのワールドトランスフォーム初期化
+	//worldTransform3DReticle_.Initialize();
 
 	// textureHandle_ = textureHandle;
     worldTransform_.Initialize();
@@ -97,44 +97,54 @@ void Player::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& pos
 
 	camera_ = camera;
 
-	
+	/*
 	//レティクル用テクスチャ取得
 	uint32_t textureReticle = TextureManager::Load("Cursor.png");
 	//スプライト生成
 	sprite2DReticle_ = Sprite::Create(textureReticle, {0, 0}, {1, 1, 1, 1}, {50, 50});
 
+	// カーソル
+	modelCursor_ = Model::CreateFromOBJ("Cursor", true);
+*/
 
+
+	
+	//Matrix4x4 viewport;
 }
 
 void Player::Update()
 {
+	
 
 
 
 	/*
 	// 自機から3Dレティクルへの距離
-	const float kDistanceP_to_R = 50.0f;
+	const float kDistanceP_to_3DR = 50.0f;
+	
+	// 前方向ベクトル(X+向き)
+	Vector3 offset = {1.0f, 0, 0};
+	
+	//自機のワールド行列の回転を反映
+	offset = TransformNormal(offset, worldTransform_.matWorld_);
 
-	// 前方向ベクトル
-	Vector3 offset = {0.0f, 0.0f, 1.0f};
+	//ベクトルの長さを整える
+	offset = Normalize(offset) * kDistanceP_to_3DR;
 
-	// 自機の回転行列
-	Matrix4x4 rotateMatrix = MakeRotateMatrix(worldTransform_.rotation_);
-
-	// 回転を反映
-	offset = TransformNormal(offset, rotateMatrix);
-
-	// 正規化
-	offset = Normalize(offset);
-
-	// 3Dレティクル座標
-	worldTransform3DReticle_.translation_ = worldTransform_.translation_ + offset * kDistanceP_to_R;
-
-
-
+	//3Dレティクルの座標を設定
+	worldTransform3DReticle_.translation_ = worldTransform_.translation_ + offset;
+	
+	//worldTransform3DReticle_のワールド行列更新と転送
+	worldTransform3DReticle_.rotation_ = worldTransform_.rotation_;
+*/
 
 
 
+	
+
+	
+	/*
+	
 
 	Matrix4x4 viewMatrix;
 	Matrix4x4 projectionMatrix;
@@ -263,8 +273,15 @@ void Player::Draw()
 	{
 		return;
 	}
-
+	
+	// プレイヤーモデルの描画
 	model_->Draw(worldTransform_, *camera_);
+	/*
+	// 3Dレティクルの描画
+	if (modelCursor_) 
+	{
+		modelCursor_->Draw(worldTransform3DReticle_, *camera_);
+	}*/
 }
 
 // 7.旋回制御
@@ -287,6 +304,7 @@ void Player::AnimateTurn()
 Player::~Player() 
 { 
 	delete sprite2DReticle_; 
+	//delete cursor_;
 }
 
 #pragma region プレイヤーの弾と敵の衝突

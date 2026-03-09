@@ -22,7 +22,7 @@ public:
 	void Draw();
 
 
-
+	//Matrix4x4 viewProjection;
 
 
 
@@ -151,9 +151,9 @@ private:
 	// ワールド変換データ
 	KamataEngine::WorldTransform worldTransform_;
 	// ワールド変換データ
-	KamataEngine::WorldTransform worldTransform3DReticle_;
+	//KamataEngine::WorldTransform worldTransform3DReticle_;
 
-
+	//Matrix4x4 viewProjection;
 
 
 	// カメラ
@@ -163,6 +163,13 @@ private:
 
 	// モデル
 	KamataEngine::Model* model_;
+
+
+	// カーソル
+	//Cursor* cursor_ = nullptr;
+	KamataEngine::Model* modelCursor_ = nullptr;
+
+
 
 	KamataEngine::Vector3 velocity_ = {};
 

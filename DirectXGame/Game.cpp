@@ -23,7 +23,7 @@
 #include"math.h"
 //#include"Matrix4x4.h"
 using namespace KamataEngine;
-
+using namespace MathUtility;
 
 
 struct MousePosition
@@ -214,6 +214,15 @@ void Game::Initialize()
 #pragma endregion
 
 	
+
+
+
+
+	//ビュープロジェクションの初期化
+	//viewProjectionMatrix_ = MakeViewProjectionMatrix(camera_);
+	
+
+
 	//マウスカーソルの位置
 	//Input::GetInstance()->GetMousePosition();
 	
@@ -311,8 +320,11 @@ void Game::Initialize()
 
 #pragma region カーソル
 	
-	// カーソル
-	modelCursor_ = Model::CreateFromOBJ("Cursor", true);
+	
+	/**/
+	
+	
+	modelCursor_ = Model::CreateFromOBJ("Cursor");
 	
 	// カーソル
 	cursor_ = new Cursor();
@@ -322,7 +334,7 @@ void Game::Initialize()
 	//cursor_->Initialize(modelCursor_, &camera_, playerPosition);
 	cursor_->Initialize(modelCursor_, &camera_, cursorPosition);
 	
-	//cursor_->SetMapChipField(mapChipField_);
+	cursor_->SetMapChipField(mapChipField_);
 
 #pragma endregion
 
@@ -439,7 +451,7 @@ void Game::Update()
 	// フェード
 	fade_->Update();
 	
-
+	cursor_->Update();
 
 	/*
 	Matrix4x4 viewMatrix;
@@ -633,7 +645,7 @@ void Game::Update()
 #pragma region カーソル
 
 
-	cursor_->Update();
+	//cursor_->Update();
 	Input::MouseMove mouseMove = Input::GetInstance()->GetMouseMove();
 	ImGui::Text("Mouse Move X: %ld, Y: %ld, Z: %ld", mouseMove.lX, mouseMove.lY, mouseMove.lZ);
 
@@ -927,6 +939,9 @@ void Game::Draw()
 	Model::PreDraw();
 
 
+	cursor_->Draw();
+
+
 		// ブロックの描画
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_)
 	{
@@ -953,7 +968,7 @@ if (!player_->IsDead())
 	}
 }
 
-	cursor_->Draw();
+	
 
 	// パーティクル(プレイヤー)
 	if (phase_ == Phase::kDeath)
@@ -1011,9 +1026,9 @@ if (!player_->IsDead())
 Game::~Game()
 {
 	delete sprite_;
-	
-	delete player_;
 	delete cursor_;
+	delete player_;
+	
 	for (P_Bullet* bullet : bullets_)
 	{
 		delete bullet;

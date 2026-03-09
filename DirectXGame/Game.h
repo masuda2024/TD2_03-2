@@ -29,6 +29,7 @@
 // ゲームシーン
 
 using namespace KamataEngine;
+using namespace MathUtility;
 
 /*
 struct MouseMove
@@ -85,6 +86,13 @@ public:
 
 
 
+
+	
+
+
+
+
+
 	
 
 
@@ -100,8 +108,8 @@ public:
 
 
 	static int GetMouscePosition(int* positionX, int* positionY);
-
-
+	
+	
 
 
 
@@ -172,11 +180,8 @@ private:
 	Player* player_ = nullptr;
 	KamataEngine::Model* modelPlayer_ = nullptr;
 
-	//カーソル
 	Cursor* cursor_ = nullptr;
 	KamataEngine::Model* modelCursor_ = nullptr;
-
-
 
 
 #pragma region プレイヤーの弾
