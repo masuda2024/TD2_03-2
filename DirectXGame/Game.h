@@ -227,6 +227,11 @@ private:
 
 	int respawnTimer = 120;
 
+	// 敵HPテクスチャハンドル
+	uint32_t enemyhpHandle_ = 0;
+	// スプライト
+	Sprite* enemyhpSprite_ = nullptr;
+
 #pragma endregion
 
 	

@@ -281,6 +281,13 @@ void Game::Update()
 	pointSprite_->SetPosition({0, 30});           
 
 
+	/*
+	// 敵HP
+	float enemyHpRatio = (float)enemy_->E_GetHP() / (float)enemy_->E_GetMaxHP();
+	enemyHpRatio = std::clamp(enemyHpRatio, 0.0f, 1.0f);
+	enemyhpSprite_->SetSize({enemyHpRatio * 200.0f, 20.0f}); // 幅200px、高さ20px
+	enemyhpSprite_->SetPosition({1060, 10});                 // 左上少し下に表示
+*/
 
 	
 	if (time <= 0) 
@@ -303,7 +310,7 @@ void Game::Update()
 	
 	// プレイヤーの攻撃を呼び出す
 	
-
+	
 	if (Input::GetInstance()->IsTriggerMouse(0))
 	{
 		Audio::GetInstance()->PlayWave(P_Shot_);
@@ -311,6 +318,7 @@ void Game::Update()
 		{
 			if (!bullet->IsActive())
 			{
+				
 				bullet->StartAttack_at_Mouse();
 				break;
 			}
