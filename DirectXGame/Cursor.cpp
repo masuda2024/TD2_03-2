@@ -34,6 +34,7 @@ void Cursor::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& pos
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / -2.0f;
 
 	camera_ = camera;
+
 }
 
 void Cursor::Update()
@@ -41,17 +42,8 @@ void Cursor::Update()
 
 	// キャラクターの移動ベクトル
 	Vector3 move = {0, 0, 0};
-	/*
-	if (Input::GetInstance()->TriggerKey(DIK_M))
-	{
-		ON_Mouse = true;
-		OFF_Mouse = false;
-	}
-	if (Input::GetInstance()->TriggerKey(DIK_N))
-	{
-		ON_Mouse = false;
-		OFF_Mouse = true;
-	}*/
+	
+	//マウスのカーソル位置切り替え
 	ImGui::Text("Mouse Control: %s", ON_Mouse ? "ON" : "OFF");
 	if (Input::GetInstance()->TriggerKey(DIK_M))
 	{
@@ -90,13 +82,10 @@ void Cursor::Update()
 			move.y -= kCursorSpeed;
 		}
 	}
-	
 	if (ON_Mouse)
 	{
 		
 		
-
-
 
 		Input::MouseMove mouseMove = Input::GetInstance()->GetMouseMove();
 

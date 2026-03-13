@@ -16,6 +16,63 @@
 using namespace KamataEngine;
 using namespace MathUtility;
 
+#pragma region 行列
+
+// 行列の積
+Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
+	Matrix4x4 result;
+
+	result.m[0][0] = {(m1.m[0][0] * m2.m[0][0]) + (m1.m[0][1] * m2.m[1][0]) + (m1.m[0][2] * m2.m[2][0]) + (m1.m[0][3] * m2.m[3][0])};
+	result.m[0][1] = {(m1.m[0][0] * m2.m[0][1]) + (m1.m[0][1] * m2.m[1][1]) + (m1.m[0][2] * m2.m[2][1]) + (m1.m[0][3] * m2.m[3][1])};
+	result.m[0][2] = {(m1.m[0][0] * m2.m[0][2]) + (m1.m[0][1] * m2.m[1][2]) + (m1.m[0][2] * m2.m[2][2]) + (m1.m[0][3] * m2.m[3][2])};
+	result.m[0][3] = {(m1.m[0][0] * m2.m[0][3]) + (m1.m[0][1] * m2.m[1][3]) + (m1.m[0][2] * m2.m[2][3]) + (m1.m[0][3] * m2.m[3][3])};
+
+	result.m[1][0] = {(m1.m[1][0] * m2.m[0][0]) + (m1.m[1][1] * m2.m[1][0]) + (m1.m[1][2] * m2.m[2][0]) + (m1.m[1][3] * m2.m[3][0])};
+	result.m[1][1] = {(m1.m[1][0] * m2.m[0][1]) + (m1.m[1][1] * m2.m[1][1]) + (m1.m[1][2] * m2.m[2][1]) + (m1.m[1][3] * m2.m[3][1])};
+	result.m[1][2] = {(m1.m[1][0] * m2.m[0][2]) + (m1.m[1][1] * m2.m[1][2]) + (m1.m[1][2] * m2.m[2][2]) + (m1.m[1][3] * m2.m[3][2])};
+	result.m[1][3] = {(m1.m[1][0] * m2.m[0][3]) + (m1.m[1][1] * m2.m[1][3]) + (m1.m[1][2] * m2.m[2][3]) + (m1.m[1][3] * m2.m[3][3])};
+
+	result.m[2][0] = {(m1.m[2][0] * m2.m[0][0]) + (m1.m[2][1] * m2.m[1][0]) + (m1.m[2][2] * m2.m[2][0]) + (m1.m[2][3] * m2.m[3][0])};
+	result.m[2][1] = {(m1.m[2][0] * m2.m[0][1]) + (m1.m[2][1] * m2.m[1][1]) + (m1.m[2][2] * m2.m[2][1]) + (m1.m[2][3] * m2.m[3][1])};
+	result.m[2][2] = {(m1.m[2][0] * m2.m[0][2]) + (m1.m[2][1] * m2.m[1][2]) + (m1.m[2][2] * m2.m[2][2]) + (m1.m[2][3] * m2.m[3][2])};
+	result.m[2][3] = {(m1.m[2][0] * m2.m[0][3]) + (m1.m[2][1] * m2.m[1][3]) + (m1.m[2][2] * m2.m[2][3]) + (m1.m[2][3] * m2.m[3][3])};
+
+	result.m[3][0] = {(m1.m[3][0] * m2.m[0][0]) * (m1.m[3][1] * m2.m[1][0]) + (m1.m[3][2] * m2.m[2][0]) + (m1.m[3][3] * m2.m[3][0])};
+	result.m[3][1] = {(m1.m[3][0] * m2.m[0][1]) + (m1.m[3][1] * m2.m[1][1]) + (m1.m[3][2] * m2.m[2][1]) + (m1.m[3][3] * m2.m[3][1])};
+	result.m[3][2] = {(m1.m[3][0] * m2.m[0][2]) + (m1.m[3][1] * m2.m[1][2]) + (m1.m[3][2] * m2.m[2][2]) + (m1.m[3][3] * m2.m[3][2])};
+	result.m[3][3] = {(m1.m[3][0] * m2.m[0][3]) + (m1.m[3][1] * m2.m[1][3]) + (m1.m[3][2] * m2.m[2][3]) + (m1.m[3][3] * m2.m[3][3])};
+
+	return result;
+}
+
+Matrix4x4 MakeRotateMatrix(const Vector3& rotation)
+{
+	float cosX = cosf(rotation.x);
+	float sinX = sinf(rotation.x);
+
+	float cosY = cosf(rotation.y);
+	float sinY = sinf(rotation.y);
+
+	float cosZ = cosf(rotation.z);
+	float sinZ = sinf(rotation.z);
+
+	// X回転
+	Matrix4x4 rotX = {1, 0, 0, 0, 0, cosX, sinX, 0, 0, -sinX, cosX, 0, 0, 0, 0, 1};
+
+	// Y回転
+	Matrix4x4 rotY = {cosY, 0, -sinY, 0, 0, 1, 0, 0, sinY, 0, cosY, 0, 0, 0, 0, 1};
+
+	// Z回転
+	Matrix4x4 rotZ = {cosZ, sinZ, 0, 0, -sinZ, cosZ, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
+
+	// Z → X → Y の順で合成
+	Matrix4x4 result = Multiply(Multiply(rotZ, rotX), rotY);
+
+	return result;
+}
+
+#pragma endregion
+
 void P_Bullet::Initialize(KamataEngine::Model* model, Camera* camera, Player* player)
 {
 	// NULLポイントチェック
@@ -60,8 +117,20 @@ void P_Bullet::Update()
 	worldTransform_.TransferMatrix(); // プレイヤーの座標の計算
 }
 
+
+/*
 void P_Bullet::StartAttack()
 {
+	Input::MouseMove mouseMove = Input::GetInstance()->GetMouseMove();
+
+	if (Input::GetInstance()->TriggerKey(DIK_M)) 
+	{
+		ON_Mouse = !ON_Mouse;  // 押すたびに反転
+		OFF_Mouse = !ON_Mouse; // 逆状態にする
+	}
+
+
+
 	if (!player_)
 		return;
 	isActive_ = true;
@@ -79,11 +148,115 @@ void P_Bullet::StartAttack()
 	forward.y = -sinf(pitch);
 	forward.z = -cosf(pitch) * cosf(yaw);
 
-	velocity_ = forward;
+	if (OFF_Mouse)
+	{
+		velocity_ = forward;
+	}
+	if (ON_Mouse)
+	{
+		velocity_.x = forward.x += mouseMove.lX * 0.15f;
+		velocity_.y = forward.y -= mouseMove.lY * 0.15f;
+	}
+
+
+	
+
 
 	const float kSpawnOffset = 1.5f;
 	worldTransform_.translation_ = player_->GetWorldPosition() + forward * kSpawnOffset;
 }
+
+
+
+void P_Bullet::StartAttack()
+{
+
+
+		if (!player_)
+			return;
+
+		isActive_ = true;
+		timer_ = 0.0f;
+	
+		// マウス座標取得
+		Vector2 mousePos = Input::GetInstance()->GetMousePosition();
+
+		// スクリーン → ワールド変換
+		Vector3 mouseWorld = camera_->aspectRatio * (mousePos.x - 640) / 640.0f * tanf(camera_->fovAngleY / 2.0f) * 
+			Vector3 {1, 0, 0}+ camera_->fovAngleY * (mousePos.y - 360) / 360.0f * tanf(camera_->fovAngleY / 2.0f) * 
+			Vector3 {0, 1, 0} + 
+			Vector3{0, 0, 1};
+
+		// プレイヤー位置
+		Vector3 playerPos = player_->GetWorldPosition();
+
+		// プレイヤー → マウス
+		Vector3 dir = mouseWorld - playerPos;
+
+		// 正規化
+		dir = Normalize(dir);
+	
+		// 弾速度
+		velocity_ = dir * 0.5f;
+
+		// 発射位置
+		const float kSpawnOffset = 1.5f;
+		worldTransform_.translation_ = playerPos + dir * kSpawnOffset;
+	
+}*/
+
+void P_Bullet::StartAttack()
+{
+	if (!player_)
+		return;
+
+	isActive_ = true;
+	timer_ = 0.0f;
+
+	// マウス座標
+	Vector2 mousePos = Input::GetInstance()->GetMousePosition();
+
+	float screenWidth = 1280.0f;
+	float screenHeight = 720.0f;
+
+	// -1～1 に変換
+	float ndcX = (mousePos.x / screenWidth) * 2.0f - 1.0f;
+	float ndcY = 1.0f - (mousePos.y / screenHeight) * 2.0f;
+
+	// カメラ空間の方向
+	float tanFov = tanf(camera_->fovAngleY * 0.5f);
+
+	Vector3 rayDirCamera;
+	rayDirCamera.x = ndcX * camera_->aspectRatio * tanFov;
+	rayDirCamera.y = ndcY * tanFov;
+	rayDirCamera.z = 0.0f;
+
+	rayDirCamera = Normalize(rayDirCamera);
+
+	// カメラ回転取得
+	Vector3 camRot = camera_->rotation_;
+
+	Matrix4x4 rotMat = MakeRotateMatrix(camRot);
+
+	// ワールド方向に変換
+	Vector3 dir = TransformNormal(rayDirCamera, rotMat);
+	dir = Normalize(dir);
+
+	// 弾速度
+	float bulletSpeed = 0.5f;
+	velocity_ = dir * bulletSpeed;
+
+	// 発射位置
+	Vector3 playerPos = player_->GetWorldPosition();
+	const float kSpawnOffset = 1.5f;
+	worldTransform_.translation_ = playerPos + dir * kSpawnOffset;
+}
+
+
+
+
+
+
 
 #pragma region ブロックとの衝突
 

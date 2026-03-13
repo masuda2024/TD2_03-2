@@ -63,4 +63,6 @@ private:
 	//マウスの切り替え
 	uint32_t OFF_Mouse = true;
 	uint32_t ON_Mouse = false;
+
+	
 };
