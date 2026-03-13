@@ -41,7 +41,7 @@ void Cursor::Update()
 
 	// キャラクターの移動ベクトル
 	Vector3 move = {0, 0, 0};
-	
+	/*
 	if (Input::GetInstance()->TriggerKey(DIK_M))
 	{
 		ON_Mouse = true;
@@ -51,9 +51,13 @@ void Cursor::Update()
 	{
 		ON_Mouse = false;
 		OFF_Mouse = true;
+	}*/
+	ImGui::Text("Mouse Control: %s", ON_Mouse ? "ON" : "OFF");
+	if (Input::GetInstance()->TriggerKey(DIK_M))
+	{
+		ON_Mouse = !ON_Mouse;  // 押すたびに反転
+		OFF_Mouse = !ON_Mouse; // 逆状態にする
 	}
-
-
 
 
 	if (OFF_Mouse)
@@ -86,11 +90,14 @@ void Cursor::Update()
 			move.y -= kCursorSpeed;
 		}
 	}
-	/*
 	
-	*/
 	if (ON_Mouse)
 	{
+		
+		
+
+
+
 		Input::MouseMove mouseMove = Input::GetInstance()->GetMouseMove();
 
 		worldTransform_.translation_.x += mouseMove.lX * 0.15f;

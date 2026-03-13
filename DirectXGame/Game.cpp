@@ -349,7 +349,7 @@ void Game::Update()
 	cursor_->Update();
 	Input::MouseMove mouseMove = Input::GetInstance()->GetMouseMove();
 	ImGui::Text("Mouse Move X: %ld, Y: %ld, Z: %ld", mouseMove.lX, mouseMove.lY, mouseMove.lZ);
-
+    
 
 #pragma endregion
 
