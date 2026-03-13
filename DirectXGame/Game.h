@@ -276,6 +276,6 @@ private:
 
 	float t = 0.0f;
 
-
+	//bool useMouseAttack_ = false;
 
 };

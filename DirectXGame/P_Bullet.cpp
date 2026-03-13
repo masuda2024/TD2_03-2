@@ -90,6 +90,32 @@ void P_Bullet::Initialize(KamataEngine::Model* model, Camera* camera, Player* pl
 
 void P_Bullet::Update() 
 {
+	/*
+	if (Input::GetInstance()->TriggerKey(DIK_M))
+	{
+		ON_Mouse = !ON_Mouse;  // 押すたびに反転
+		OFF_Mouse = !ON_Mouse; // 逆状態にする
+	}
+
+	
+	if (Input::GetInstance()->TriggerKey(DIK_M)) 
+	{
+		useMouseAttack_ = !useMouseAttack_;
+	}
+	if (!isActive_ && Input::GetInstance()->IsTriggerMouse(0))
+{
+	if (useMouseAttack_)
+	{
+	    StartAttack_at_Mouse();
+	}
+	else
+	{
+	    StartAttack();
+	}
+}
+	*/
+
+
 
 	if (!isActive_)
 	{
@@ -105,8 +131,10 @@ void P_Bullet::Update()
 	// 弾を移動
 	worldTransform_.translation_ += velocity_;
 
+	
+	// 弾が表示されている時間
 	timer_ += 1.0f / 60.0f;
-	if (timer_ >= kLifeTime) 
+	if (timer_ >= kLifeTime)
 	{
 		isActive_ = false;
 		return;
@@ -121,20 +149,12 @@ void P_Bullet::Update()
 /*
 void P_Bullet::StartAttack()
 {
-	Input::MouseMove mouseMove = Input::GetInstance()->GetMouseMove();
-
-	if (Input::GetInstance()->TriggerKey(DIK_M)) 
-	{
-		ON_Mouse = !ON_Mouse;  // 押すたびに反転
-		OFF_Mouse = !ON_Mouse; // 逆状態にする
-	}
-
-
-
+	
 	if (!player_)
 		return;
 	isActive_ = true;
 	timer_ = 0.0f;
+	
 
 	const auto& rot = player_->GetRotation();
 
@@ -148,70 +168,22 @@ void P_Bullet::StartAttack()
 	forward.y = -sinf(pitch);
 	forward.z = -cosf(pitch) * cosf(yaw);
 
-	if (OFF_Mouse)
-	{
-		velocity_ = forward;
-	}
-	if (ON_Mouse)
-	{
-		velocity_.x = forward.x += mouseMove.lX * 0.15f;
-		velocity_.y = forward.y -= mouseMove.lY * 0.15f;
-	}
-
-
-	
-
+	velocity_ = forward;
 
 	const float kSpawnOffset = 1.5f;
 	worldTransform_.translation_ = player_->GetWorldPosition() + forward * kSpawnOffset;
+
 }
+*/
 
 
-
-void P_Bullet::StartAttack()
-{
-
-
-		if (!player_)
-			return;
-
-		isActive_ = true;
-		timer_ = 0.0f;
-	
-		// マウス座標取得
-		Vector2 mousePos = Input::GetInstance()->GetMousePosition();
-
-		// スクリーン → ワールド変換
-		Vector3 mouseWorld = camera_->aspectRatio * (mousePos.x - 640) / 640.0f * tanf(camera_->fovAngleY / 2.0f) * 
-			Vector3 {1, 0, 0}+ camera_->fovAngleY * (mousePos.y - 360) / 360.0f * tanf(camera_->fovAngleY / 2.0f) * 
-			Vector3 {0, 1, 0} + 
-			Vector3{0, 0, 1};
-
-		// プレイヤー位置
-		Vector3 playerPos = player_->GetWorldPosition();
-
-		// プレイヤー → マウス
-		Vector3 dir = mouseWorld - playerPos;
-
-		// 正規化
-		dir = Normalize(dir);
-	
-		// 弾速度
-		velocity_ = dir * 0.5f;
-
-		// 発射位置
-		const float kSpawnOffset = 1.5f;
-		worldTransform_.translation_ = playerPos + dir * kSpawnOffset;
-	
-}*/
-
-void P_Bullet::StartAttack()
+void P_Bullet::StartAttack_at_Mouse()
 {
 	if (!player_)
 		return;
-
 	isActive_ = true;
 	timer_ = 0.0f;
+	
 
 	// マウス座標
 	Vector2 mousePos = Input::GetInstance()->GetMousePosition();

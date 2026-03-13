@@ -1,4 +1,4 @@
-﻿#include "Tutorial.h"
+#include "Tutorial.h"
 using namespace KamataEngine;
 
 void Tutorial::Initialize()
@@ -28,7 +28,7 @@ void Tutorial::Update()
 	case Phase::kMain:
 
 		// タイトルシーンの終了条件
-		if (Input::GetInstance()->TriggerKey(DIK_SPACE))
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE) || Input::GetInstance()->IsTriggerMouse(0))
 		{
 			Audio::GetInstance()->PlayWave(Botan_);
 			// フェードアウト開始

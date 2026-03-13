@@ -59,9 +59,7 @@ void Game::Initialize()
 	
 	
 
-	P_Shot_ = Audio::GetInstance()->LoadWave("Sounds/sound/Shot.mp3");
-
-
+	
 	
 
 	
@@ -85,6 +83,10 @@ void Game::Initialize()
 
 	// プレイヤーの弾
 	modelPlayerBullet_ = Model::CreateFromOBJ("bullet", true);
+	// プレイヤーの弾の発射音声
+	P_Shot_ = Audio::GetInstance()->LoadWave("Sounds/sound/Shot.mp3");
+
+
 	// パーティクルの3Dモデルデータの生成
 	model_P_Particle_ = Model::CreateFromOBJ("deathParticle", true);
 
@@ -261,7 +263,7 @@ void Game::Update()
 	// フェード
 	fade_->Update();
 	
-
+	
 
 
 	time -= 20;
@@ -309,14 +311,14 @@ void Game::Update()
 		{
 			if (!bullet->IsActive())
 			{
-				bullet->StartAttack();
+				bullet->StartAttack_at_Mouse();
 				break;
 			}
 		}
 	}
 
-
-
+	
+	/*
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) 
 	{
 		Audio::GetInstance()->PlayWave(P_Shot_);
@@ -324,13 +326,18 @@ void Game::Update()
 		{
 			if (!bullet->IsActive()) 
 			{
-				bullet->StartAttack();
+				
+				bullet->StartAttack_at_Mouse();
+
 				break;
 			}
 		}
 	}
+*/
+
+
 	// プレイヤーの弾を更新
-	for (P_Bullet* bullet : bullets_) 
+	for(P_Bullet* bullet : bullets_) 
 	{
 		bullet->Update();
 		if (!bullet->GetReflection() && bullet->IsActive())
@@ -339,6 +346,11 @@ void Game::Update()
 		} 
 		//ImGui::Text("Score x 2 %d", bullet->GetReflection());
 	}
+
+	
+
+
+
 
 
 #pragma endregion
