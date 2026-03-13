@@ -2,11 +2,9 @@
 #include "KamataEngine.h"
 #include"MyMath.h"
 
-
-
 class MapChipField;
 
-class Cursor 
+class Cursor
 {
 public:
 	// 初期化
@@ -18,19 +16,10 @@ public:
 	// 描画
 	void Draw();
 
-  
-        // 位置を設定
-    void SetPosition(const KamataEngine::Vector3& position)
-	{
-		worldTransform_.translation_ = position;
-    }
-
-
 	// 敵の当たり判定サイズ
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
 
-	
 	// マップとの当たり判定情報
 	struct CollisionMapInfo 
 	{
@@ -41,10 +30,6 @@ public:
 	};
 	// ワールド座標を取得
 	KamataEngine::Vector3 GetWorldPosition();
-	
-
-	
-
 
 	// 加速度
 	static inline const float kAccleration = 0.1f;
@@ -57,12 +42,9 @@ public:
 
 	const KamataEngine::Vector3& GetVelocity() const { return velocity_; }
 
-	
-
 	const KamataEngine::Vector3& GetRotation() const { return worldTransform_.rotation_; }
 
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
-
 
 private:
 	// ワールド変換データ
@@ -77,4 +59,8 @@ private:
 	KamataEngine::Vector3 velocity_ = {};
 
 	MapChipField* mapChipField_ = nullptr;
+
+	//マウスの切り替え
+	uint32_t OFF_Mouse = true;
+	uint32_t ON_Mouse = false;
 };

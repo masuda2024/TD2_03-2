@@ -9,7 +9,7 @@
 using namespace KamataEngine;
 using namespace MathUtility;
 
-KamataEngine::Vector3 Cursor::GetWorldPosition()
+KamataEngine::Vector3 Cursor::GetWorldPosition() 
 {
 	// ワールド座標を入れる変数
 	KamataEngine::Vector3 worldPos;
@@ -20,7 +20,6 @@ KamataEngine::Vector3 Cursor::GetWorldPosition()
 
 	return worldPos;
 }
-
 
 void Cursor::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& position)
 {
@@ -33,44 +32,73 @@ void Cursor::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& pos
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / -2.0f;
-	
+
 	camera_ = camera;
 }
 
 void Cursor::Update()
 {
 
-
 	// キャラクターの移動ベクトル
 	Vector3 move = {0, 0, 0};
-	// キャラクターの移動速度
-	const float kCursorSpeed = 0.5f;
-
-	Vector3 acceleration = {};
-
-	// 押した方向で移動ベクトルを変更(左右)
-	if (Input::GetInstance()->PushKey(DIK_A))
+	
+	if (Input::GetInstance()->TriggerKey(DIK_M))
 	{
-		move.x -= kCursorSpeed;
-	} else if (Input::GetInstance()->PushKey(DIK_D)) 
+		ON_Mouse = true;
+		OFF_Mouse = false;
+	}
+	if (Input::GetInstance()->TriggerKey(DIK_N))
 	{
-		move.x += kCursorSpeed;
-		if (velocity_.x < 0.0f)
+		ON_Mouse = false;
+		OFF_Mouse = true;
+	}
+
+
+
+
+	if (OFF_Mouse)
+	{
+		// キャラクターの移動速度
+		const float kCursorSpeed = 0.5f;
+
+		Vector3 acceleration = {};
+
+		// 押した方向で移動ベクトルを変更(左右)
+		if (Input::GetInstance()->PushKey(DIK_A))
 		{
-			// 速度と逆方向に入力中は急ブレーキ
-			velocity_.x *= (1.0f - kAttenuation);
+			move.x -= kCursorSpeed;
+		} else if (Input::GetInstance()->PushKey(DIK_D))
+		{
+			move.x += kCursorSpeed;
+			if (velocity_.x < 0.0f)
+			{
+				// 速度と逆方向に入力中は急ブレーキ
+				velocity_.x *= (1.0f - kAttenuation);
+			}
+			acceleration.x += kAccleration;
 		}
-		acceleration.x += kAccleration;
-		
+		// 押した方向で移動ベクトルを変更(上下)
+		if (Input::GetInstance()->PushKey(DIK_W))
+		{
+			move.y += kCursorSpeed;
+		} else if (Input::GetInstance()->PushKey(DIK_S))
+		{
+			move.y -= kCursorSpeed;
+		}
 	}
-	// 押した方向で移動ベクトルを変更(上下)
-	if (Input::GetInstance()->PushKey(DIK_W)) 
+	/*
+	
+	*/
+	if (ON_Mouse)
 	{
-		move.y += kCursorSpeed;
-	} else if (Input::GetInstance()->PushKey(DIK_S))
-	{
-		move.y -= kCursorSpeed;
+		Input::MouseMove mouseMove = Input::GetInstance()->GetMouseMove();
+
+		worldTransform_.translation_.x += mouseMove.lX * 0.15f;
+		worldTransform_.translation_.y -= mouseMove.lY * 0.15f;
+	
 	}
+	
+	
 
 	// 座標移動(ベクトルの加算)
 	worldTransform_.translation_ += move;
@@ -80,7 +108,4 @@ void Cursor::Update()
 	worldTransform_.TransferMatrix();
 }
 
-void Cursor::Draw()
-{
-	model_->Draw(worldTransform_, *camera_);
-}
+void Cursor::Draw() { model_->Draw(worldTransform_, *camera_); }

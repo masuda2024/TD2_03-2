@@ -1,4 +1,4 @@
-﻿#include "P_Bullet.h"
+#include "P_Bullet.h"
 #include "KamataEngine.h"
 
 #include "MapChipField.h"
@@ -27,8 +27,6 @@ void P_Bullet::Initialize(KamataEngine::Model* model, Camera* camera, Player* pl
 
 	player_ = player;
 
-	
-
 	// ワールド変換データ初期化
 	worldTransform_.Initialize();
 }
@@ -40,7 +38,6 @@ void P_Bullet::Update()
 	{
 		return;
 	}
-	
 
 	CollisionMapInfo collisionMapInfo{};
 	collisionMapInfo.move = velocity_;
@@ -48,30 +45,22 @@ void P_Bullet::Update()
 	CheckMapCollision(collisionMapInfo);
 	CheckMapHit(collisionMapInfo);
 
-
-
-
 	// 弾を移動
 	worldTransform_.translation_ += velocity_;
 
-
-	
 	timer_ += 1.0f / 60.0f;
-	if (timer_ >= kLifeTime)
+	if (timer_ >= kLifeTime) 
 	{
 		isActive_ = false;
 		return;
 	}
-
-
-
 
 	// アフィン変換行列
 	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 	worldTransform_.TransferMatrix(); // プレイヤーの座標の計算
 }
 
-void P_Bullet::StartAttack() 
+void P_Bullet::StartAttack()
 {
 	if (!player_)
 		return;
@@ -143,7 +132,7 @@ void P_Bullet::CheckMapCollisionUp(CollisionMapInfo& info)
 		hit = true;
 	}
 
-	if (hit) 
+	if (hit)
 	{
 		// 盛り込みを排除する方向に移動量
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + info.move + KamataEngine::Vector3(0, +kHeight / 2.0f, 0));
@@ -161,16 +150,16 @@ void P_Bullet::CheckMapCollisionUp(CollisionMapInfo& info)
 	}
 }
 
-void P_Bullet::CheckMapCollisionDown(CollisionMapInfo& info)
+void P_Bullet::CheckMapCollisionDown(CollisionMapInfo& info) 
 {
-	if (info.move.y >= 0)
+	if (info.move.y >= 0) 
 	{
 		return;
 	}
 
 	std::array<KamataEngine::Vector3, kNumCorner> positionsNew;
 
-	for (uint32_t i = 0; i < positionsNew.size(); ++i) 
+	for (uint32_t i = 0; i < positionsNew.size(); ++i)
 	{
 		positionsNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
 	}
@@ -184,7 +173,7 @@ void P_Bullet::CheckMapCollisionDown(CollisionMapInfo& info)
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	mapChipTypeNext = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex - 1);
-	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock)
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) 
 	{
 		hit = true;
 	}
@@ -194,7 +183,7 @@ void P_Bullet::CheckMapCollisionDown(CollisionMapInfo& info)
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	mapChipTypeNext = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex - 1);
 
-	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) 
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock)
 	{
 		hit = true;
 	}
@@ -222,14 +211,14 @@ void P_Bullet::CheckMapCollisionDown(CollisionMapInfo& info)
 void P_Bullet::CheckMapCollisionRight(CollisionMapInfo& info) 
 {
 	// 右移動アリ
-	if (info.move.x <= 0) 
+	if (info.move.x <= 0)
 	{
 		return;
 	}
 
 	std::array<KamataEngine::Vector3, kNumCorner> positionsNew;
 
-	for (uint32_t i = 0; i < positionsNew.size(); ++i) 
+	for (uint32_t i = 0; i < positionsNew.size(); ++i)
 	{
 		positionsNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
 	}
@@ -244,7 +233,7 @@ void P_Bullet::CheckMapCollisionRight(CollisionMapInfo& info)
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	mapChipTypeNext = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex - 1, indexSet.yIndex);
 
-	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) 
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock)
 	{
 		hit = true;
 	}
@@ -280,7 +269,7 @@ void P_Bullet::CheckMapCollisionRight(CollisionMapInfo& info)
 	}
 }
 
-void P_Bullet::CheckMapCollisionLeft(CollisionMapInfo& info) 
+void P_Bullet::CheckMapCollisionLeft(CollisionMapInfo& info)
 {
 	// 左移動アリ
 	if (info.move.x >= 0) 
@@ -290,7 +279,7 @@ void P_Bullet::CheckMapCollisionLeft(CollisionMapInfo& info)
 
 	std::array<KamataEngine::Vector3, kNumCorner> positionsNew;
 
-	for (uint32_t i = 0; i < positionsNew.size(); ++i) 
+	for (uint32_t i = 0; i < positionsNew.size(); ++i)
 	{
 		positionsNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
 	}
@@ -304,7 +293,7 @@ void P_Bullet::CheckMapCollisionLeft(CollisionMapInfo& info)
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	mapChipTypeNext = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex + 1, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) 
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock)
 	{
 		hit = true;
 	}
@@ -327,7 +316,7 @@ void P_Bullet::CheckMapCollisionLeft(CollisionMapInfo& info)
 		MapChipField::IndexSet indexSetNow;
 		indexSetNow = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + KamataEngine::Vector3(-kWidth / 2.0f, 0, 0));
 
-		if (indexSetNow.xIndex != indexSet.xIndex) 
+		if (indexSetNow.xIndex != indexSet.xIndex)
 		{
 			// めり込み先ブロックの範囲矩形
 			MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
@@ -355,13 +344,9 @@ void P_Bullet::CheckMapHit(CollisionMapInfo& info)
 		velocity_.y = std::abs(velocity_.y);
 
 	reflection_ = true;
-	
 }
 
-
-#pragma endregion 
-
-
+#pragma endregion
 
 void P_Bullet::Draw() 
 {
@@ -372,8 +357,6 @@ void P_Bullet::Draw()
 
 	model_->Draw(worldTransform_, *camera_);
 }
-
-
 
 #pragma region プレイヤーの弾と敵の衝突
 
@@ -390,16 +373,11 @@ AABB P_Bullet::GetAABB()
 }
 
 // 弾と敵の衝突応答
-void P_Bullet::OnCollition(const Enemy* enemy) 
-{
-	(void)enemy;
-}
+void P_Bullet::OnCollition(const Enemy* enemy) { (void)enemy; }
 
 #pragma endregion
 
-
-
-KamataEngine::Vector3 P_Bullet::GetWorldPosition()
+KamataEngine::Vector3 P_Bullet::GetWorldPosition() 
 {
 	// ワールド座標を入れる変数
 	KamataEngine::Vector3 worldPos;
@@ -411,7 +389,7 @@ KamataEngine::Vector3 P_Bullet::GetWorldPosition()
 	return worldPos;
 }
 
-KamataEngine::Vector3 P_Bullet::CornerPosition(const KamataEngine::Vector3& center, Corner corner) 
+KamataEngine::Vector3 P_Bullet::CornerPosition(const KamataEngine::Vector3& center, Corner corner)
 {
 
 	KamataEngine::Vector3 offetTable[kNumCorner] = 

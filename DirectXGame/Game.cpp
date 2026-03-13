@@ -26,180 +26,6 @@ using namespace KamataEngine;
 using namespace MathUtility;
 
 
-struct MousePosition
-{
-	float x;
-	float y;
-};
-
-struct Vector2
-{
-	float x;
-	float y;
-};
-
-
-
-
-
-#pragma region ベクトルの計算
-
-// 加算
-Vector3 Add(const Vector3& v1, const Vector3& v2)
-{
-	Vector3 result;
-	result = {v1.x + v2.x, v1.y + v2.y, v1.z + v2.z};
-	return result;
-};
-
-// 減算
-Vector3 VectorSubtract(const Vector3& v1, const Vector3& v2)
-{
-	Vector3 result;
-	result = {v1.x - v2.x, v1.y - v2.y, v1.z - v2.z};
-	return result;
-};
-
-// スカラー倍
-Vector3 Multiply(float scalar, const Vector3& v)
-{
-	Vector3 result;
-	result = {v.x * scalar, v.y * scalar, v.z * scalar};
-	return result;
-};
-
-// 内積
-float Dot(const Vector3& v1, const Vector3& v2) 
-{
-	float result;
-	result = {v1.x * v2.x + v1.y * v2.y + v1.z * v2.z};
-	return result;
-};
-
-// 長さ(ノルム)
-float Length(const Vector3& v)
-{
-	float result;
-	result = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
-	return result;
-};
-
-// 正規化
-Vector3 Nomalize(const Vector3& v)
-{
-	Vector3 result;
-	result = {v.x / sqrtf(v.x * v.x + v.y * v.y + v.z * v.z), v.y / sqrtf(v.x * v.x + v.y * v.y + v.z * v.z), v.z / sqrtf(v.x * v.x + v.y * v.y + v.z * v.z)};
-	return result;
-};
-
-#pragma endregion
-
-/*
-// ビューボート変換行列
-Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth)
-{
-
-	Matrix4x4 result{};
-
-	result.m[0][0] = width / 2.0f;
-	result.m[0][1] = 0.0f;
-	result.m[0][2] = 0.0f;
-	result.m[0][3] = 0.0f;
-
-	result.m[1][0] = 0.0f;
-	result.m[1][1] = -(height / 2.0f);
-	result.m[1][2] = 0.0f;
-	result.m[1][3] = 0.0f;
-
-	result.m[2][0] = 0.0f;
-	result.m[2][1] = 0.0f;
-	result.m[2][2] = maxDepth - minDepth;
-	result.m[2][3] = 0.0f;
-
-	result.m[3][0] = left + (width / 2.0f);
-	result.m[3][1] = top + (height / 2.0f);
-	result.m[3][2] = minDepth;
-	result.m[3][3] = 1.0f;
-
-	return result;
-}
-
-// ビューボート変換行列
-Matrix4x4 MakeViewportMatrix(float VpWidth, float VpHeight, float OffsetX, float OffsetY) {
-
-	Matrix4x4 result{};
-
-	result.m[0][0] = VpWidth / 2.0f;
-	result.m[0][1] = 0.0f;
-	result.m[0][2] = 0.0f;
-	result.m[0][3] = 0.0f;
-
-	result.m[1][0] = 0.0f;
-	result.m[1][1] = -(VpHeight / 2.0f);
-	result.m[1][2] = 0.0f;
-	result.m[1][3] = 0.0f;
-
-	result.m[2][0] = 0.0f;
-	result.m[2][1] = 0.0f;
-	result.m[2][2] = 1.0f;
-	result.m[2][3] = 0.0f;
-
-	result.m[3][0] = (VpWidth / 2.0f) + OffsetX;
-	result.m[3][1] = (VpHeight / 2.0f) + OffsetY;
-	result.m[3][2] = 0.0f;
-	result.m[3][3] = 1.0f;
-
-	return result;
-}
-
-Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
-	Matrix4x4 result{};
-
-	result.m[0][0] = m1.m[0][0] * m2.m[0][0] + m1.m[0][1] * m2.m[1][0] + m1.m[0][2] * m2.m[2][0] + m1.m[0][3] * m2.m[3][0];
-	result.m[0][1] = m1.m[0][0] * m2.m[0][1] + m1.m[0][1] * m2.m[1][1] + m1.m[0][2] * m2.m[2][1] + m1.m[0][3] * m2.m[3][1];
-	result.m[0][2] = m1.m[0][0] * m2.m[0][2] + m1.m[0][1] * m2.m[1][2] + m1.m[0][2] * m2.m[2][2] + m1.m[0][3] * m2.m[3][2];
-	result.m[0][3] = m1.m[0][0] * m2.m[0][3] + m1.m[0][1] * m2.m[1][3] + m1.m[0][2] * m2.m[2][3] + m1.m[0][3] * m2.m[3][3];
-
-	result.m[1][0] = m1.m[1][0] * m2.m[0][0] + m1.m[1][1] * m2.m[1][0] + m1.m[1][2] * m2.m[2][0] + m1.m[1][3] * m2.m[3][0];
-	result.m[1][1] = m1.m[1][0] * m2.m[0][1] + m1.m[1][1] * m2.m[1][1] + m1.m[1][2] * m2.m[2][1] + m1.m[1][3] * m2.m[3][1];
-	result.m[1][2] = m1.m[1][0] * m2.m[0][2] + m1.m[1][1] * m2.m[1][2] + m1.m[1][2] * m2.m[2][2] + m1.m[1][3] * m2.m[3][2];
-	result.m[1][3] = m1.m[1][0] * m2.m[0][3] + m1.m[1][1] * m2.m[1][3] + m1.m[1][2] * m2.m[2][3] + m1.m[1][3] * m2.m[3][3];
-
-	result.m[2][0] = m1.m[2][0] * m2.m[0][0] + m1.m[2][1] * m2.m[1][0] + m1.m[2][2] * m2.m[2][0] + m1.m[2][3] * m2.m[3][0];
-	result.m[2][1] = m1.m[2][0] * m2.m[0][1] + m1.m[2][1] * m2.m[1][1] + m1.m[2][2] * m2.m[2][1] + m1.m[2][3] * m2.m[3][1];
-	result.m[2][2] = m1.m[2][0] * m2.m[0][2] + m1.m[2][1] * m2.m[1][2] + m1.m[2][2] * m2.m[2][2] + m1.m[2][3] * m2.m[3][2];
-	result.m[2][3] = m1.m[2][0] * m2.m[0][3] + m1.m[2][1] * m2.m[1][3] + m1.m[2][2] * m2.m[2][3] + m1.m[2][3] * m2.m[3][3];
-
-	result.m[3][0] = m1.m[3][0] * m2.m[0][0] + m1.m[3][1] * m2.m[1][0] + m1.m[3][2] * m2.m[2][0] + m1.m[3][3] * m2.m[3][0];
-	result.m[3][1] = m1.m[3][0] * m2.m[0][1] + m1.m[3][1] * m2.m[1][1] + m1.m[3][2] * m2.m[2][1] + m1.m[3][3] * m2.m[3][1];
-	result.m[3][2] = m1.m[3][0] * m2.m[0][2] + m1.m[3][1] * m2.m[1][2] + m1.m[3][2] * m2.m[2][2] + m1.m[3][3] * m2.m[3][2];
-	result.m[3][3] = m1.m[3][0] * m2.m[0][3] + m1.m[3][1] * m2.m[1][3] + m1.m[3][2] * m2.m[2][3] + m1.m[3][3] * m2.m[3][3];
-
-	return result;
-}
-
-
-// 3次元アフィン変換行列
-Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
-	Matrix4x4 result{};
-
-	Matrix4x4 scaleMatrix = MakeScaleMatrix(scale);
-
-	Matrix4x4 rotateXMatrix = MakeRotateXMatrix(rotate.x);
-	Matrix4x4 rotateYMatrix = MakeRotateYMatrix(rotate.y);
-	Matrix4x4 rotateZMatrix = MakeRotateZMatrix(rotate.z);
-	Matrix4x4 rotateXYZMatrix = Multiply(rotateXMatrix, Multiply(rotateYMatrix, rotateZMatrix));
-
-	Matrix4x4 translateMatrix = MakeTranslateMatrix(translate);
-
-	result = Multiply(Multiply(scaleMatrix, rotateXYZMatrix), translateMatrix);
-
-	return result;
-}
-
-
-
-*/
 
 
 
@@ -214,20 +40,6 @@ void Game::Initialize()
 #pragma endregion
 
 	
-
-
-
-
-	//ビュープロジェクションの初期化
-	//viewProjectionMatrix_ = MakeViewProjectionMatrix(camera_);
-	
-
-
-	//マウスカーソルの位置
-	//Input::GetInstance()->GetMousePosition();
-	
-	//Input::MouseMove mouseMove = Input::GetInstance()->GetMouseMove();
-
 
 
 
@@ -320,8 +132,6 @@ void Game::Initialize()
 
 #pragma region カーソル
 	
-	
-	/**/
 	
 	
 	modelCursor_ = Model::CreateFromOBJ("Cursor");
@@ -451,115 +261,6 @@ void Game::Update()
 	// フェード
 	fade_->Update();
 	
-	cursor_->Update();
-
-	/*
-	Matrix4x4 viewMatrix;
-	Matrix4x4 projectionMatrix;
-	Matrix4x4 viewportMatrix;
-	
-
-
-
-
-
-#pragma region マウスカーソル位置
-	//マウス座標(スクリーン座標)を取得する
-	POINT mousePoint;
-	GetCursorPos(&mousePoint);
-	//クライアントエリア座標に変換する
-	//HWND hwnd = GetActiveWindow();
-	HWND hwnd = WinApp::GetInstance()->GetHwnd();
-	ScreenToClient(hwnd, &mousePoint);
-	//マウス座標をモデル座標に変換する
-	
-
-
-
-	//ビュープロジェクションビューポート合成行列
-    Matrix4x4 matVPV = Multiply(Multiply(viewMatrix, projectionMatrix), viewportMatrix);
-	//合成行列の逆行列
-    Matrix4x4 matInverceVPV = Inverse(matVPV);
-	//スクリーン座標
-	KamataEngine::Vector3 posNear = KamataEngine::Vector3(static_cast<float>(mousePoint.x), static_cast<float>(mousePoint.y), 0.0f);
-	KamataEngine::Vector3 posFar = KamataEngine::Vector3(static_cast<float>(mousePoint.x), static_cast<float>(mousePoint.y), 1.0f);
-	//スクリーン座標系からワールド座標系へ
-	posNear = Transform(posNear, matInverceVPV);
-	posFar = Transform(posFar, matInverceVPV);
-	// マウスレイの方向
-	KamataEngine::Vector3 mouseDirection = posNear - posFar;
-	mouseDirection = Normalize(mouseDirection);
-	//カメラから照準オブジェクトの距離
-	const float kDistanceTestObject = 100.0f;
-	worldTransform_.translation_ = posNear + mouseDirection * kDistanceTestObject;
-	
-
-
-
-
-
-
-
-	int mouseX = mousePoint.x;
-	int mouseY = mousePoint.y;
-	
-
-	ImGui::Text("mousePoint X  %d", mouseX);
-	ImGui::Text("mousePoint Y  %d", mouseY);
-
-	//cursor_->SetPosition({static_cast<float>(mouseX), static_cast<float>(mouseY)});
-	//int MoveF = 0;
-
-#pragma endregion
-	
-	*/
-
-
-
-
-
-
-/*
-
-
-
-
-
-
-	
-	KamataEngine::Vector2 current_P = {0.0f, 0.0f};
-
-	for (P_Bullet* bullet : bullets_) 
-	{
-		float start = bullet->GetWorldPosition().x;
-		float end = static_cast<float>(mouseX) / 10.0f; // マウスのX座標を10で割って弾の終点とする
-		
-		current_P.x = start + (end - start) * MoveF / 10.0f; // MoveFを10で割って0から1の範囲にする
-		
-		if (Cursor_ON_Mouse)
-		{
-			MoveF = 1;
-
-		}
-
-	}
-
-*/
-
-	/*
-	
-	
-
-
-
-
-	if (Cursor_ON_Mouse)
-	{
-		cursor_->SetPosition({static_cast<float>(mouseX), static_cast<float>(mouseY)});
-	}
-*/
-	
-
 
 
 
@@ -645,7 +346,7 @@ void Game::Update()
 #pragma region カーソル
 
 
-	//cursor_->Update();
+	cursor_->Update();
 	Input::MouseMove mouseMove = Input::GetInstance()->GetMouseMove();
 	ImGui::Text("Mouse Move X: %ld, Y: %ld, Z: %ld", mouseMove.lX, mouseMove.lY, mouseMove.lZ);
 
