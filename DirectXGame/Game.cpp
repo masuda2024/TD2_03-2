@@ -72,13 +72,16 @@ void Game::Initialize()
 
 	
 	// プレイヤー
-	modelPlayer_ = Model::CreateFromOBJ("player", true);
+	//modelPlayer_ = Model::CreateFromOBJ("player", true);
 
-	
+	modelPlayer_ = Model::CreateFromOBJ("H_ziki", true);
+
 
 
 	// プレイヤーの弾
-	modelPlayerBullet_ = Model::CreateFromOBJ("bullet", true);
+	//modelPlayerBullet_ = Model::CreateFromOBJ("bullet", true);
+	modelPlayerBullet_ = Model::CreateFromOBJ("Z_bullet", true);
+	
 	// プレイヤーの弾の発射音声
 	P_Shot_ = Audio::GetInstance()->LoadWave("Sounds/sound/Shot.mp3");
 
@@ -148,8 +151,13 @@ void Game::Initialize()
 
 	
 	// 敵の3Dモデル
-	modelEnemy_ = Model::CreateFromOBJ("enemy", true);
+	//modelEnemy_ = Model::CreateFromOBJ("enemy", true);
 	
+	modelEnemy_ = Model::CreateFromOBJ("kaizyu1", true);
+	
+
+
+
 	model_E_Particle_ = Model::CreateFromOBJ("E_deathParticle", true);
 
 	// 敵のHP
