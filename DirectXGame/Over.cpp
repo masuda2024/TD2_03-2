@@ -4,7 +4,7 @@ using namespace KamataEngine;
 
 void Over::Initialize() 
 {
-	textureHandle_ = TextureManager::Load("gameover.png");
+	textureHandle_ = TextureManager::Load("Scenes/gameover.png");
 	overSprite_ = Sprite::Create(textureHandle_, {0, 0});
 
 	Botan_ = Audio::GetInstance()->LoadWave("Sounds/sound/Decision2.mp3");

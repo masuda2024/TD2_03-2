@@ -5,7 +5,7 @@ using namespace KamataEngine;
 
 void Title::Initialize()
 {
-	textureHandle_ = TextureManager::Load("tdTitle.png");
+	textureHandle_ = TextureManager::Load("Scenes/tdTitle.png");
 	titleSprite_ = KamataEngine::Sprite::Create(textureHandle_, {0, 0});
 	
 	Botan_ = Audio::GetInstance()->LoadWave("Sounds/sound/Decision2.mp3");

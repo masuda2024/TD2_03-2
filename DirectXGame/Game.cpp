@@ -122,11 +122,12 @@ void Game::Initialize()
 	//得点
 	pointHandle_ = TextureManager::Load("Point.png");
 	pointSprite_ = KamataEngine::Sprite::Create(pointHandle_, {0, 0});
+	
 	//時間
 	timeHandle_ = TextureManager::Load("Time.png");
 	timeSprite_ = KamataEngine::Sprite::Create(timeHandle_, {0, 0});
 
-
+	
 #pragma endregion
 
 
@@ -162,7 +163,24 @@ void Game::Initialize()
 	
 	model_E_Particle_ = Model::CreateFromOBJ("E_deathParticle", true);
 
-    
+	// 敵のHP
+	enemyhpHandle_ = TextureManager::Load("Ehp.png");
+	enemyhpSprite_ = KamataEngine::Sprite::Create(enemyhpHandle_, {1050, 0});
+
+	
+	
+	
+	// 敵の生成
+	enemy_ = new Enemy();
+	// 敵の座標
+	KamataEngine::Vector3 enemyPosition = {35, 5, 0};
+	enemy_->Initialize(modelEnemy_, &camera_, enemyPosition);
+	// enemy_->SetMapChipField(mapChipField_);
+
+
+
+
+    /*
 	    // 敵座標をマップチップ番号で指定
 	std::vector<KamataEngine::Vector2> enemyTilePositions = 
 	{
@@ -190,7 +208,7 @@ void Game::Initialize()
 		// 敵のデスパーティクル
 		E_Particles_ = new E_DeathParticle();
 		E_Particles_->Initialize(model_E_Particle_, &camera_, enemyPosition);
-	}
+	}*/
 
 
 #pragma endregion
@@ -263,33 +281,58 @@ void Game::Update()
 	// フェード
 	fade_->Update();
 	
-	
+
+	#pragma region UI
+
+	// enemyHPのスプライト
+	enemyhpHandle_ = TextureManager::Load("Sprites/Ehp.png");
+	enemyhpSprite_ = KamataEngine::Sprite::Create(enemyhpHandle_, {1050, 0});
+
+	_enemyhpHandle_ = TextureManager::Load("Sprites/Ehp_.png");
+	_enemyhpSprite_ = KamataEngine::Sprite::Create(_enemyhpHandle_, {1050, 0});
 
 
+	// 敵HP
+	float enemyHpRatio = (float)enemy_->E_GetHP() / (float)enemy_->E_GetMaxHP();
+	enemyHpRatio = std::clamp(enemyHpRatio, 0.0f, 1.0f);
+	enemyhpSprite_->SetSize({enemyHpRatio * 300.0f, 30.0f}); // 幅200px、高さ20px
+	enemyhpSprite_->SetPosition({980, 0});                   // 左上少し下に表示
+
+	_enemyhpSprite_->SetSize({300.0f, 30.0f}); // 幅200px、高さ20px
+	_enemyhpSprite_->SetPosition({980, 0});    // 左上少し下に表示
+
+
+
+
+
+
+
+	/*
 	time -= 20;
 
 	float timeRatio = (float)time / (float)maxtime;
 	timeRatio = std::clamp(timeRatio, 0.0f, 1.0f);
 	timeSprite_->SetSize({timeRatio * 1280.0f, 30.0f}); // 幅200px、高さ20px
-	timeSprite_->SetPosition({0, 0});           
-
+	timeSprite_->SetPosition({0, 0});
 
 
 	float scoreRatio = (float)score / (float)MaxScore;
 	scoreRatio = std::clamp(scoreRatio, 0.0f, 1.0f);
-	pointSprite_->SetSize({scoreRatio * 1280.0f, 30.0f}); // 幅200px、高さ20px
-	pointSprite_->SetPosition({0, 30});           
-
-
-	/*
-	// 敵HP
-	float enemyHpRatio = (float)enemy_->E_GetHP() / (float)enemy_->E_GetMaxHP();
-	enemyHpRatio = std::clamp(enemyHpRatio, 0.0f, 1.0f);
-	enemyhpSprite_->SetSize({enemyHpRatio * 200.0f, 20.0f}); // 幅200px、高さ20px
-	enemyhpSprite_->SetPosition({1060, 10});                 // 左上少し下に表示
+	pointSprite_->SetSize({scoreRatio * 200.0f, 20.0f}); // 幅200px、高さ20px
+	pointSprite_->SetPosition({1060, 10});           
 */
 
+
+
+	#pragma endregion
+
+
 	
+
+	/**/
+	
+
+	/*
 	if (time <= 0) 
 	{
 		phase_ = Phase::kDeath;
@@ -298,7 +341,7 @@ void Game::Update()
 	if (score >= MaxScore)
 	{
 		phase_ = Phase::kEnemyDeath;
-	}
+	}*/
 
 
 
@@ -374,13 +417,18 @@ void Game::Update()
 #pragma endregion
 
 #pragma region 敵
-	
+	/*
 	for (Enemy* enemy : enemies_)
 	{
-		enemy->Update();
-	}
+		
+	}*/
+	enemy_->Update();
 	
-	
+	ImGui::Text("Enemy HP : %d", enemy_->E_GetHP());
+
+
+
+
 	//ImGui::Text("Score %d", score);
 
 #pragma endregion
@@ -415,16 +463,15 @@ void Game::Update()
 			P_Particles_ = new P_DeathParticle();
 			P_Particles_->Initialize(model_P_Particle_, &camera_, deathParticlesPosition);
 		}
-		for (Enemy* enemy : enemies_)
-		{
+		
 
 
-			if (enemy->IsEnemyDead() == true)
+			if (enemy_->IsEnemyDead() == true)
 			{
 				std::vector<KamataEngine::Vector2> enemyTilePositions;
 
 				// 敵の座標を取得
-				const KamataEngine::Vector3 E_deathParticlesPosition = enemy->GetWorldPosition();
+				const KamataEngine::Vector3 E_deathParticlesPosition = enemy_->GetWorldPosition();
 
 				// パーティクル
 				E_Particles_ = new E_DeathParticle();
@@ -432,11 +479,13 @@ void Game::Update()
 			} 
 
 
-			if (enemy->IsEnemyDead2() == true)
+			if (enemy_->IsEnemyDead() == true)
 			{
 				phase_ = Phase::kEnemyDeath;
 			}
-		}
+		    /*
+		    for (Enemy* enemy : enemies_) {
+		}*/
 		
 		
 
@@ -500,7 +549,7 @@ void Game::Update()
 
 
 	// ブロックの更新
-	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) 
+	for(std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) 
 	{
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
 		{
@@ -561,15 +610,16 @@ void Game::ChangePhase()
 #pragma endregion
 
 #pragma region 敵
+		/*
 		for (Enemy* enemy : enemies_)
 		{
-			if (enemy->IsEnemyDead2() == true)
-			{
-				// デス演出フェーズに切り替え
-				phase_ = Phase::kEnemyDeath;
-			}
+			
+		}*/
+		if (enemy_->IsEnemyDead() == true) 
+		{
+			// デス演出フェーズに切り替え
+			phase_ = Phase::kEnemyDeath;
 		}
-		
 #pragma endregion
 
 		break;
@@ -580,6 +630,7 @@ void Game::ChangePhase()
 		if (P_Particles_) 
 		{
 			// シーン終了
+			//ゲームオーバーへ
 			finishedGAME_ = true;
 		}
 
@@ -587,6 +638,7 @@ void Game::ChangePhase()
 	case Phase::kEnemyDeath:
 
 		// シーン終了
+		// ゲームクリアへ
 		finishedGAME2_ = true;
 
 		break;
@@ -608,36 +660,37 @@ void Game::CheckAllCollisions()
 	{
 		// プレイヤーの弾
 		aabb1 = bullet->GetAABB();
+		/*
 		for (Enemy* enemy : enemies_)
 		{
-			aabb2 = enemy->GetAABB();
-			if (IsCollition(aabb1, aabb2))
-			{
-				// 自キャラの衝突時関数を呼び出す
-				bullet->OnCollition(enemy);
-				enemy->OnCollition(bullet);
-				
-			} 
-		}
+			
+		}*/
+		aabb2 = enemy_->GetAABB();
+		if (IsCollition(aabb1, aabb2))
+		{
+			// 自キャラの衝突時関数を呼び出す
+			bullet->OnCollition(enemy_);
+			enemy_->OnCollition(bullet);
+		} 
 	}
-	
+	/*
 	for (Enemy* enemy : enemies_)
 	{
-		aabb2 = enemy->GetAABB();
-		for (P_Bullet* bullet : bullets_)
-		{
-			aabb1 = bullet->GetAABB();
-			if (IsCollition(aabb1, aabb2))
-			{
-				enemy->OnCollition(bullet);
-				bullet->OnCollition(enemy);
-
-				score += 150;
-			}
-		}
+		
 	}
+	
+	aabb2 = enemy_->GetAABB();
+	for (P_Bullet* bullet : bullets_)
+	{
+		aabb1 = bullet->GetAABB();
+		if (IsCollition(aabb1, aabb2))
+		{
+			enemy_->OnCollition(bullet);
+			bullet->OnCollition(enemy_);
 
-
+			score += 150;
+		}
+	}*/
 #pragma endregion
 	
 
@@ -654,6 +707,7 @@ void Game::Draw()
 	
 	pointSprite_->Draw();
 
+	enemyhpSprite_->Draw();
 	
 	Sprite::PostDraw();
 
@@ -717,13 +771,14 @@ if (!player_->IsDead())
 	// 敵の描画 下記のフェーズのみ描画
 	if (phase_ == Phase::kPlay || phase_ == Phase::kFadeIn || phase_ == Phase::kDeath) 
 	{
+		/*
 		for (Enemy* enemy : enemies_)
 		{
-			std::srand(static_cast<unsigned int>(std::time(nullptr)));
-		
-			enemy->Draw();
-		}
+			
+		}*/
+		std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
+		enemy_->Draw();
 	}
 	// パーティクル(敵)
 	if (phase_ == Phase::kEnemyDeath)
@@ -755,12 +810,15 @@ Game::~Game()
 		delete bullet;
 	}
 	delete P_Particles_;
+	/*
 	for (Enemy* enemy : enemies_)
 	{
-		delete enemy;
-	}
-    
+		
+	}*/
+	delete enemy_;
 	delete E_Particles_;
+	delete enemyhpSprite_;
+	delete _enemyhpSprite_;
 
 	delete skydome_;
 

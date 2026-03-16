@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "KamataEngine.h"
 #include "MyMath.h"
@@ -12,11 +12,12 @@ public:
 	// デスフラグ
 	bool isenemyDead_ = false;
 	bool isenemyDead2_ = false;
-	bool iscollition = false;
+    bool iscollition = false;
 	// デスフラグのgetter
 	// bool IsEnemyDead() const { return isenemyDead_; }
 
-
+	// 体力表示
+	int32_t enemyHp;
 
 	// 敵の当たり判定サイズ
 	static inline const float kWidth = 10.0f;
@@ -57,11 +58,9 @@ public:
 	// 描画
 	void Draw();
 
-	int E_GetHP() const { return point; }
-	int E_GetMaxHP() const { return maxP_; }
+	int E_GetHP() const { return hp_; }
+	int E_GetMaxHP() const { return maxHP_; }
 	bool IsEnemyDead() const { return isenemyDead_; }
-	bool IsEnemyDead2() const { return isenemyDead2_; }
-	bool E_Collition() const { return iscollition; }
 	
 
 
@@ -73,7 +72,7 @@ private:
 	float nextActionTime_ = 0.0f;
 	float setEnemy_ = 0.0f;
 
-	int respawnTimer = 80;
+	int32_t respawnTimer = 80;
 
 	// ワールド変換データ
 	KamataEngine::WorldTransform worldTransform_;
@@ -87,9 +86,10 @@ private:
 	KamataEngine::Vector3 velocity_ = {};
 
 
-	int point = 0;
-	int maxP_ = 50000;
+	int32_t point = 0;
+	int32_t maxP_ = 50000;
 
 	
-
+	int32_t maxHP_ = 10000;
+	int32_t hp_ = maxHP_;
 };

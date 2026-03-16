@@ -166,8 +166,8 @@ private:
 
 	
 	//時間
-	int maxtime = 100000;
-	int time = maxtime;
+	//int maxtime = 100000;
+	//int time = maxtime;
 
 
 	// 天球
@@ -213,8 +213,8 @@ private:
 #pragma region 敵
 
 	// 敵
-	//Enemy* enemy_ = nullptr;
-	std::list<Enemy*> enemies_;
+	Enemy* enemy_ = nullptr;
+	//std::list<Enemy*> enemies_;
 
 
 	KamataEngine::Model* modelEnemy_ = nullptr;
@@ -231,7 +231,8 @@ private:
 	uint32_t enemyhpHandle_ = 0;
 	// スプライト
 	Sprite* enemyhpSprite_ = nullptr;
-
+	uint32_t _enemyhpHandle_ = 0;
+	Sprite* _enemyhpSprite_ = nullptr;
 #pragma endregion
 
 	

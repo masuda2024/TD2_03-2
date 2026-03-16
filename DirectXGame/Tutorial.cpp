@@ -4,7 +4,7 @@ using namespace KamataEngine;
 void Tutorial::Initialize()
 {
 	// チュートリアルのスプライト
-	t_Handle_ = TextureManager::Load("tdTutorial.png");
+	t_Handle_ = TextureManager::Load("Scenes/tdTutorial.png");
 	tutorialSprite_ = KamataEngine::Sprite::Create(t_Handle_, {0, 0});
 
 	Botan_ = Audio::GetInstance()->LoadWave("Sounds/sound/Decision2.mp3");

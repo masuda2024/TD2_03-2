@@ -1,4 +1,4 @@
-﻿#include "Enemy.h"
+#include "Enemy.h"
 #include"Game.h"
 #include"cassert"
 #include<numbers>
@@ -34,7 +34,7 @@ void Enemy::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& posi
 	worldTransform_.Initialize();
 
 	
-	
+	enemyHp = 10000;
 	
 }
 
@@ -72,6 +72,10 @@ void Enemy::Draw()
 		
 	}
 	model_->Draw(worldTransform_, *camera_);
+	if (enemyHp < 0)
+	{
+		isenemyDead_ = true;
+	}
 }
 
 KamataEngine::Vector3 Enemy::GetWorldPosition()
@@ -104,8 +108,15 @@ AABB Enemy::GetAABB()
 void Enemy::OnCollition(const P_Bullet* playerBullet)
 {
 	(void)playerBullet;
-	isenemyDead_=true;	
-	iscollition = true;
+	//isenemyDead_=true;	
+	//iscollition = true;
+	enemyHp -= 10;
+	hp_ -= 10;
+	if (hp_ <= 0)
+	{
+		hp_ = 0;
+		isenemyDead_ = true;
+	}
 }
 
 #pragma endregion

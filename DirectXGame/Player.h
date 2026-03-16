@@ -129,6 +129,6 @@ private:
 
 	MapChipField* mapChipField_ = nullptr;
 
-	int maxHP_ = 10;
-	int hp_ = maxHP_;
+	int32_t maxHP_ = 10;
+	int32_t hp_ = maxHP_;
 };
