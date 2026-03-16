@@ -6,11 +6,25 @@
 #include<DirectXMath.h>
 
 
+
+
+class E_Bullet;
 class MapChipField;
 class Enemy;
 class Player 
 {
 public:
+
+
+	#pragma region 敵の弾とプレイヤー
+	// AABBを取得
+	AABB2 GetAABB2();
+	// 衝突応答
+	void OnCollition2(const E_Bullet* enemyBullet);
+#pragma endregion
+
+
+
 	// 初期化
 	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, KamataEngine::Vector3& position);
 
@@ -20,10 +34,28 @@ public:
 	// 描画
 	void Draw();
 
+
+
+	
+	int P_GetHP() const { return hp_; }
+	int P_GetMaxHP() const { return maxHP_; }
+	bool IsEnemyDead() const { return isDead_; }
+	
+
+
+
 	// デスフラグ
 	bool isDead_ = false;
 	// デスフラグのgetter
 	// bool IsDead() const { return isDead_; }
+
+
+
+
+	// 体力表示
+	int32_t playerHp;
+
+
 
 	// キャラクターの当たり判定サイズ
 	static inline const float kWidth = 0.8f;
@@ -129,6 +161,6 @@ private:
 
 	MapChipField* mapChipField_ = nullptr;
 
-	int32_t maxHP_ = 10;
+	int32_t maxHP_ = 10000;
 	int32_t hp_ = maxHP_;
 };

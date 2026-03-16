@@ -151,3 +151,37 @@ KamataEngine::Vector3 Player::GetWorldPosition()
 
 	return worldPos;
 }
+
+#pragma endregion
+
+
+#pragma region 敵の弾とプレイヤー
+
+AABB2 Player::GetAABB2()
+{
+	KamataEngine::Vector3 worldPos = GetWorldPosition();
+
+	AABB2 aabb;
+
+	aabb.min = {worldPos.x - kWidth / 2.0f, worldPos.y - kHeight / 2.0f, worldPos.z - kWidth / 2.0f};
+	aabb.max = {worldPos.x + kWidth / 2.0f, worldPos.y + kHeight / 2.0f, worldPos.z + kWidth / 2.0f};
+
+	return aabb;
+}
+
+// 衝突応答
+void Player::OnCollition2(const E_Bullet* enemyBullet)
+{
+	(void)enemyBullet;
+	// isenemyDead_=true;
+	// iscollition = true;
+	playerHp -= 10;
+	hp_ -= 10;
+	if (hp_ <= 0) 
+	{
+		hp_ = 0;
+		isDead_ = true;
+	}
+}
+
+#pragma endregion

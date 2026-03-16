@@ -17,6 +17,9 @@
 
 #include "Enemy.h"
 #include "E_DeathParticle.h"
+#include "E_Bullet.h"
+
+
 
 
 
@@ -111,8 +114,7 @@ public:
 	
 	
 
-
-
+	
 
 
 
@@ -136,6 +138,13 @@ private:
 
 	// スプライト
 	KamataEngine::Sprite* sprite_ = nullptr;
+
+
+
+
+
+
+
 
 
 
@@ -164,10 +173,20 @@ private:
 	int score = 0;
 	
 
+
+
+
+
+
+
 	
 	//時間
 	//int maxtime = 100000;
 	//int time = maxtime;
+
+
+
+
 
 
 	// 天球
@@ -233,6 +252,25 @@ private:
 	Sprite* enemyhpSprite_ = nullptr;
 	uint32_t _enemyhpHandle_ = 0;
 	Sprite* _enemyhpSprite_ = nullptr;
+
+
+
+	#pragma region 敵の弾
+	// 敵の弾
+	KamataEngine::Model* modelE_Bullet_ = nullptr;
+	// 弾
+	std::list<E_Bullet*> E_bullets_;
+	// 速度
+	KamataEngine::Vector3 E_B_velocity_;
+	// 弾の寿命(フレーム数)
+	// int playerBulletLifeTime = 20; // 変更可能な左辺値にするためconstを外し型をintに変更    // スペースキーを押して弾を撃つ
+	// 敵の弾の生成
+	E_Bullet* E_Bullet_ = nullptr;
+	void EnemyAttack();
+	#pragma endregion
+
+
+
 #pragma endregion
 
 	

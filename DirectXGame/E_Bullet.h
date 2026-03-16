@@ -1,0 +1,61 @@
+#pragma once
+#include "KamataEngine.h"
+#include "MyMath.h"
+#include "Player.h"
+
+class Player;
+
+class E_Bullet 
+{
+public:
+	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity);
+
+	void Update();
+
+	void Draw();
+
+	// 終了フラグ
+	bool isFinished_ = false;
+
+	// デスフラグ
+    //bool isEBDead_ = false;
+
+	//bool IsEBDead() const { return isEBDead_; }
+
+	// 速度
+	KamataEngine::Vector3 velocity_;
+
+	// 当たり判定サイズ
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
+	// ワールド座標を取得
+	KamataEngine::Vector3 GetWorldPosition();
+
+	;
+	float shotT = 0.0f;
+	float shotC = 0.0f;
+
+#pragma region プレイヤーと敵の弾の衝突
+
+	// AABBを取得
+	AABB2 GetAABB2();
+	// 衝突応答
+	void OnCollition2(const Player* player);
+
+#pragma endregion
+
+private:
+	// ワールド変換データ
+	KamataEngine::WorldTransform worldTransform_;
+
+	// モデル
+	KamataEngine::Model* model_;
+
+	// カメラ
+	KamataEngine::Camera* camera_;
+
+	// 速度
+	KamataEngine::Vector3 Bulletvelocity_;
+
+	int isShot = false;
+};

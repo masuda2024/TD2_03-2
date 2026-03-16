@@ -6,11 +6,10 @@
 #include<list>
 #define NOMINMAX
 
-
 using namespace KamataEngine;
 using namespace MathUtility;
 
-void Enemy::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& position) 
+void Enemy::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& position)
 {
 	// NULLポイントチェック
 	assert(model);
@@ -117,6 +116,8 @@ void Enemy::OnCollition(const P_Bullet* playerBullet)
 		hp_ = 0;
 		isenemyDead_ = true;
 	}
+
+	
 }
 
 #pragma endregion

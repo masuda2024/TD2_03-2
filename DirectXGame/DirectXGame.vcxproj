@@ -158,6 +158,7 @@
     <ClCompile Include="Clear.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="E_Bullet.cpp" />
     <ClCompile Include="E_DeathParticle.cpp" />
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -274,6 +275,7 @@
     <ClInclude Include="Clear.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="E_Bullet.h" />
     <ClInclude Include="E_DeathParticle.h" />
     <ClInclude Include="Fade.h" />
     <ClInclude Include="Game.h" />

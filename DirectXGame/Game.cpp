@@ -59,10 +59,6 @@ void Game::Initialize()
 	
 	
 
-	
-	
-
-	
 #pragma region スカイドーム
 
 	modelskydome_ = Model::CreateFromOBJ("SkyDome", true);
@@ -130,13 +126,10 @@ void Game::Initialize()
 	
 #pragma endregion
 
-
-
-
 #pragma region カーソル
 	
 	
-	
+	TextureManager::Load("Cursor.png");
 	modelCursor_ = Model::CreateFromOBJ("Cursor");
 	
 	// カーソル
@@ -150,10 +143,6 @@ void Game::Initialize()
 	cursor_->SetMapChipField(mapChipField_);
 
 #pragma endregion
-
-
-	TextureManager::Load("Cursor.png");
-
 
 #pragma region 敵
 
@@ -178,37 +167,15 @@ void Game::Initialize()
 	// enemy_->SetMapChipField(mapChipField_);
 
 
+	// 敵の弾
+	modelE_Bullet_ = Model::CreateFromOBJ("E_bullet", true);
+	// 敵の弾
+	E_Bullet_ = new E_Bullet();
+	E_Bullet_->Initialize(modelE_Bullet_, &camera_, enemyPosition, E_B_velocity_);
 
 
-    /*
-	    // 敵座標をマップチップ番号で指定
-	std::vector<KamataEngine::Vector2> enemyTilePositions = 
-	{
-	    {60, 15},
-	    //{15, 11},
-		//{25, 5},
-		//{35, 8},
-		//{45, 30},
-		//{60, 10},
-        //{75, 6 },
-		//{5,17},
-	    //{2, 25 },
-	    //{27, 8 },
-	};
 
-	// 敵座標をマップチップ番号で指定
-	for (const auto& tilePos : enemyTilePositions)
-	{
-		Enemy* newEnemy = new Enemy();
-		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(static_cast<uint32_t>(tilePos.x), static_cast<uint32_t>(tilePos.y));
-		Vector3 enemySize = {1.0f, 1.0f, 1.0f};
-		newEnemy->Initialize(modelEnemy_, &camera_, enemyPosition);
-		enemies_.push_back(newEnemy);
 
-		// 敵のデスパーティクル
-		E_Particles_ = new E_DeathParticle();
-		E_Particles_->Initialize(model_E_Particle_, &camera_, enemyPosition);
-	}*/
 
 
 #pragma endregion
@@ -282,6 +249,8 @@ void Game::Update()
 	fade_->Update();
 	
 
+
+
 	#pragma region UI
 
 	// enemyHPのスプライト
@@ -329,19 +298,6 @@ void Game::Update()
 
 	
 
-	/**/
-	
-
-	/*
-	if (time <= 0) 
-	{
-		phase_ = Phase::kDeath;
-	}
-
-	if (score >= MaxScore)
-	{
-		phase_ = Phase::kEnemyDeath;
-	}*/
 
 
 
@@ -425,13 +381,23 @@ void Game::Update()
 	enemy_->Update();
 	
 	ImGui::Text("Enemy HP : %d", enemy_->E_GetHP());
+	// 敵の弾を更新
 
+	for (E_Bullet* Ebullet : E_bullets_)
+	{
+		Ebullet->Update();
+	}
 
 
 
 	//ImGui::Text("Score %d", score);
 
 #pragma endregion
+
+
+
+
+
 
 	// カメラコントロール
 	cameraController_->Update();
@@ -646,25 +612,25 @@ void Game::ChangePhase()
 }
 
 
+
+
+
+
+
+
+
 void Game::CheckAllCollisions()
 {
+
 #pragma region プレイヤーの弾と敵
 	// 判定対象1と2の座標
 	AABB aabb1, aabb2;
-	
-	
-
-	
 
 	for (P_Bullet* bullet : bullets_)
 	{
 		// プレイヤーの弾
 		aabb1 = bullet->GetAABB();
-		/*
-		for (Enemy* enemy : enemies_)
-		{
-			
-		}*/
+		
 		aabb2 = enemy_->GetAABB();
 		if (IsCollition(aabb1, aabb2))
 		{
@@ -673,26 +639,24 @@ void Game::CheckAllCollisions()
 			enemy_->OnCollition(bullet);
 		} 
 	}
-	/*
-	for (Enemy* enemy : enemies_)
-	{
-		
-	}
 	
-	aabb2 = enemy_->GetAABB();
-	for (P_Bullet* bullet : bullets_)
-	{
-		aabb1 = bullet->GetAABB();
-		if (IsCollition(aabb1, aabb2))
-		{
-			enemy_->OnCollition(bullet);
-			bullet->OnCollition(enemy_);
-
-			score += 150;
-		}
-	}*/
 #pragma endregion
 	
+#pragma region 敵の弾とプレイヤー
+	AABB2 aabb3, aabb4;
+
+	for (E_Bullet* Ebullet : E_bullets_)
+	{
+		aabb3 = Ebullet->GetAABB2();
+
+		aabb4 = player_->GetAABB2();
+		if (IsCollition2(aabb3, aabb4))
+		{
+			Ebullet->OnCollition2(player_);
+			player_->OnCollition2(Ebullet);
+		}
+	}
+#pragma endregion
 
 }
 
@@ -712,6 +676,11 @@ void Game::Draw()
 	Sprite::PostDraw();
 
 	Model::PreDraw();
+
+
+
+
+
 
 
 	cursor_->Draw();
@@ -771,11 +740,7 @@ if (!player_->IsDead())
 	// 敵の描画 下記のフェーズのみ描画
 	if (phase_ == Phase::kPlay || phase_ == Phase::kFadeIn || phase_ == Phase::kDeath) 
 	{
-		/*
-		for (Enemy* enemy : enemies_)
-		{
-			
-		}*/
+		
 		std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
 		enemy_->Draw();
@@ -788,7 +753,11 @@ if (!player_->IsDead())
 			E_Particles_->Draw();
 		}
 	}
-	
+
+	for (E_Bullet* Ebullet : E_bullets_)
+	{
+		Ebullet->Draw();
+	}
 
 #pragma endregion
 
@@ -801,6 +770,8 @@ if (!player_->IsDead())
 
 Game::~Game()
 {
+
+
 	delete sprite_;
 	delete cursor_;
 	delete player_;
@@ -810,15 +781,19 @@ Game::~Game()
 		delete bullet;
 	}
 	delete P_Particles_;
-	/*
-	for (Enemy* enemy : enemies_)
-	{
-		
-	}*/
+	
+
 	delete enemy_;
 	delete E_Particles_;
 	delete enemyhpSprite_;
 	delete _enemyhpSprite_;
+	for (E_Bullet* Ebullet : E_bullets_)
+	{
+		delete Ebullet;
+	}
+
+
+
 
 	delete skydome_;
 

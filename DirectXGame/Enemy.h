@@ -3,6 +3,9 @@
 #include "KamataEngine.h"
 #include "MyMath.h"
 #include <list>
+#include "Player.h"
+#include "Game.h"
+
 
 
 class P_Bullet;
@@ -92,4 +95,5 @@ private:
 	
 	int32_t maxHP_ = 10000;
 	int32_t hp_ = maxHP_;
+
 };
