@@ -155,8 +155,8 @@ void Game::Initialize()
 	model_E_Particle_ = Model::CreateFromOBJ("E_deathParticle", true);
 
 	// 敵のHP
-	enemyhpHandle_ = TextureManager::Load("Ehp.png");
-	enemyhpSprite_ = KamataEngine::Sprite::Create(enemyhpHandle_, {1050, 0});
+	enemyHPHandle_ = TextureManager::Load("Ehp.png");
+	enemyHPSprite_ = KamataEngine::Sprite::Create(enemyHPHandle_, {1050, 0});
 
 	
 	
@@ -174,10 +174,6 @@ void Game::Initialize()
 	// 敵の弾
 	E_Bullet_ = new E_Bullet();
 	E_Bullet_->Initialize(modelE_Bullet_, &camera_, enemyPosition, E_B_velocity_);
-
-
-
-
 
 
 #pragma endregion
@@ -247,31 +243,46 @@ void Game::GenerateBlocks()
 
 void Game::Update()
 {
+	ImGui::Text("Enemy HP : %d", enemy_->E_GetHP());
+
+
+
 	// フェード
 	fade_->Update();
 	
 #pragma region UI
 
 	// enemyHPのスプライト
-	enemyhpHandle_ = TextureManager::Load("Sprites/Ehp.png");
-	enemyhpSprite_ = KamataEngine::Sprite::Create(enemyhpHandle_, {1050, 0});
+	enemyHPHandle_ = TextureManager::Load("Sprites/Ehp.png");
+	enemyHPSprite_ = KamataEngine::Sprite::Create(enemyHPHandle_, {1050, 0});
 
-	_enemyhpHandle_ = TextureManager::Load("Sprites/Ehp_.png");
-	_enemyhpSprite_ = KamataEngine::Sprite::Create(_enemyhpHandle_, {1050, 0});
+	_enemyHPHandle_ = TextureManager::Load("Sprites/Ehp_.png");
+	_enemyHPSprite_ = KamataEngine::Sprite::Create(_enemyHPHandle_, {1050, 0});
 
 
 	// 敵HP
 	float enemyHpRatio = (float)enemy_->E_GetHP() / (float)enemy_->E_GetMaxHP();
 	enemyHpRatio = std::clamp(enemyHpRatio, 0.0f, 1.0f);
-	enemyhpSprite_->SetSize({enemyHpRatio * 300.0f, 30.0f}); // 幅200px、高さ20px
-	enemyhpSprite_->SetPosition({980, 0});                   // 左上少し下に表示
+	enemyHPSprite_->SetSize({enemyHpRatio * 300.0f, 30.0f}); // 幅200px、高さ20px
+	enemyHPSprite_->SetPosition({980, 0});                   // 左上少し下に表示
 
-	_enemyhpSprite_->SetSize({300.0f, 30.0f}); // 幅200px、高さ20px
-	_enemyhpSprite_->SetPosition({980, 0});    // 左上少し下に表示
-
-
+	_enemyHPSprite_->SetSize({300.0f, 30.0f}); // 幅200px、高さ20px
+	_enemyHPSprite_->SetPosition({980, 0});    // 左上少し下に表示
 
 
+	playerHPHandle_ = TextureManager::Load("Sprites/hp.png");
+	playerHPSprite_ = KamataEngine::Sprite::Create(playerHPHandle_, {0, 0});
+	_playerHPHandle_ = TextureManager::Load("Sprites/hp_.png");
+	_playerHPSprite_ = KamataEngine::Sprite::Create(_playerHPHandle_, {0, 0});
+
+	// プレイヤーHP
+	float hpRatio = (float)player_->GetHP() / (float)player_->GetMaxHP();
+	hpRatio = std::clamp(hpRatio, 0.0f, 1.0f);
+	playerHPSprite_->SetSize({hpRatio * 300.0f, 30.0f}); // 例：幅200px、高さ20px
+	playerHPSprite_->SetPosition({0, 0});
+
+	_playerHPSprite_->SetSize({300.0f, 30.0f}); // 例：幅200px、高さ20px
+	_playerHPSprite_->SetPosition({0, 0});      
 
 
 
@@ -369,16 +380,12 @@ void Game::Update()
 #pragma endregion
 
 #pragma region 敵
-	/*
-	for (Enemy* enemy : enemies_)
-	{
-		
-	}*/
+	
 	enemy_->Update();
 	
-	ImGui::Text("Enemy HP : %d", enemy_->E_GetHP());
-	// 敵の弾を更新
+	EnemyAttack();
 
+	// 敵の弾を更新
 	for (E_Bullet* Ebullet : E_bullets_)
 	{
 		Ebullet->Update();
@@ -389,7 +396,6 @@ void Game::Update()
 	//ImGui::Text("Score %d", score);
 
 #pragma endregion
-
 
 #pragma region デバッグカメラ
 
@@ -444,9 +450,7 @@ void Game::Update()
 			{
 				phase_ = Phase::kEnemyDeath;
 			}
-		    /*
-		    for (Enemy* enemy : enemies_) {
-		}*/
+		 
 		
 		
 
@@ -546,7 +550,28 @@ void Game::Update()
 	}
 
 	#pragma endregion
+
 }
+
+
+
+// 敵の攻撃
+void Game::EnemyAttack()
+{
+	// 弾の速度
+	const float kEBulletSpeed = 1.0f;
+	Vector3 E_bulletVelocity = {kEBulletSpeed, 0.0f, 0.0f};
+
+	// 座標を取得(弾を自キャラと同じ位置にする)
+	const KamataEngine::Vector3 enemyBulletPosition = enemy_->GetWorldPosition();
+
+	E_Bullet_ = new E_Bullet();
+	E_Bullet_->Initialize(modelE_Bullet_, &camera_, enemyBulletPosition, E_bulletVelocity);
+
+	E_bullets_.push_back(E_Bullet_);
+}
+
+
 
 
 // フェーズ
@@ -660,12 +685,18 @@ void Game::Draw()
 	
 	Sprite::PreDraw();
 
-	timeSprite_->Draw();
+	//timeSprite_->Draw();
 	
-	pointSprite_->Draw();
+	//pointSprite_->Draw();
 
-	enemyhpSprite_->Draw();
+	_playerHPSprite_->Draw();
+	_enemyHPSprite_->Draw();
+
+	playerHPSprite_->Draw();
+	enemyHPSprite_->Draw();
 	
+
+
 	Sprite::PostDraw();
 
 	Model::PreDraw();
@@ -689,7 +720,7 @@ void Game::Draw()
 #pragma endregion
 	
 
-#pragma region 天球　
+#pragma region 天球
 	skydome_->Draw();
 #pragma endregion
 	
@@ -738,6 +769,11 @@ if (!player_->IsDead())
 		std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
 		enemy_->Draw();
+
+		for (E_Bullet* Ebullet : E_bullets_) 
+		{
+			Ebullet->Draw();
+		}
 	}
 	// パーティクル(敵)
 	if (phase_ == Phase::kEnemyDeath)
@@ -748,10 +784,7 @@ if (!player_->IsDead())
 		}
 	}
 
-	for (E_Bullet* Ebullet : E_bullets_)
-	{
-		Ebullet->Draw();
-	}
+	
 
 #pragma endregion
 
@@ -790,13 +823,17 @@ Game::~Game()
 		delete Ebullet;
 	}
 
-
 #pragma endregion
 
 #pragma region UI
 	delete cursor_;
-	delete enemyhpSprite_;
-	delete _enemyhpSprite_;
+
+	delete playerHPSprite_;
+	delete _playerHPSprite_;
+
+	delete enemyHPSprite_;
+	delete _enemyHPSprite_;
+
 	delete timeSprite_;
 	delete pointSprite_;
 #pragma endregion

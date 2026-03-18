@@ -5,22 +5,55 @@
 #include <list>
 #include "Player.h"
 #include "Game.h"
+#include "E_Bullet.h"
 
+
+
+#pragma region
+#pragma endregion
 
 
 class P_Bullet;
 class Enemy 
 {
 public:
-	// デスフラグ
-	bool isenemyDead_ = false;
-	bool isenemyDead2_ = false;
-    bool iscollition = false;
-	// デスフラグのgetter
-	// bool IsEnemyDead() const { return isenemyDead_; }
+
+
+#pragma region 基本構成
+
+	// 初期化
+	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, KamataEngine::Vector3& position);
+
+	// 更新
+	void Update();
+
+	// 描画
+	void Draw();
+
+#pragma endregion
+
+#pragma region 状態
+
 
 	// 体力表示
 	int32_t enemyHp;
+
+	int32_t E_GetHP() const { return hp_; }
+	int32_t E_GetMaxHP() const { return maxHP_; }
+	bool IsEnemyDead() const { return isenemyDead_; }
+	
+	// デスフラグ
+	bool isenemyDead_ = false;
+	bool isenemyDead2_ = false;
+	bool iscollition = false;
+	// デスフラグのgetter
+	// bool IsEnemyDead() const { return isenemyDead_; }
+
+
+#pragma endregion
+
+#pragma region 動作
+
 
 	// 敵の当たり判定サイズ
 	static inline const float kWidth = 10.0f;
@@ -41,6 +74,17 @@ public:
 	// 経過時間
 	float walkTimer_ = 0.0f;
 
+	// 敵の弾を発射
+	void E_Fire();
+
+
+#pragma endregion
+
+	
+	
+	
+
+	
 	// ワールド座標を取得
 	KamataEngine::Vector3 GetWorldPosition();
 	
@@ -52,41 +96,43 @@ public:
 #pragma endregion
 
 	
-	// 初期化
-	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, KamataEngine::Vector3& position);
-
-	// 更新
-	void Update();
-
-	// 描画
-	void Draw();
-
-	int E_GetHP() const { return hp_; }
-	int E_GetMaxHP() const { return maxHP_; }
-	bool IsEnemyDead() const { return isenemyDead_; }
 	
 
-
+	
+	
 private:
 	
+	/*
+	//敵の弾のポインター
+	E_Bullet* E_bullet_ = nullptr;
+	std::list<E_Bullet*> bullets_;
+*/
+
+	// モデル
+	KamataEngine::Model* model_;
+	// カメラ
+	KamataEngine::Camera* camera_;
+	// ワールド変換データ
+	KamataEngine::WorldTransform worldTransform_;
+
+	KamataEngine::Vector3 velocity_ = {};
 
 	// ラ/ンダムで行動するためのタイマー
 	float actionTimer_ = 0.0f;
 	float nextActionTime_ = 0.0f;
 	float setEnemy_ = 0.0f;
-
 	int32_t respawnTimer = 80;
-
-	// ワールド変換データ
-	KamataEngine::WorldTransform worldTransform_;
-	// モデル
-	KamataEngine::Camera* camera_;
+	
+	
+	
+	
+	
 	// テクスチャハンドル
 	// uint32_t textureHandle_ = 0u;
 
-	KamataEngine::Model* model_;
+	
 
-	KamataEngine::Vector3 velocity_ = {};
+	
 
 
 	int32_t point = 0;

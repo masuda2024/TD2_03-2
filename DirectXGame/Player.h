@@ -16,15 +16,7 @@ class Player
 public:
 
 
-	#pragma region 敵の弾とプレイヤー
-	// AABBを取得
-	AABB2 GetAABB2();
-	// 衝突応答
-	void OnCollition2(const E_Bullet* enemyBullet);
-#pragma endregion
-
-
-
+#pragma region 基本構成
 	// 初期化
 	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, KamataEngine::Vector3& position);
 
@@ -34,35 +26,52 @@ public:
 	// 描画
 	void Draw();
 
+	~Player();
+#pragma endregion
+
+
+
+
+#pragma region 敵の弾とプレイヤー
+	// AABBを取得
+	AABB2 GetAABB2();
+	// 衝突応答
+	void OnCollition2(const E_Bullet* enemyBullet);
+#pragma endregion
+
 
 
 	
-	int P_GetHP() const { return hp_; }
-	int P_GetMaxHP() const { return maxHP_; }
-	bool IsEnemyDead() const { return isDead_; }
-	
 
-
-
+#pragma region プレイヤーの状態
+	// 体力表示
+	int32_t playerHp;
+	int32_t P_GetHP() const { return hp_; }
+	int32_t P_GetMaxHP() const { return maxHP_; }
+	bool IsDead() const { return isDead_; }
 	// デスフラグ
 	bool isDead_ = false;
 	// デスフラグのgetter
 	// bool IsDead() const { return isDead_; }
+	
+	// Getter / 状態確認
+	/**/
+	int32_t GetHP() const { return hp_; }
+	int32_t GetMaxHP() const { return maxHP_; }
+	
 
+#pragma endregion
 
-
-
-	// 体力表示
-	int32_t playerHp;
-
-
+	
+	
+#pragma region プレイヤーと壁
 
 	// キャラクターの当たり判定サイズ
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
 
 	// 角
-	enum Corner 
+	enum Corner
 	{
 		kRightBottom, // 右下
 		kLeftBottom,  // 左下
@@ -74,6 +83,16 @@ public:
 	};
 
 	KamataEngine::Vector3 CornerPosition(const KamataEngine::Vector3& center, Corner corner);
+
+
+
+
+
+
+#pragma endregion
+
+
+#pragma region 動作
 
 	// 加速度
 	static inline const float kAccleration = 0.1f;
@@ -95,6 +114,10 @@ public:
 	// 着地時の速度減衰率
 	static inline const float kAttenuationWall = 0.9f;
 
+
+
+
+
 	// 左右
 	enum class LRDirection 
 	{
@@ -112,6 +135,10 @@ public:
 	bool onGround_ = true;
 
 	LRDirection lrDirection_ = LRDirection::kRight;
+#pragma endregion
+
+#pragma region 座標(ワールド変換)
+
 
 	const KamataEngine::WorldTransform& GetWorldTransform() const { return worldTransform_; }
 
@@ -123,6 +150,7 @@ public:
 	const KamataEngine::Vector3& GetRotation() const { return worldTransform_.rotation_; }
 
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
+#pragma endregion
 
 #pragma region 回転
 
@@ -132,25 +160,20 @@ public:
 	float cosValue_ = 0.0f;
 	float sinValue_ = 0.0f;
 
-#pragma endregion
-
 	static inline const float kBlank = 0.9f;
 
 	void AnimateTurn();
 
-	~Player();
+#pragma endregion
 
-	// Getter / 状態確認
-	int GetHP() const { return hp_; }
-	int GetMaxHP() const { return maxHP_; }
-	bool IsDead() const { return isDead_; }
-
+	
 private:
 	// ワールド変換データ
 	KamataEngine::WorldTransform worldTransform_;
 
 	// カメラ
 	KamataEngine::Camera* camera_;
+	
 	// テクスチャハンドル
 	// uint32_t textureHandle_ = 0u;
 

@@ -106,6 +106,8 @@ void Player::Draw()
 	model_->Draw(worldTransform_, *camera_);
 }
 
+Player::~Player() {}
+
 // 7.旋回制御
 void Player::AnimateTurn() 
 {
@@ -123,7 +125,7 @@ void Player::AnimateTurn()
 	}
 }
 
-Player::~Player() {}
+
 
 #pragma region プレイヤーの弾と敵の衝突
 
