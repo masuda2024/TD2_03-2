@@ -89,15 +89,7 @@ public:
 
 
 
-
-	
-
-
-
-
-
-	
-
+#pragma region 終了フラグ
 
 	// 終了フラグ
 	bool finishedGAME_ = false;
@@ -107,6 +99,9 @@ public:
 	// 敵を倒した場合の(クリア)フラグ
 	bool finishedGAME2_ = false;
 	bool IsFinishedGAME2() const { return finishedGAME2_; } ////ゲームクリア
+
+#pragma endregion
+
 
 
 
@@ -119,6 +114,9 @@ public:
 
 
 private:
+
+
+
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0;
 	// 3Dモデルデータ
@@ -144,55 +142,37 @@ private:
 
 
 
+#pragma region マップ関係
 
-
-
-
-
-	//ブロック
+	// ブロック
 	KamataEngine::Model* modelBlock_;
 	// マップチップフィールド
 	MapChipField* mapChipField_;
-	
+
 	void GenerateBlocks();
+#pragma endregion
 
-
+#pragma region UI
 
 	// 得点テクスチャハンドル
 	uint32_t pointHandle_ = 0;
 	// スプライト
 	KamataEngine::Sprite* pointSprite_ = nullptr;
-
 	uint32_t timeHandle_ = 0;
 	KamataEngine::Sprite* timeSprite_ = nullptr;
-
-
-	
 	// スコア
 	int MaxScore = 1000000;
 	int score = 0;
-	
 
-
-
-
-
-
-
-	
-	//時間
-	//int maxtime = 100000;
-	//int time = maxtime;
-
-
-
-
-
-
+#pragma endregion
+#pragma region 天球
 	// 天球
 	Skydome* skydome_ = nullptr;
 	KamataEngine::Model* modelskydome_ = nullptr;
 
+#pragma endregion
+
+	
 #pragma region プレイヤー
 
 	// プレイヤー
@@ -204,6 +184,9 @@ private:
 
 
 #pragma region プレイヤーの弾
+
+	uint32_t P_Shot_ = 0;
+
 	// 自キャラの弾
 	KamataEngine::Model* modelPlayerBullet_ = nullptr;
 	// 弾
@@ -315,7 +298,7 @@ private:
 	Fade* fade_ = nullptr;
 #pragma endregion
 
-	uint32_t P_Shot_ = 0;
+	
 
 
 	float t = 0.0f;

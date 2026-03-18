@@ -6,6 +6,11 @@
 #include <cstdlib>
 #include <ctime>
 
+#include "imgui.h"
+#include "Windows.h"
+#include"math.h"
+
+
 #include "CameraController.h"
 #include "Fade.h"
 
@@ -16,12 +21,9 @@
 
 
 
-#include "imgui.h"
 
-#include "Windows.h"
 
-#include"math.h"
-//#include"Matrix4x4.h"
+
 using namespace KamataEngine;
 using namespace MathUtility;
 
@@ -38,26 +40,18 @@ void Game::Initialize()
 #pragma region
 
 #pragma endregion
-
-	
-
-
-
-
-
 	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
-
-
-	//ブロック
+#pragma region マップ関係
+	// ブロック
 	modelBlock_ = Model::CreateFromOBJ("block");
 	// マップチップフィールドの生成
 	mapChipField_ = new MapChipField;
 	// マップチップフィールドの初期化
 	mapChipField_->LoadMapchipCsv("Resources/blocks.csv");
 	GenerateBlocks();
-	
-	
+
+#pragma endregion
 
 #pragma region スカイドーム
 
@@ -256,10 +250,7 @@ void Game::Update()
 	// フェード
 	fade_->Update();
 	
-
-
-
-	#pragma region UI
+#pragma region UI
 
 	// enemyHPのスプライト
 	enemyhpHandle_ = TextureManager::Load("Sprites/Ehp.png");
@@ -303,14 +294,11 @@ void Game::Update()
 
 	#pragma endregion
 
-
-	
-
-
-
-
+#pragma region 天球
 	// 天球の更新
 	skydome_->Update();
+#pragma endregion
+	
 #pragma region プレイヤー
 
 	player_->Update();
@@ -403,8 +391,7 @@ void Game::Update()
 #pragma endregion
 
 
-
-
+#pragma region デバッグカメラ
 
 
 	// カメラコントロール
@@ -557,6 +544,8 @@ void Game::Update()
 		camera_.TransferMatrix();
 		camera_.UpdateMatrix();
 	}
+
+	#pragma endregion
 }
 
 
@@ -584,11 +573,7 @@ void Game::ChangePhase()
 #pragma endregion
 
 #pragma region 敵
-		/*
-		for (Enemy* enemy : enemies_)
-		{
-			
-		}*/
+		
 		if (enemy_->IsEnemyDead() == true) 
 		{
 			// デス演出フェーズに切り替え
@@ -685,16 +670,13 @@ void Game::Draw()
 
 	Model::PreDraw();
 
-
-
-
-
-
-
+#pragma region カーソル
 	cursor_->Draw();
+#pragma endregion
 
 
-		// ブロックの描画
+#pragma region ブロック
+	// ブロックの描画
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_)
 	{
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
@@ -704,9 +686,13 @@ void Game::Draw()
 			modelBlock_->Draw(*worldTransformBlock, camera_);
 		}
 	}
+#pragma endregion
+	
 
-
-skydome_->Draw();
+#pragma region 天球　
+	skydome_->Draw();
+#pragma endregion
+	
 
 #pragma region プレイヤー
 
@@ -778,44 +764,54 @@ if (!player_->IsDead())
 
 Game::~Game()
 {
-
-
+	// 3Dモデルデータの解放
+	delete model_;
+	// スプライトの解放
 	delete sprite_;
-	delete cursor_;
+#pragma region プレイヤー
 	delete player_;
-	
+
 	for (P_Bullet* bullet : bullets_)
 	{
 		delete bullet;
 	}
 	delete P_Particles_;
-	
+
+
+#pragma endregion
+
+#pragma region 敵
 
 	delete enemy_;
 	delete E_Particles_;
-	delete enemyhpSprite_;
-	delete _enemyhpSprite_;
-	for (E_Bullet* Ebullet : E_bullets_)
+	
+	for (E_Bullet* Ebullet : E_bullets_) 
 	{
 		delete Ebullet;
 	}
 
 
+#pragma endregion
+
+#pragma region UI
+	delete cursor_;
+	delete enemyhpSprite_;
+	delete _enemyhpSprite_;
+	delete timeSprite_;
+	delete pointSprite_;
+#pragma endregion
 
 
+#pragma region 天球
 	delete skydome_;
+#pragma endregion
+	
+	
+#pragma region マップ関係
 
-	// フェード
-	delete fade_;
-
-	// 3Dモデルデータの解放
-	delete model_;
-
-	// デバッグカメラの解放
-	delete debugCamera_;
-
+	// マップチップを解放
 	delete mapChipField_;
-	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) 
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_)
 	{
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) 
 		{
@@ -823,9 +819,16 @@ Game::~Game()
 		}
 	}
 	worldTransformBlocks_.clear();
+#pragma endregion
 
+#pragma region フェード・デバッグカメラ
 
+	// フェード
+	delete fade_;
 
-	delete timeSprite_;
-	delete pointSprite_;
+	// デバッグカメラの解放
+	delete debugCamera_;
+
+#pragma endregion
+
 }
