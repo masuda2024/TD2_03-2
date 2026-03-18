@@ -149,9 +149,6 @@ void Game::Initialize()
 	
 	modelEnemy_ = Model::CreateFromOBJ("kaizyu1", true);
 	
-
-
-
 	model_E_Particle_ = Model::CreateFromOBJ("E_deathParticle", true);
 
 	// 敵のHP
@@ -175,7 +172,8 @@ void Game::Initialize()
 	E_Bullet_ = new E_Bullet();
 	E_Bullet_->Initialize(modelE_Bullet_, &camera_, enemyPosition, E_B_velocity_);
 
-
+	EnemyAttack();
+	
 #pragma endregion
 
 #pragma region カメラ関係
@@ -382,9 +380,20 @@ void Game::Update()
 #pragma region 敵
 	
 	enemy_->Update();
-	
-	EnemyAttack();
+	//発射タイマーをカウントダウンする
+	fireTimer--;
 
+	if (fireTimer == 0)
+	{
+		EnemyAttack();
+		fireTimer = kFireInterval;
+	}
+
+
+
+
+	
+	
 	// 敵の弾を更新
 	for (E_Bullet* Ebullet : E_bullets_)
 	{
@@ -556,8 +565,11 @@ void Game::Update()
 
 
 // 敵の攻撃
+
 void Game::EnemyAttack()
 {
+	fireTimer = kFireInterval;
+
 	// 弾の速度
 	const float kEBulletSpeed = 1.0f;
 	Vector3 E_bulletVelocity = {kEBulletSpeed, 0.0f, 0.0f};

@@ -266,7 +266,11 @@ private:
 	// 弾の寿命(フレーム数)
 	// int playerBulletLifeTime = 20; // 変更可能な左辺値にするためconstを外し型をintに変更    // スペースキーを押して弾を撃つ
 	
+
+	static const int kFireInterval = 60;
+	int32_t fireTimer = 0;
 	void EnemyAttack();
+	
 	#pragma endregion
 
 
