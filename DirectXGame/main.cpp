@@ -14,6 +14,10 @@ using namespace KamataEngine;
 // DirectXCommonインスタンスの取得
 DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
+
+#pragma region シーンの設定と生成
+
+
 enum class Scene 
 {
 	kUnknown = 0,
@@ -44,8 +48,10 @@ Clear* gameClear = nullptr;
 // ゲームオーバーシーンの生成
 Over* gameOver = nullptr;
 
+#pragma endregion
 
 
+#pragma region BGM
 
 uint32_t T_Handle_ = 0;
 uint32_t T_Voice_ = 0;
@@ -59,7 +65,7 @@ uint32_t C_Voice_ = 0;
 uint32_t O_Handle_ = 0;
 uint32_t O_Voice_ = 0;
 
-
+#pragma endregion
 
 
 // Windowsアプリでのエントリーポイント(main関数)
@@ -69,6 +75,10 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 	KamataEngine::Initialize(L"3163_");
 	// ImGuiManagerインスタンスの取得
 	ImGuiManager* imguiManager = ImGuiManager::GetInstance();
+
+
+#pragma region シーンの初期化
+
 
 	// 最初のシーンの初期化
 	scene = Scene::kTitle;
@@ -89,7 +99,9 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 	//ゲームクリアシーンの初期化
 	gameClear->Initialize();
 
+#pragma endregion
 
+#pragma region BGMの読み込み
 
 	T_Handle_ = Audio::GetInstance()->LoadWave("Sounds/bgm/Future_1.mp3");
 	T_Voice_ = Audio::GetInstance()->PlayWave(T_Handle_, true);
@@ -100,7 +112,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 	C_Handle_ = Audio::GetInstance()->LoadWave("Sounds/bgm/Fusion_01.mp3");
 	O_Handle_ = Audio::GetInstance()->LoadWave("Sounds/bgm/Springin_Radio_Ending.mp3");
 
-
+#pragma endregion
 
 
 	while (true) 
@@ -136,6 +148,11 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 		dxCommon->PostDraw();
 	}
 
+
+#pragma region シーンの解放
+
+
+
 	// タイトルシーンの解放
 	delete title;
 
@@ -158,6 +175,11 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 
 	gameScene = nullptr;
 
+
+#pragma endregion
+
+
+
 	KamataEngine::Finalize();
 
 
@@ -178,13 +200,6 @@ void UpdateScene()
 		
 	case Scene::kGame:
 		gameScene->Update();
-
-
-		
-
-
-
-
 		break;
 
 	case Scene::kClear:
