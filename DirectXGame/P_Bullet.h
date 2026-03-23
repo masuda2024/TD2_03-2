@@ -36,7 +36,7 @@ public:
 
 	void Update();
 
-	void StartAttack();
+	//void StartAttack();
 	void StartAttack_at_Mouse();
 
 	void Draw();

@@ -18,9 +18,9 @@ public:
 	bool isFinished_ = false;
 
 	// デスフラグ
-    //bool isEBDead_ = false;
+	// bool isEBDead_ = false;
 
-	//bool IsEBDead() const { return isEBDead_; }
+	// bool IsEBDead() const { return isEBDead_; }
 
 	// 速度
 	KamataEngine::Vector3 velocity_;
@@ -32,8 +32,8 @@ public:
 	KamataEngine::Vector3 GetWorldPosition();
 
 	;
-	//float shotT = 0.0f;
-	//float shotC = 0.0f;
+	// float shotT = 0.0f;
+	// float shotC = 0.0f;
 
 #pragma region プレイヤーと敵の弾の衝突
 

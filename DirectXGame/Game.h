@@ -236,6 +236,10 @@ private:
 
 #pragma region 敵
 
+
+
+
+
 	// 敵
 	Enemy* enemy_ = nullptr;
 	//std::list<Enemy*> enemies_;
@@ -267,7 +271,7 @@ private:
 	// int playerBulletLifeTime = 20; // 変更可能な左辺値にするためconstを外し型をintに変更    // スペースキーを押して弾を撃つ
 	
 
-	static const int kFireInterval = 60;
+	static const int kFireInterval = 30;
 	int32_t fireTimer = 0;
 	void EnemyAttack();
 	

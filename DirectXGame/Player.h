@@ -45,7 +45,7 @@ public:
 
 #pragma region プレイヤーの状態
 	// 体力表示
-	int32_t playerHp;
+	//int32_t playerHp;
 	int32_t P_GetHP() const { return hp_; }
 	int32_t P_GetMaxHP() const { return maxHP_; }
 	bool IsDead() const { return isDead_; }
@@ -93,6 +93,9 @@ public:
 
 
 #pragma region 動作
+
+
+
 
 	// 加速度
 	static inline const float kAccleration = 0.1f;
@@ -186,4 +189,6 @@ private:
 
 	int32_t maxHP_ = 10000;
 	int32_t hp_ = maxHP_;
+
+	
 };

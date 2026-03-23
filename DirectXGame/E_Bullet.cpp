@@ -1,11 +1,9 @@
 #include "E_Bullet.h"
 #include "Enemy.h"
 
-
 #include <list>
 #define NOMINMAX
 #include "MapChipField.h"
-
 
 using namespace KamataEngine;
 using namespace MathUtility;
@@ -32,8 +30,8 @@ void E_Bullet::Initialize(KamataEngine::Model* model, Camera* camera, const Kama
 	//  Bulletvelocity_ = velocity;
 	isShot = true;
 
-	//shotT = 30.0f;
-	//shotC = 40.0f;
+	// shotT = 30.0f;
+	// shotC = 40.0f;
 }
 
 void E_Bullet::Update()
@@ -41,25 +39,24 @@ void E_Bullet::Update()
 	/*
 	if (isShot == 0)
 	{
-		shotC--;
-		if (shotC <= 0.0f)
-		{
-			isShot = true;
-			shotT = 30.0f;
-		}
+	    shotC--;
+	    if (shotC <= 0.0f)
+	    {
+	        isShot = true;
+	        shotT = 30.0f;
+	    }
 	}
 
-	if (isShot == 1) 
+	if (isShot == 1)
 	{
-		
-		shotT--;
-		if (shotT <= 0.0f)
-		{
-			isShot = false;
-			shotC = 40.0f;
-		}
-	}*/
 
+	    shotT--;
+	    if (shotT <= 0.0f)
+	    {
+	        isShot = false;
+	        shotC = 40.0f;
+	    }
+	}*/
 
 	worldTransform_.translation_ -= velocity_;
 
@@ -68,12 +65,12 @@ void E_Bullet::Update()
 	worldTransform_.TransferMatrix(); // 敵の座標の計算
 }
 
-void E_Bullet::Draw() 
+void E_Bullet::Draw()
 {
 
 	// モデルの描画
 
-	if (isShot == 1) 
+	if (isShot == 1)
 	{
 		model_->Draw(worldTransform_, *camera_);
 	}
@@ -85,7 +82,7 @@ void E_Bullet::Draw()
 	}
 }
 
-KamataEngine::Vector3 E_Bullet::GetWorldPosition() 
+KamataEngine::Vector3 E_Bullet::GetWorldPosition()
 {
 	// ワールド座標を入れる変数
 	KamataEngine::Vector3 worldPos;
@@ -99,7 +96,7 @@ KamataEngine::Vector3 E_Bullet::GetWorldPosition()
 
 #pragma region 敵の弾とプレイヤーの当たり判定
 
-AABB2 E_Bullet::GetAABB2()
+AABB2 E_Bullet::GetAABB2() 
 {
 	KamataEngine::Vector3 worldPos = GetWorldPosition();
 

@@ -39,13 +39,34 @@ void Enemy::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& posi
 
 void Enemy::Update() 
 {
-	/*
-	E_Fire();
+	
 
-	if (E_bullet_)
+
+	/**/
+
+	switch (phase_)
 	{
-		E_bullet_->Update();
-	}*/
+	//接近フェーズ
+	case Phase::Approach:
+	default:
+		//移動(ベクトルを加算)
+		worldTransform_.translation_.x += velocity_.x;
+		//規定の位置に到達したら攻撃
+		if (worldTransform_.translation_.x < 30.0f)
+		{
+			phase_ = Phase::Attack;
+		}
+		break;
+	//攻撃フェーズ
+	case Phase::Attack:
+
+
+		break;
+	}
+
+
+
+
 
 
 
@@ -138,14 +159,3 @@ void Enemy::OnCollition(const P_Bullet* playerBullet)
 
 #pragma endregion
 
-
-/*
-void Enemy::E_Fire()
-{
-    E_Bullet* newE_Bullet = new E_Bullet();
-    newE_Bullet->Initialize(model_, camera_, GetWorldPosition(), velocity_);
-
-    bullets_.push_back(newE_Bullet);
-
-
-}*/

@@ -53,6 +53,15 @@ public:
 #pragma endregion
 
 #pragma region 動作
+	/**/
+	enum class Phase
+	{
+		Approach, //接近
+		Attack,   //攻撃
+	};
+	Phase phase_ = Phase::Approach;
+
+
 
 
 	// 敵の当たり判定サイズ

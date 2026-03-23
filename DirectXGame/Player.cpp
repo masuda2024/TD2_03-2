@@ -43,19 +43,6 @@ void Player::Update()
 
 	Vector3 acceleration = {};
 
-	// --- メンバ変数を更新 ---
-	/*
-	angle_ = worldTransform_.rotation_.x;
-	cosValue_ = std::cos(angle_);
-	sinValue_ = std::sin(angle_);
-
-	constexpr float kTurnSpeed = 0.09f;
-	worldTransform_.rotation_.x += kTurnSpeed;
-	if (worldTransform_.rotation_.x > 6.2831853f)
-	{
-	    worldTransform_.rotation_.x -= 6.2831853f;
-	}*/
-
 	// 押した方向で移動ベクトルを変更(左右)
 	if (Input::GetInstance()->PushKey(DIK_A))
 	{
@@ -69,7 +56,7 @@ void Player::Update()
 			velocity_.x *= (1.0f - kAttenuation);
 		}
 		acceleration.x += kAccleration;
-		if (lrDirection_ != LRDirection::kRight)
+		if (lrDirection_ != LRDirection::kRight) 
 		{
 			lrDirection_ = LRDirection::kRight;
 			// 旋回開始時の角度を記録する
@@ -79,7 +66,7 @@ void Player::Update()
 		}
 	}
 	// 押した方向で移動ベクトルを変更(上下)
-	if (Input::GetInstance()->PushKey(DIK_W))
+	if (Input::GetInstance()->PushKey(DIK_W)) 
 	{
 		move.y += kCharacterSpeed;
 	} else if (Input::GetInstance()->PushKey(DIK_S)) 
@@ -89,10 +76,28 @@ void Player::Update()
 
 	// 座標移動(ベクトルの加算)
 	worldTransform_.translation_ += move;
-
 	// アフィン変換行列
 	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 	worldTransform_.TransferMatrix(); // プレイヤーの座標の計算
+
+
+	// --- メンバ変数を更新 ---
+	/*
+	angle_ = worldTransform_.rotation_.x;
+	cosValue_ = std::cos(angle_);
+	sinValue_ = std::sin(angle_);
+
+	constexpr float kTurnSpeed = 0.09f;
+	worldTransform_.rotation_.x += kTurnSpeed;
+	if (worldTransform_.rotation_.x > 6.2831853f)
+	{
+	    worldTransform_.rotation_.x -= 6.2831853f;
+	}*/
+
+	
+
+	
+	
 }
 
 // プレイヤーの描画(敵当たったら非表示になる)
@@ -177,13 +182,14 @@ void Player::OnCollition2(const E_Bullet* enemyBullet)
 	(void)enemyBullet;
 	// isenemyDead_=true;
 	// iscollition = true;
-	playerHp -= 10;
-	hp_ -= 10;
+	//playerHp -= 100;
+	hp_ -= 100;
 	if (hp_ <= 0) 
 	{
 		hp_ = 0;
 		isDead_ = true;
 	}
+	
 }
 
 #pragma endregion
