@@ -114,7 +114,7 @@ private:
 	KamataEngine::Vector3 Bulletvelocity_;
 
 	float timer_ = 0.0f;
-	static inline const float kLifeTime = 2.0f;
+	static inline const float kLifeTime = 60.0f;
 
 	static inline const float kBlank = 0.1f;
 	MapChipField* mapChipField_ = nullptr;

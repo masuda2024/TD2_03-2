@@ -32,8 +32,8 @@ public:
 	KamataEngine::Vector3 GetWorldPosition();
 
 	;
-	float shotT = 0.0f;
-	float shotC = 0.0f;
+	//float shotT = 0.0f;
+	//float shotC = 0.0f;
 
 #pragma region プレイヤーと敵の弾の衝突
 
@@ -57,5 +57,5 @@ private:
 	// 速度
 	KamataEngine::Vector3 Bulletvelocity_;
 
-	int isShot = false;
+	int32_t isShot = true;
 };

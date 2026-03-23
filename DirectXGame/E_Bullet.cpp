@@ -30,15 +30,15 @@ void E_Bullet::Initialize(KamataEngine::Model* model, Camera* camera, const Kama
 
 	// NextActionTime_ = (rand() % 300) / 2.0f + 60.0f;
 	//  Bulletvelocity_ = velocity;
-	isShot = false;
+	isShot = true;
 
-	shotT = 30.0f;
-	shotC = 40.0f;
+	//shotT = 30.0f;
+	//shotC = 40.0f;
 }
 
 void E_Bullet::Update()
 {
-
+	/*
 	if (isShot == 0)
 	{
 		shotC--;
@@ -51,14 +51,17 @@ void E_Bullet::Update()
 
 	if (isShot == 1) 
 	{
-		worldTransform_.translation_ -= velocity_;
+		
 		shotT--;
 		if (shotT <= 0.0f)
 		{
 			isShot = false;
 			shotC = 40.0f;
 		}
-	}
+	}*/
+
+
+	worldTransform_.translation_ -= velocity_;
 
 	// アフィン変換行列
 	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
