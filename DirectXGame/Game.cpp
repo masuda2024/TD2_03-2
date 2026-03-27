@@ -274,7 +274,8 @@ void Game::Update()
 #pragma region プレイヤー
 
 	player_->Update();
-
+	player_->RotateX();
+	player_->RotateZ();
 	// プレイヤーの攻撃を呼び出す
 
 	if (Input::GetInstance()->IsTriggerMouse(0)) 

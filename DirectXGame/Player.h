@@ -59,6 +59,10 @@ public:
 	int32_t GetHP() const { return hp_; }
 	int32_t GetMaxHP() const { return maxHP_; }
 	
+	
+	void RotateX();
+	void RotateZ();
+
 
 #pragma endregion
 
