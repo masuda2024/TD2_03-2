@@ -72,7 +72,7 @@ uint32_t O_Voice_ = 0;
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 {
 	// タイトルバー
-	KamataEngine::Initialize(L"3163_");
+	KamataEngine::Initialize(L"3163_カーソルシューティング");
 	// ImGuiManagerインスタンスの取得
 	ImGuiManager* imguiManager = ImGuiManager::GetInstance();
 

@@ -191,6 +191,12 @@ private:
 	// 天球
 	Skydome* skydome_ = nullptr;
 	KamataEngine::Model* modelskydome_ = nullptr;
+	
+	
+	Skydome* skydome2_ = nullptr;
+	KamataEngine::Model* modelEarth_ = nullptr;
+
+
 
 #pragma endregion
 

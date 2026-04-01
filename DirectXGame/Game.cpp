@@ -44,10 +44,18 @@ void Game::Initialize()
 
 #pragma region スカイドーム
 
+	modelEarth_ = Model::CreateFromOBJ("earth", true);
 	modelskydome_ = Model::CreateFromOBJ("SkyDome", true);
 	// スカイドームの生成
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelskydome_, textureHandle_, &camera_);
+
+	skydome2_ = new Skydome();
+	skydome2_->Initialize(modelEarth_, textureHandle_, &camera_);
+
+
+
+
 
 #pragma endregion
 
@@ -249,26 +257,14 @@ void Game::Update()
 	_playerHPSprite_->SetSize({300.0f, 30.0f}); // 例：幅200px、高さ20px
 	_playerHPSprite_->SetPosition({0, 0});
 
-	/*
-	time -= 20;
-
-	float timeRatio = (float)time / (float)maxtime;
-	timeRatio = std::clamp(timeRatio, 0.0f, 1.0f);
-	timeSprite_->SetSize({timeRatio * 1280.0f, 30.0f}); // 幅200px、高さ20px
-	timeSprite_->SetPosition({0, 0});
-
-
-	float scoreRatio = (float)score / (float)MaxScore;
-	scoreRatio = std::clamp(scoreRatio, 0.0f, 1.0f);
-	pointSprite_->SetSize({scoreRatio * 200.0f, 20.0f}); // 幅200px、高さ20px
-	pointSprite_->SetPosition({1060, 10});
-*/
+	
 
 #pragma endregion
 
 #pragma region 天球
 	// 天球の更新
 	skydome_->Update();
+	skydome2_->Update();
 #pragma endregion
 
 #pragma region プレイヤー
@@ -613,10 +609,7 @@ void Game::Draw()
 
 	Sprite::PreDraw();
 
-	// timeSprite_->Draw();
-
-	// pointSprite_->Draw();
-
+	
 	_playerHPSprite_->Draw();
 	_enemyHPSprite_->Draw();
 
@@ -633,6 +626,7 @@ void Game::Draw()
 
 #pragma region ブロック
 	// ブロックの描画
+	/*
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) 
 	{
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) 
@@ -641,11 +635,12 @@ void Game::Draw()
 				continue;
 			modelBlock_->Draw(*worldTransformBlock, camera_);
 		}
-	}
+	}*/
 #pragma endregion
 
 #pragma region 天球
 	skydome_->Draw();
+	skydome2_->Draw();
 #pragma endregion
 
 #pragma region プレイヤー
@@ -747,12 +742,12 @@ Game::~Game()
 	delete enemyHPSprite_;
 	delete _enemyHPSprite_;
 
-	delete timeSprite_;
-	delete pointSprite_;
+
 #pragma endregion
 
 #pragma region 天球
 	delete skydome_;
+	delete skydome2_;
 #pragma endregion
 
 #pragma region マップ関係
