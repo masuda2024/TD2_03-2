@@ -196,6 +196,8 @@ private:
 	Skydome* skydome2_ = nullptr;
 	KamataEngine::Model* modelEarth_ = nullptr;
 
+	Skydome* skydome3_ = nullptr;
+	KamataEngine::Model* modelMoon_ = nullptr;
 
 
 #pragma endregion

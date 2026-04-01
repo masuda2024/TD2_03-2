@@ -44,8 +44,10 @@ void Game::Initialize()
 
 #pragma region スカイドーム
 
-	modelEarth_ = Model::CreateFromOBJ("earth", true);
+	
 	modelskydome_ = Model::CreateFromOBJ("SkyDome", true);
+	modelEarth_ = Model::CreateFromOBJ("earth", true);
+	modelMoon_ = Model::CreateFromOBJ("moon", true);
 	// スカイドームの生成
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelskydome_, textureHandle_, &camera_);
@@ -53,6 +55,8 @@ void Game::Initialize()
 	skydome2_ = new Skydome();
 	skydome2_->Initialize(modelEarth_, textureHandle_, &camera_);
 
+	skydome3_ = new Skydome();
+	skydome3_->Initialize(modelMoon_, textureHandle_, &camera_);
 
 
 
@@ -265,6 +269,7 @@ void Game::Update()
 	// 天球の更新
 	skydome_->Update();
 	skydome2_->Update();
+	skydome3_->Update();
 #pragma endregion
 
 #pragma region プレイヤー
@@ -641,6 +646,7 @@ void Game::Draw()
 #pragma region 天球
 	skydome_->Draw();
 	skydome2_->Draw();
+	skydome3_->Draw();
 #pragma endregion
 
 #pragma region プレイヤー
@@ -748,6 +754,7 @@ Game::~Game()
 #pragma region 天球
 	delete skydome_;
 	delete skydome2_;
+	delete skydome3_;
 #pragma endregion
 
 #pragma region マップ関係
