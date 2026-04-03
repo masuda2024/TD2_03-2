@@ -3,15 +3,13 @@
 
 #include "MapChipField.h"
 
-#include"Player.h"
-#include"Game.h"
-
+#include "Game.h"
+#include "Player.h"
 
 #include <algorithm>
 #include <list>
 #include <numbers>
 #define NOMINMAX
-
 
 using namespace KamataEngine;
 using namespace MathUtility;
@@ -89,19 +87,19 @@ void P_Bullet::Initialize(KamataEngine::Model* model, Camera* camera, Player* pl
 	worldTransform_.Initialize();
 }
 
-void P_Bullet::Update() 
+void P_Bullet::Update()
 {
 	/*
 	if (Input::GetInstance()->TriggerKey(DIK_M))
 	{
-		ON_Mouse = !ON_Mouse;  // 押すたびに反転
-		OFF_Mouse = !ON_Mouse; // 逆状態にする
+	    ON_Mouse = !ON_Mouse;  // 押すたびに反転
+	    OFF_Mouse = !ON_Mouse; // 逆状態にする
 	}
 
-	
-	if (Input::GetInstance()->TriggerKey(DIK_M)) 
+
+	if (Input::GetInstance()->TriggerKey(DIK_M))
 	{
-		useMouseAttack_ = !useMouseAttack_;
+	    useMouseAttack_ = !useMouseAttack_;
 	}
 	if (!isActive_ && Input::GetInstance()->IsTriggerMouse(0))
 {
@@ -115,8 +113,6 @@ void P_Bullet::Update()
 	}
 }
 	*/
-
-
 
 	if (!isActive_)
 	{
@@ -132,7 +128,6 @@ void P_Bullet::Update()
 	// 弾を移動
 	worldTransform_.translation_ += velocity_;
 
-	
 	// 弾が表示されている時間
 	timer_ += 1.0f / 60.0f;
 	if (timer_ >= kLifeTime)
@@ -146,45 +141,42 @@ void P_Bullet::Update()
 	worldTransform_.TransferMatrix(); // プレイヤーの座標の計算
 }
 
-
 /*
 void P_Bullet::StartAttack()
 {
-	
-	if (!player_)
-		return;
-	isActive_ = true;
-	timer_ = 0.0f;
-	
 
-	const auto& rot = player_->GetRotation();
+    if (!player_)
+        return;
+    isActive_ = true;
+    timer_ = 0.0f;
 
-	float pitch = rot.x; // 上下
-	float yaw = rot.y;   // 左右
 
-	// Player の向き通りの forward
+    const auto& rot = player_->GetRotation();
 
-	KamataEngine::Vector3 forward;
-	forward.x = cosf(pitch) * sinf(yaw);
-	forward.y = -sinf(pitch);
-	forward.z = -cosf(pitch) * cosf(yaw);
+    float pitch = rot.x; // 上下
+    float yaw = rot.y;   // 左右
 
-	velocity_ = forward;
+    // Player の向き通りの forward
 
-	const float kSpawnOffset = 1.5f;
-	worldTransform_.translation_ = player_->GetWorldPosition() + forward * kSpawnOffset;
+    KamataEngine::Vector3 forward;
+    forward.x = cosf(pitch) * sinf(yaw);
+    forward.y = -sinf(pitch);
+    forward.z = -cosf(pitch) * cosf(yaw);
+
+    velocity_ = forward;
+
+    const float kSpawnOffset = 1.5f;
+    worldTransform_.translation_ = player_->GetWorldPosition() + forward * kSpawnOffset;
 
 }
 */
 
-
-void P_Bullet::StartAttack_at_Mouse()
+void P_Bullet::StartAttack_at_Mouse() 
 {
 	if (!player_)
 		return;
 	isActive_ = true;
 	timer_ = 0.0f;
-	
 
 	// マウス座標
 	Vector2 mousePos = Input::GetInstance()->GetMousePosition();
@@ -225,12 +217,6 @@ void P_Bullet::StartAttack_at_Mouse()
 	worldTransform_.translation_ = playerPos + dir * kSpawnOffset;
 }
 
-
-
-
-
-
-
 #pragma region ブロックとの衝突
 
 void P_Bullet::CheckMapCollision(CollisionMapInfo& info)
@@ -241,7 +227,7 @@ void P_Bullet::CheckMapCollision(CollisionMapInfo& info)
 	CheckMapCollisionLeft(info);
 }
 
-void P_Bullet::CheckMapCollisionUp(CollisionMapInfo& info)
+void P_Bullet::CheckMapCollisionUp(CollisionMapInfo& info) 
 {
 
 	if (info.move.y <= 0)
@@ -264,7 +250,7 @@ void P_Bullet::CheckMapCollisionUp(CollisionMapInfo& info)
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	mapChipTypeNext = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex + 1);
-	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) 
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock)
 	{
 		hit = true;
 	}
@@ -296,9 +282,9 @@ void P_Bullet::CheckMapCollisionUp(CollisionMapInfo& info)
 	}
 }
 
-void P_Bullet::CheckMapCollisionDown(CollisionMapInfo& info) 
+void P_Bullet::CheckMapCollisionDown(CollisionMapInfo& info)
 {
-	if (info.move.y >= 0) 
+	if (info.move.y >= 0)
 	{
 		return;
 	}
@@ -329,13 +315,13 @@ void P_Bullet::CheckMapCollisionDown(CollisionMapInfo& info)
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	mapChipTypeNext = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex - 1);
 
-	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock)
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) 
 	{
 		hit = true;
 	}
 
 	// ブロックにヒット?
-	if (hit) 
+	if (hit)
 	{
 		// 盛り込みを排除する方向に移動量
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + info.move + KamataEngine::Vector3(0, -kHeight / 2.0f, 0));
@@ -354,17 +340,17 @@ void P_Bullet::CheckMapCollisionDown(CollisionMapInfo& info)
 	}
 }
 
-void P_Bullet::CheckMapCollisionRight(CollisionMapInfo& info) 
+void P_Bullet::CheckMapCollisionRight(CollisionMapInfo& info)
 {
 	// 右移動アリ
-	if (info.move.x <= 0)
+	if (info.move.x <= 0) 
 	{
 		return;
 	}
 
 	std::array<KamataEngine::Vector3, kNumCorner> positionsNew;
 
-	for (uint32_t i = 0; i < positionsNew.size(); ++i)
+	for (uint32_t i = 0; i < positionsNew.size(); ++i) 
 	{
 		positionsNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
 	}
@@ -389,7 +375,7 @@ void P_Bullet::CheckMapCollisionRight(CollisionMapInfo& info)
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	mapChipTypeNext = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex - 1, indexSet.yIndex);
 
-	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock)
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) 
 	{
 		hit = true;
 	}
@@ -415,17 +401,17 @@ void P_Bullet::CheckMapCollisionRight(CollisionMapInfo& info)
 	}
 }
 
-void P_Bullet::CheckMapCollisionLeft(CollisionMapInfo& info)
+void P_Bullet::CheckMapCollisionLeft(CollisionMapInfo& info) 
 {
 	// 左移動アリ
-	if (info.move.x >= 0) 
+	if (info.move.x >= 0)
 	{
 		return;
 	}
 
 	std::array<KamataEngine::Vector3, kNumCorner> positionsNew;
 
-	for (uint32_t i = 0; i < positionsNew.size(); ++i)
+	for (uint32_t i = 0; i < positionsNew.size(); ++i) 
 	{
 		positionsNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
 	}
@@ -448,7 +434,7 @@ void P_Bullet::CheckMapCollisionLeft(CollisionMapInfo& info)
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	mapChipTypeNext = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex + 1, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) 
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock)
 	{
 		hit = true;
 	}
@@ -462,7 +448,7 @@ void P_Bullet::CheckMapCollisionLeft(CollisionMapInfo& info)
 		MapChipField::IndexSet indexSetNow;
 		indexSetNow = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + KamataEngine::Vector3(-kWidth / 2.0f, 0, 0));
 
-		if (indexSetNow.xIndex != indexSet.xIndex)
+		if (indexSetNow.xIndex != indexSet.xIndex) 
 		{
 			// めり込み先ブロックの範囲矩形
 			MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
@@ -474,7 +460,7 @@ void P_Bullet::CheckMapCollisionLeft(CollisionMapInfo& info)
 }
 
 // 弾の反射処理
-void P_Bullet::CheckMapHit(CollisionMapInfo& info)
+void P_Bullet::CheckMapHit(CollisionMapInfo& info) 
 {
 
 	// X軸反射
@@ -494,7 +480,7 @@ void P_Bullet::CheckMapHit(CollisionMapInfo& info)
 
 #pragma endregion
 
-void P_Bullet::Draw() 
+void P_Bullet::Draw()
 {
 	if (!isActive_)
 	{
@@ -506,7 +492,7 @@ void P_Bullet::Draw()
 
 #pragma region プレイヤーの弾と敵の衝突
 
-AABB P_Bullet::GetAABB()
+AABB P_Bullet::GetAABB() 
 {
 	KamataEngine::Vector3 worldPos = GetWorldPosition();
 
@@ -538,7 +524,7 @@ KamataEngine::Vector3 P_Bullet::GetWorldPosition()
 KamataEngine::Vector3 P_Bullet::CornerPosition(const KamataEngine::Vector3& center, Corner corner)
 {
 
-	KamataEngine::Vector3 offetTable[kNumCorner] = 
+	KamataEngine::Vector3 offetTable[kNumCorner] =
 	{
 	    {+kWidth / 2.0f, -kHeight / 2.0f, 0},
         {-kWidth / 2.0f, -kHeight / 2.0f, 0},

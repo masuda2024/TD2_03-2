@@ -169,6 +169,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="P_Bullet.cpp" />
     <ClCompile Include="P_DeathParticle.cpp" />
+    <ClCompile Include="Recovery.cpp" />
     <ClCompile Include="Skydome.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Tutorial.cpp" />
@@ -285,6 +286,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="P_Bullet.h" />
     <ClInclude Include="P_DeathParticle.h" />
+    <ClInclude Include="Recovery.h" />
     <ClInclude Include="Skydome.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Tutorial.h" />

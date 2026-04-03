@@ -1,27 +1,23 @@
 #pragma once
 #include "KamataEngine.h"
 
-
 #include "MapChipField.h"
-
 
 #include "CameraController.h"
 #include "Skydome.h"
 
 
-#include "Player.h"
+#include "Recovery.h"
+
+
 #include "Cursor.h"
-#include "P_DeathParticle.h"
 #include "P_Bullet.h"
+#include "P_DeathParticle.h"
+#include "Player.h"
 
-
-#include "Enemy.h"
-#include "E_DeathParticle.h"
 #include "E_Bullet.h"
-
-
-
-
+#include "E_DeathParticle.h"
+#include "Enemy.h"
 
 #include "Fade.h"
 #include <list>
@@ -37,42 +33,37 @@ using namespace MathUtility;
 /*
 struct MouseMove
 {
-	LONG lx;
-	LONG ly;
-	LONG lz;
+    LONG lx;
+    LONG ly;
+    LONG lz;
 };*/
-
 
 /*
 
-Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) 
+Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2)
 {
-	Matrix4x4 result{};
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++) 
-		{
-			result.m[i][j] = m1.m[i][0] * m2.m[0][j] + m1.m[i][1] * m2.m[1][j] + m1.m[i][2] * m2.m[2][j] + m1.m[i][3] * m2.m[3][j];
-		}
-	}
-	return result;
+    Matrix4x4 result{};
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            result.m[i][j] = m1.m[i][0] * m2.m[0][j] + m1.m[i][1] * m2.m[1][j] + m1.m[i][2] * m2.m[2][j] + m1.m[i][3] * m2.m[3][j];
+        }
+    }
+    return result;
 }
 // ビュープロジェクション
 Matrix4x4 viewProjectionMatrix;
 //ビュープロジェクションの初期化
 Matrix4x4 InitializeViewProjectionMatrix(const Camera& camera)
 {
-	Matrix4x4 view;
-	Matrix4x4 projection;
-	return Multiply(view, projection);
+    Matrix4x4 view;
+    Matrix4x4 projection;
+    return Multiply(view, projection);
 }
 */
 
-
-
-
-
-class Game
+class Game 
 {
 public:
 	// デストラクタ
@@ -87,8 +78,6 @@ public:
 	// 描画
 	void Draw();
 
-
-
 #pragma region 終了フラグ
 
 	// 終了フラグ
@@ -102,21 +91,9 @@ public:
 
 #pragma endregion
 
-
-
-
 	static int GetMouscePosition(int* positionX, int* positionY);
-	
-	
-
-	
-
-
 
 private:
-
-
-
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0;
 	// 3Dモデルデータ
@@ -124,7 +101,6 @@ private:
 
 	std::vector<std::vector<KamataEngine::WorldTransform*>> worldTransformBlocks_; // stdでエラーが起きたらKamataEngine::をいれる
 
-	
 	// デバックカメラの生成
 	// debugCamera_ = new DebugCamera();
 
@@ -136,11 +112,6 @@ private:
 
 	// スプライト
 	KamataEngine::Sprite* sprite_ = nullptr;
-
-
-
-
-
 
 #pragma region マップ関係
 
@@ -164,45 +135,46 @@ private:
 	int32_t MaxScore = 1000000;
 	int32_t score = 0;
 
-
-	//プレイヤーのHP
+	// プレイヤーのHP
 	uint32_t playerHPHandle_ = 0;
 	Sprite* playerHPSprite_ = nullptr;
 
 	uint32_t _playerHPHandle_ = 0;
 	Sprite* _playerHPSprite_ = nullptr;
 
-
-	//敵のHP
-	// 敵HPテクスチャハンドル
+	// 敵のHP
+	//  敵HPテクスチャハンドル
 	uint32_t enemyHPHandle_ = 0;
 	// スプライト
 	Sprite* enemyHPSprite_ = nullptr;
-	
+
 	uint32_t _enemyHPHandle_ = 0;
 	Sprite* _enemyHPSprite_ = nullptr;
 
 #pragma endregion
 
-
-
-
 #pragma region 天球
 	// 天球
 	Skydome* skydome_ = nullptr;
 	KamataEngine::Model* modelskydome_ = nullptr;
-	
-	
+
 	Skydome* skydome2_ = nullptr;
 	KamataEngine::Model* modelEarth_ = nullptr;
 
 	Skydome* skydome3_ = nullptr;
 	KamataEngine::Model* modelMoon_ = nullptr;
 
+#pragma endregion
+
+
+#pragma region 回復アイテム
+
+	Recovery* recovery_ = nullptr; 
+	KamataEngine::Model* modelRecovery_ = nullptr;
 
 #pragma endregion
 
-	
+
 #pragma region プレイヤー
 
 	// プレイヤー
@@ -211,7 +183,6 @@ private:
 
 	Cursor* cursor_ = nullptr;
 	KamataEngine::Model* modelCursor_ = nullptr;
-
 
 #pragma region プレイヤーの弾
 
@@ -224,34 +195,24 @@ private:
 	// 速度
 	KamataEngine::Vector3 velocity_;
 	// 弾の寿命(フレーム数)
-	//int playerBulletLifeTime = 20; // 変更可能な左辺値にするためconstを外し型をintに変更    // スペースキーを押して弾を撃つ
+	// int playerBulletLifeTime = 20; // 変更可能な左辺値にするためconstを外し型をintに変更    // スペースキーを押して弾を撃つ
 
 #pragma endregion
 
 	// プレイヤーの弾の生成
 	P_Bullet* playerBullet_ = nullptr;
-	
 
 	// プレイヤーのパーティクル
 	P_DeathParticle* P_Particles_ = nullptr;
 	KamataEngine::Model* model_P_Particle_ = nullptr;
 
-	
-
-	
-
 #pragma endregion
 
 #pragma region 敵
 
-
-
-
-
 	// 敵
 	Enemy* enemy_ = nullptr;
-	//std::list<Enemy*> enemies_;
-
+	// std::list<Enemy*> enemies_;
 
 	KamataEngine::Model* modelEnemy_ = nullptr;
 
@@ -263,10 +224,7 @@ private:
 
 	int32_t respawnTimer = 120;
 
-	
-
-
-	#pragma region 敵の弾
+#pragma region 敵の弾
 	// 敵の弾の生成
 	E_Bullet* E_Bullet_ = nullptr;
 	// 敵の弾
@@ -277,19 +235,14 @@ private:
 	KamataEngine::Vector3 E_B_velocity_;
 	// 弾の寿命(フレーム数)
 	// int playerBulletLifeTime = 20; // 変更可能な左辺値にするためconstを外し型をintに変更    // スペースキーを押して弾を撃つ
-	
 
 	static const int kFireInterval = 30;
 	int32_t fireTimer = 0;
 	void EnemyAttack();
-	
-	#pragma endregion
-
-
 
 #pragma endregion
 
-	
+#pragma endregion
 
 #pragma region カメラ関係
 
@@ -299,26 +252,23 @@ private:
 	KamataEngine::DebugCamera* debugCamera_ = nullptr;
 	// カメラコントロール
 	CameraController* cameraController_ = nullptr;
-	
+
 #pragma endregion
-
-
-
 
 	// 全ての当たり判定
 	void CheckAllCollisions();
-	
+
 #pragma region フェーズ・フェード
 
 	// ゲームのフェーズ(型)
-	enum class Phase
+	enum class Phase 
 	{
-		kFadeIn,       // フェードイン
-		kPlay,         // ゲームプレイ
-		kDeath,        // プレイヤーのデス演出
-		kEnemyDeath,   // 敵のデス演出
-		kFadeOut,      // フェードアウト(オーバー)
-		kFadeOut2,     // フェードアウト(クリア)
+		kFadeIn,     // フェードイン
+		kPlay,       // ゲームプレイ
+		kDeath,      // プレイヤーのデス演出
+		kEnemyDeath, // 敵のデス演出
+		kFadeOut,    // フェードアウト(オーバー)
+		kFadeOut2,   // フェードアウト(クリア)
 	};
 
 	// ゲームの現在フェーズから開始
@@ -331,11 +281,7 @@ private:
 	Fade* fade_ = nullptr;
 #pragma endregion
 
-	
-
-
 	float t = 0.0f;
 
-	//bool useMouseAttack_ = false;
-
+	// bool useMouseAttack_ = false;
 };

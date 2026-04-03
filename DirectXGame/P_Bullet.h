@@ -1,11 +1,10 @@
 #pragma once
 #include "KamataEngine.h"
-#include"MyMath.h"
+#include "MyMath.h"
 
 class Enemy;
 
 class Player;
-
 
 class MapChipField;
 
@@ -23,7 +22,7 @@ class P_Bullet
 	};
 
 public:
-	struct CollisionMapInfo
+	struct CollisionMapInfo 
 	{
 		bool ceiling = false;
 		bool landing = false;
@@ -36,7 +35,7 @@ public:
 
 	void Update();
 
-	//void StartAttack();
+	// void StartAttack();
 	void StartAttack_at_Mouse();
 
 	void Draw();
@@ -120,10 +119,10 @@ private:
 	MapChipField* mapChipField_ = nullptr;
 
 	// マウスの切り替え
-	//uint32_t OFF_Mouse = true;
-	//uint32_t ON_Mouse = false;
+	// uint32_t OFF_Mouse = true;
+	// uint32_t ON_Mouse = false;
 
-	//bool ON_Mouse;
-	//bool OFF_Mouse;
-	//bool useMouseAttack_ = false;
+	// bool ON_Mouse;
+	// bool OFF_Mouse;
+	// bool useMouseAttack_ = false;
 };

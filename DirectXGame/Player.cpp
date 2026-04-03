@@ -219,3 +219,29 @@ void Player::OnCollition2(const E_Bullet* enemyBullet)
 }
 
 #pragma endregion
+
+#pragma region 回復アイテムとプレイヤー
+
+AABB3 Player::GetAABB3()
+{
+	KamataEngine::Vector3 worldPos = GetWorldPosition();
+
+	AABB3 aabb;
+
+	aabb.min = {worldPos.x - kWidth / 2.0f, worldPos.y - kHeight / 2.0f, worldPos.z - kWidth / 2.0f};
+	aabb.max = {worldPos.x + kWidth / 2.0f, worldPos.y + kHeight / 2.0f, worldPos.z + kWidth / 2.0f};
+
+	return aabb;
+}
+
+// 衝突応答
+void Player::OnCollition3(const Recovery* recovery) 
+{
+	(void)recovery;
+	
+	hp_ += 100;
+}
+
+
+
+#pragma endregion

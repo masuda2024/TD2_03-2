@@ -5,12 +5,14 @@
 #include<list>
 #include<DirectXMath.h>
 
+#include"Recovery.h"
 
 
 
 class E_Bullet;
 class MapChipField;
 class Enemy;
+class Recovery;
 class Player 
 {
 public:
@@ -39,7 +41,14 @@ public:
 	void OnCollition2(const E_Bullet* enemyBullet);
 #pragma endregion
 
+#pragma region 回復アイテムとプレイヤー
+	
+	// AABBを取得
+	AABB3 GetAABB3();
+	// 衝突応答
+	void OnCollition3(const Recovery* recovery);
 
+#pragma endregion
 
 	
 
