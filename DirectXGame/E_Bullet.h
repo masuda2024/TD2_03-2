@@ -1,41 +1,29 @@
 #pragma once
 #include "KamataEngine.h"
 #include "MyMath.h"
-#include "Player.h"
 
 class Player;
-
-class E_Bullet 
+class E_Bullet
 {
 public:
-	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity);
-
+	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity);
 	void Update();
+	void Draw(const KamataEngine::Camera& camera);
 
-	void Draw();
-
-	// 終了フラグ
-	bool isFinished_ = false;
-
-	// デスフラグ
-	// bool isEBDead_ = false;
-
-	// bool IsEBDead() const { return isEBDead_; }
+	KamataEngine::Model* model_E_Bullet_ = nullptr;
 
 	// 速度
-	KamataEngine::Vector3 velocity_;
+	KamataEngine::Vector3 EB_velocity_;
+
+	const KamataEngine::WorldTransform& GetWorldTransform() const { return worldTransform_; }
+
+#pragma region 衝突判定 [ プレイヤー  <<===>>  敵の弾 ]
 
 	// 当たり判定サイズ
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
 	// ワールド座標を取得
 	KamataEngine::Vector3 GetWorldPosition();
-
-	;
-	// float shotT = 0.0f;
-	// float shotC = 0.0f;
-
-#pragma region プレイヤーと敵の弾の衝突
 
 	// AABBを取得
 	AABB2 GetAABB2();
@@ -44,18 +32,25 @@ public:
 
 #pragma endregion
 
+	// 寿命
+	static const int32_t kLifeTime_E = 60 * 5;
+	// デスタイマー
+	int32_t deathTimer_E_ = kLifeTime_E;
+	// デスフラグ
+	bool isDead_eb_ = false;
+	bool IsDead_EB() const { return isDead_eb_; }
+
 private:
 	// ワールド変換データ
 	KamataEngine::WorldTransform worldTransform_;
-
 	// モデル
-	KamataEngine::Model* model_;
+	KamataEngine::Model* model_ = nullptr;
 
 	// カメラ
 	KamataEngine::Camera* camera_;
 
-	// 速度
-	KamataEngine::Vector3 Bulletvelocity_;
+	KamataEngine::Vector3 velocity_ = {};
 
-	int32_t isShot = true;
+	// テクスチャハンドル
+	uint32_t textureHandle_ = 0;
 };

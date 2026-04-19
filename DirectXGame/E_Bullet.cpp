@@ -1,88 +1,49 @@
 #include "E_Bullet.h"
-#include "Enemy.h"
-
-#include <list>
-#define NOMINMAX
-#include "MapChipField.h"
-
 using namespace KamataEngine;
-using namespace MathUtility;
+#include "MyMath.h"
 
-void E_Bullet::Initialize(KamataEngine::Model* model, Camera* camera, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity)
+void E_Bullet::Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity)
 {
-	// NULLポイントチェック
-	// assert(model);
+	assert(model);
 
 	model_ = model;
 
-	camera_ = camera;
+	model_E_Bullet_ = model;
 
-	// 速度を引数で受け取って初期化
-	velocity_ = velocity;
+	EB_velocity_ = velocity;
 
-	// 引数で受け取った初期座標をリセット
-	worldTransform_.translation_ = position;
+	model_E_Bullet_ = KamataEngine::Model::CreateFromOBJ("E_bullet");
 
-	// ワールド変換データ初期化
 	worldTransform_.Initialize();
-
-	// NextActionTime_ = (rand() % 300) / 2.0f + 60.0f;
-	//  Bulletvelocity_ = velocity;
-	isShot = true;
-
-	// shotT = 30.0f;
-	// shotC = 40.0f;
+	worldTransform_.translation_ = position;
 }
 
 void E_Bullet::Update()
 {
-	/*
-	if (isShot == 0)
+	// 弾の速度(X軸方向)
+	// PB_velocity_.x = 1.0f;
+	if (--deathTimer_E_ <= 0)
 	{
-	    shotC--;
-	    if (shotC <= 0.0f)
-	    {
-	        isShot = true;
-	        shotT = 30.0f;
-	    }
+		isDead_eb_ = true;
 	}
 
-	if (isShot == 1)
-	{
+	// 弾の速度(X軸方向)
+	EB_velocity_.x = 1.0f;
 
-	    shotT--;
-	    if (shotT <= 0.0f)
-	    {
-	        isShot = false;
-	        shotC = 40.0f;
-	    }
-	}*/
-
-	worldTransform_.translation_ -= velocity_;
+	// 座標を移動させる (1フレーム分の移動量)
+	worldTransform_.translation_.x -= EB_velocity_.x;
 
 	// アフィン変換行列
 	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
-	worldTransform_.TransferMatrix(); // 敵の座標の計算
+	// 行列を定数バッファに転送
+	worldTransform_.TransferMatrix();
 }
 
-void E_Bullet::Draw()
-{
+void E_Bullet::Draw(const KamataEngine::Camera& camera) { model_E_Bullet_->Draw(worldTransform_, camera); }
 
-	// モデルの描画
+#pragma region 衝突判定 [ プレイヤー  <<===>>  敵の弾 ]
 
-	if (isShot == 1)
-	{
-		model_->Draw(worldTransform_, *camera_);
-	}
-
-	// 終了なら何もしない
-	if (isFinished_)
-	{
-		return;
-	}
-}
-
-KamataEngine::Vector3 E_Bullet::GetWorldPosition()
+KamataEngine::Vector3 E_Bullet::GetWorldPosition() 
 {
 	// ワールド座標を入れる変数
 	KamataEngine::Vector3 worldPos;
@@ -94,9 +55,7 @@ KamataEngine::Vector3 E_Bullet::GetWorldPosition()
 	return worldPos;
 }
 
-#pragma region 敵の弾とプレイヤーの当たり判定
-
-AABB2 E_Bullet::GetAABB2() 
+AABB2 E_Bullet::GetAABB2()
 {
 	KamataEngine::Vector3 worldPos = GetWorldPosition();
 
@@ -110,5 +69,4 @@ AABB2 E_Bullet::GetAABB2()
 
 // プレイヤーと敵の弾の衝突
 void E_Bullet::OnCollition2(const Player* player) { (void)player; }
-
 #pragma endregion

@@ -1,26 +1,26 @@
 #pragma once
 
 #include "KamataEngine.h"
-#include "MyMath.h"
+
+#include <algorithm>
+#include <cassert>
 #include <list>
-#include "Player.h"
-#include "Game.h"
+#include <numbers>
+#define NOMINMAX
+#include "MyMath.h"
+#include "math.h"
+#include <cmath>
+
 #include "E_Bullet.h"
-
-
-
-#pragma region
-#pragma endregion
-
 
 class P_Bullet;
 class Enemy 
 {
 public:
-
+	// 敵の弾
+	std::list<E_Bullet*> e_bullets_;
 
 #pragma region 基本構成
-
 	// 初期化
 	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, KamataEngine::Vector3& position);
 
@@ -30,125 +30,78 @@ public:
 	// 描画
 	void Draw();
 
+	~Enemy();
 #pragma endregion
 
-#pragma region 状態
-
-
+#pragma region 敵の状態
 	// 体力表示
-	int32_t enemyHp;
-
-	int32_t E_GetHP() const { return hp_; }
-	int32_t E_GetMaxHP() const { return maxHP_; }
-	bool IsEnemyDead() const { return isenemyDead_; }
-	
+	int32_t E_GetHP() const { return E_hp_; }
+	int32_t E_GetMaxHP() const { return E_maxHP_; }
+	bool IsEnemyDead() const { return isEnemyDead_; }
 	// デスフラグ
-	bool isenemyDead_ = false;
-	bool isenemyDead2_ = false;
-	bool iscollition = false;
-	// デスフラグのgetter
-	// bool IsEnemyDead() const { return isenemyDead_; }
+	bool isEnemyDead_ = false;
 
-
-#pragma endregion
-
-#pragma region 動作
-	/**/
+	// 行動フェーズ
 	enum class Phase
 	{
-		Approach, //接近
-		Attack,   //攻撃
+		Approach,
+		Attack,
 	};
 	Phase phase_ = Phase::Approach;
 
-
-
-
-	// 敵の当たり判定サイズ
-	static inline const float kWidth = 10.0f;
-	static inline const float kHeight = 10.0f;
-
-	// 歩行の速さ
-	static inline const float kWalkSpeed = 0.04f;
-
-	// 最初の角度[度]
-	static inline const float kWalkMotionAngleStart = 5.0f;
-
-	// 最後の角度[度]
-	static inline const float kWalkMotionAngleEnd = 5.0f;
-
-	// アニメーションの周期となる時間[秒]
-	static inline const float kWalkMotionTime = 5.0f;
-
-	// 経過時間
-	float walkTimer_ = 0.0f;
-
-	// 敵の弾を発射
-	void E_Fire();
-
-
 #pragma endregion
 
-	
-	
-	
+#pragma region 衝突判定 [ プレイヤーの弾  <<===>>  敵 ]
 
-	
-	// ワールド座標を取得
-	KamataEngine::Vector3 GetWorldPosition();
-	
-#pragma region プレイヤーの弾と敵
+	// キャラクターの当たり判定サイズ
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
+
+	// void OnCollisionE();
+	const std::list<E_Bullet*>& GetE_Bullets() const { return e_bullets_; }
+
 	// AABBを取得
 	AABB GetAABB();
 	// 衝突応答
 	void OnCollition(const P_Bullet* playerBullet);
 #pragma endregion
 
-	
-	
+#pragma region 敵の攻撃
 
-	
-	
+	void Fire();
+	void ApproachInitialize();
+	// 発射間隔
+	static const int kFireInterval = 30;
+
+#pragma endregion
+
+#pragma region 座標(ワールド変換)
+
+	const KamataEngine::WorldTransform& GetWorldTransform() const { return worldTransform_; }
+
+	const KamataEngine::Vector3& GetVelocity() const { return velocity_; }
+
+	// ワールド座標を取得
+	KamataEngine::Vector3 GetWorldPosition();
+
+	const KamataEngine::Vector3& GetRotation() const { return worldTransform_.rotation_; }
+
+#pragma endregion
+
 private:
-	
-	/*
-	//敵の弾のポインター
-	E_Bullet* E_bullet_ = nullptr;
-	std::list<E_Bullet*> bullets_;
-*/
-
-	// モデル
-	KamataEngine::Model* model_;
-	// カメラ
-	KamataEngine::Camera* camera_;
 	// ワールド変換データ
 	KamataEngine::WorldTransform worldTransform_;
+	// モデル
+	KamataEngine::Model* model_ = nullptr;
+
+	// カメラ
+	KamataEngine::Camera* camera_;
 
 	KamataEngine::Vector3 velocity_ = {};
 
-	// ラ/ンダムで行動するためのタイマー
-	float actionTimer_ = 0.0f;
-	float nextActionTime_ = 0.0f;
-	float setEnemy_ = 0.0f;
-	int32_t respawnTimer = 80;
-	
-	
-	
-	
-	
-	// テクスチャハンドル
-	// uint32_t textureHandle_ = 0u;
+	int32_t E_maxHP_ = 10000;
+	int32_t E_hp_ = E_maxHP_;
 
-	
-
-	
-
-
-	int32_t point = 0;
-	int32_t maxP_ = 50000;
-
-	
-	int32_t maxHP_ = 10000;
-	int32_t hp_ = maxHP_;
-
+	// 発射タイマー
+	int32_t fireTimer_ = 0;
 };

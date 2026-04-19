@@ -41,15 +41,15 @@ bool IsCollition(const AABB& aabb1, const AABB& aabb2)
 }
 
 // 敵の弾とプレイヤー
-bool IsCollition2(const AABB2& aabb3, const AABB2& aabb4)
+bool IsCollition2(const AABB2& aabb3, const AABB2& aabb4) 
 {
 	return (aabb3.min.x <= aabb4.max.x && aabb3.max.x >= aabb4.min.x) && // x軸
 	       (aabb3.min.y <= aabb4.max.y && aabb3.max.y >= aabb4.min.y) && // y軸
 	       (aabb3.min.z <= aabb4.max.z && aabb3.max.z >= aabb4.min.z);   // z軸
 }
 
-//回復アイテムとプレイヤー
-bool IsCollition3(const AABB3& aabb5, const AABB3& aabb6) 
+// 回復アイテムとプレイヤー
+bool IsCollition3(const AABB3& aabb5, const AABB3& aabb6)
 {
 	return (aabb5.min.x <= aabb6.max.x && aabb5.max.x >= aabb6.min.x) && // x軸
 	       (aabb5.min.y <= aabb6.max.y && aabb5.max.y >= aabb6.min.y) && // y軸

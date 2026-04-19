@@ -4,90 +4,25 @@
 
 class Enemy;
 
-class Player;
-
-class MapChipField;
-
-class P_Bullet 
+class P_Bullet
 {
-
-	enum Corner 
-	{
-		kRightBottom,
-		kLeftBottom,
-		kRightTop,
-		kLeftTop,
-
-		kNumCorner
-	};
-
 public:
-	struct CollisionMapInfo 
-	{
-		bool ceiling = false;
-		bool landing = false;
-		bool hitLeftWall = false;
-		bool hitRightWall = false;
-		KamataEngine::Vector3 move;
-	};
-
-	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, Player* player);
-
+	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity);
 	void Update();
+	void Draw(const KamataEngine::Camera& camera);
 
-	// void StartAttack();
-	void StartAttack_at_Mouse();
-
-	void Draw();
-
-	// 有効かどうか
-	bool IsActive() const { return isActive_; }
-
-	// 弾が反射したか
-	bool GetReflection() const { return reflection_; }
-	bool reflection_ = false;
-
-	// 終了フラグ
-	bool isFinished_ = false;
-
-	// デスフラグ
-	bool isPBDead_ = false;
-
-	bool IsPBDead() const { return isPBDead_; }
+	KamataEngine::Model* model_P_Bullet_ = nullptr;
 
 	// 速度
-	KamataEngine::Vector3 velocity_ = {};
+	KamataEngine::Vector3 PB_velocity_;
+
+#pragma region 衝突判定 [ プレイヤーの弾  <<===>>  敵 ]
 
 	// 当たり判定サイズ
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
 	// ワールド座標を取得
 	KamataEngine::Vector3 GetWorldPosition();
-
-	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
-
-	float angle_ = 0.0f;
-	float cosValue_ = 0.0f;
-	float sinValue_ = 0.0f;
-
-#pragma region 弾とブロックの衝突
-
-	// 弾の反射用
-
-	void CheckMapCollision(CollisionMapInfo& info);
-
-	void CheckMapCollisionUp(CollisionMapInfo& info);
-	void CheckMapCollisionDown(CollisionMapInfo& info);
-	void CheckMapCollisionRight(CollisionMapInfo& info);
-	void CheckMapCollisionLeft(CollisionMapInfo& info);
-
-	void CheckMapHit(CollisionMapInfo& info);
-
-	KamataEngine::Vector3 CornerPosition(const KamataEngine::Vector3& center, Corner corner);
-
-#pragma endregion
-
-#pragma region プレイヤーの弾と敵の衝突
 
 	// AABBを取得
 	AABB GetAABB();
@@ -96,33 +31,28 @@ public:
 
 #pragma endregion
 
-private:
-	// 攻撃のON/OFF
-	bool isActive_ = false;
-	Player* player_ = nullptr;
+	const KamataEngine::WorldTransform& GetWorldTransform() const { return worldTransform_; }
+
 	// ワールド変換データ
 	KamataEngine::WorldTransform worldTransform_;
 
+	// 寿命
+	static const int32_t kLifeTime = 60 * 5;
+	// デスタイマー
+	int32_t deathTimer_ = kLifeTime;
+	// デスフラグ
+	bool isDead_pb_ = false;
+	bool IsDead_PB() const { return isDead_pb_; }
+
+private:
 	// モデル
-	KamataEngine::Model* model_;
+	KamataEngine::Model* model_ = nullptr;
 
 	// カメラ
 	KamataEngine::Camera* camera_;
 
-	// 速度
-	KamataEngine::Vector3 Bulletvelocity_;
+	KamataEngine::Vector3 velocity_ = {};
 
-	float timer_ = 0.0f;
-	static inline const float kLifeTime = 60.0f;
-
-	static inline const float kBlank = 0.1f;
-	MapChipField* mapChipField_ = nullptr;
-
-	// マウスの切り替え
-	// uint32_t OFF_Mouse = true;
-	// uint32_t ON_Mouse = false;
-
-	// bool ON_Mouse;
-	// bool OFF_Mouse;
-	// bool useMouseAttack_ = false;
+	// テクスチャハンドル
+	uint32_t textureHandle_ = 0;
 };

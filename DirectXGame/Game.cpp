@@ -1,22 +1,8 @@
 #include "Game.h"
 #include "MapChipField.h"
 #include "MyMath.h"
-
-#include <cstdlib>
-#include <ctime>
 #include <random>
 
-#include "Windows.h"
-#include "imgui.h"
-#include "math.h"
-
-#include "CameraController.h"
-#include "Fade.h"
-
-#include "P_Bullet.h"
-#include "Player.h"
-
-#include "Enemy.h"
 
 using namespace KamataEngine;
 using namespace MathUtility;
@@ -24,104 +10,26 @@ using namespace MathUtility;
 #pragma region
 #pragma endregion
 
-void Game::Initialize() 
+void Game::Initialize()
 {
-#pragma region
 
+#pragma region フェーズ・フェード
+	// フェーズインから開始
+	phase_ = Phase::kFadeIn;
+	// フェード
+	fade_ = new Fade();
+	fade_->Initialize();
+	fade_->Start(Fade::Status::FadeIn, 1.0f);
 #pragma endregion
+
 	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
-#pragma region マップ関係
-	// ブロック
-	modelBlock_ = Model::CreateFromOBJ("block");
-	// マップチップフィールドの生成
-	mapChipField_ = new MapChipField;
-	// マップチップフィールドの初期化
-	mapChipField_->LoadMapchipCsv("Resources/blocks.csv");
-	GenerateBlocks();
 
-#pragma endregion
+#pragma region 天球
 
-#pragma region スカイドーム
-
-	modelskydome_ = Model::CreateFromOBJ("SkyDome", true);
-	modelEarth_ = Model::CreateFromOBJ("earth", true);
-	modelMoon_ = Model::CreateFromOBJ("moon", true);
-	// スカイドームの生成
-	skydome_ = new Skydome();
-	skydome_->Initialize(modelskydome_, textureHandle_, &camera_);
-
-	skydome2_ = new Skydome();
-	skydome2_->Initialize(modelEarth_, textureHandle_, &camera_);
-
-	skydome3_ = new Skydome();
-	skydome3_->Initialize(modelMoon_, textureHandle_, &camera_);
-
-#pragma endregion
-
-#pragma region プレイヤー
-
-	// プレイヤー
-	// modelPlayer_ = Model::CreateFromOBJ("player", true);
-
-	modelPlayer_ = Model::CreateFromOBJ("H_ziki", true);
-
-	// プレイヤーの弾
-	// modelPlayerBullet_ = Model::CreateFromOBJ("bullet", true);
-	modelPlayerBullet_ = Model::CreateFromOBJ("Z_bullet", true);
-
-	// プレイヤーの弾の発射音声
-	P_Shot_ = Audio::GetInstance()->LoadWave("Sounds/sound/Shot.mp3");
-
-	// パーティクルの3Dモデルデータの生成
-	model_P_Particle_ = Model::CreateFromOBJ("deathParticle", true);
-
-	// プレイヤーの生成
-	player_ = new Player();
-
-	// プレイヤーの座標を指定
-	// Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(6, 30);
-	KamataEngine::Vector3 playerPosition = {-20, 0, 0};
-	player_->Initialize(modelPlayer_, &camera_, playerPosition);
-	player_->SetMapChipField(mapChipField_);
-
-	// プレイヤーの弾
-	for (int i = 0; i < 7; i++)
-	{
-		P_Bullet* bullet = new P_Bullet();
-		bullet->Initialize(modelPlayerBullet_, &camera_, player_);
-		bullet->SetMapChipField(mapChipField_);
-		bullets_.push_back(bullet);
-	}
-
-	// プレイヤーのデスパーティクル
-	P_Particles_ = new P_DeathParticle();
-	P_Particles_->Initialize(model_P_Particle_, &camera_, playerPosition);
-
-	// 得点
-	pointHandle_ = TextureManager::Load("Point.png");
-	pointSprite_ = KamataEngine::Sprite::Create(pointHandle_, {0, 0});
-
-	// 時間
-	timeHandle_ = TextureManager::Load("Time.png");
-	timeSprite_ = KamataEngine::Sprite::Create(timeHandle_, {0, 0});
-
-#pragma endregion
-
-#pragma region カーソル
-
-	TextureManager::Load("Cursor.png");
-	modelCursor_ = Model::CreateFromOBJ("Cursor");
-
-	// カーソル
-	cursor_ = new Cursor();
-
-	// カーソルの初期化
-	KamataEngine::Vector3 cursorPosition = {15, 0, 0};
-	// cursor_->Initialize(modelCursor_, &camera_, playerPosition);
-	cursor_->Initialize(modelCursor_, &camera_, cursorPosition);
-
-	cursor_->SetMapChipField(mapChipField_);
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	modelEarth_ = KamataEngine::Model::CreateFromOBJ("earth", true);
+	modelMoon_ = KamataEngine::Model::CreateFromOBJ("moon", true);
 
 #pragma endregion
 
@@ -134,36 +42,25 @@ void Game::Initialize()
 
 #pragma endregion
 
+#pragma region プレイヤー
 
+	modelPlayer_ = Model::CreateFromOBJ("H_ziki", true);
+
+	// プレイヤーの生成
+	player_ = new Player();
+	// プレイヤーの初期化
+	KamataEngine::Vector3 playerPosition = {-20, 0, 0};
+	player_->Initialize(modelPlayer_, &camera_, playerPosition);
+
+#pragma endregion
 
 #pragma region 敵
-
-	// 敵の3Dモデル
-	// modelEnemy_ = Model::CreateFromOBJ("enemy", true);
-
 	modelEnemy_ = Model::CreateFromOBJ("kaizyu1", true);
-
-	model_E_Particle_ = Model::CreateFromOBJ("E_deathParticle", true);
-
-	// 敵のHP
-	enemyHPHandle_ = TextureManager::Load("Ehp.png");
-	enemyHPSprite_ = KamataEngine::Sprite::Create(enemyHPHandle_, {1050, 0});
-
 	// 敵の生成
 	enemy_ = new Enemy();
-	// 敵の座標
-	KamataEngine::Vector3 enemyPosition = {40, 5, 0};
+	// 敵の初期化
+	KamataEngine::Vector3 enemyPosition = {40, 10, 0};
 	enemy_->Initialize(modelEnemy_, &camera_, enemyPosition);
-	// enemy_->SetMapChipField(mapChipField_);
-
-	// 敵の弾
-	modelE_Bullet_ = Model::CreateFromOBJ("E_bullet", true);
-	// 敵の弾
-	E_Bullet_ = new E_Bullet();
-	E_Bullet_->Initialize(modelE_Bullet_, &camera_, enemyPosition, E_B_velocity_);
-
-	EnemyAttack();
-
 #pragma endregion
 
 #pragma region カメラ関係
@@ -184,63 +81,55 @@ void Game::Initialize()
 	cameraController_->SetMovableArea(cameraArea);
 
 #pragma endregion
+}
 
-#pragma region フェーズ・フェード
-	// フェーズインから開始
-	phase_ = Phase::kFadeIn;
-	// フェード
-	fade_ = new Fade();
-	fade_->Initialize();
-	fade_->Start(Fade::Status::FadeIn, 1.0f);
+
+void Game::Update()
+{
+
+#pragma region デバッグカメラ
+
+	// カメラコントロール
+	cameraController_->Update();
+	// デバッグカメラの更新
+	debugCamera_->Update();
+
+#ifdef _DEBUG
+	if (Input::GetInstance()->TriggerKey(DIK_0))
+	{
+		isDebugCameraActive_ = !isDebugCameraActive_;
+	}
+
+#endif // _DEBUG
+	// ChangePhase();
+	if (isDebugCameraActive_)
+	{
+		debugCamera_->Update();
+		camera_.matView = debugCamera_->GetCamera().matView;
+		camera_.matProjection = debugCamera_->GetCamera().matProjection;
+		camera_.TransferMatrix();
+	} else 
+	{
+		camera_.TransferMatrix();
+		camera_.UpdateMatrix();
+	}
+
 #pragma endregion
-}
-
-void Game::GenerateBlocks()
-{
-
-	// 要素数
-	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
-	uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
-
-	// 要素数を変更する
-	// 列数を設定
-	worldTransformBlocks_.resize(42);
-	for (uint32_t i = 0; i < 42; ++i) 
-	{
-		// 1列の要素数を設定
-		worldTransformBlocks_[i].resize(100);
-	}
-
-	// キューブの生成
-	for (uint32_t i = 0; i < numBlockVirtical; ++i)
-	{
-		for (uint32_t j = 0; j < numBlockHorizontal; ++j)
-		{
-			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock)
-			{
-				WorldTransform* worldTransform = new WorldTransform();
-				worldTransform->Initialize();
-				worldTransformBlocks_[i][j] = worldTransform;
-				worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
-			}
-		}
-	}
-}
-
-void Game::Update() 
-{
-	ImGui::Text("Enemy HP : %d", enemy_->E_GetHP());
 
 	// フェード
 	fade_->Update();
+	ImGui::Text("C : Clear  ,  O : Over");
+	ImGui::Text("0(Zero) : DebugCamera ");
+
+	CheckAllCollisions();
 
 #pragma region UI
 
 	// enemyHPのスプライト
-	enemyHPHandle_ = TextureManager::Load("Sprites/Ehp.png");
+	enemyHPHandle_ = TextureManager::Load("Sprits/Ehp.png");
 	enemyHPSprite_ = KamataEngine::Sprite::Create(enemyHPHandle_, {1050, 0});
 
-	_enemyHPHandle_ = TextureManager::Load("Sprites/Ehp_.png");
+	_enemyHPHandle_ = TextureManager::Load("Sprits/Ehp_.png");
 	_enemyHPSprite_ = KamataEngine::Sprite::Create(_enemyHPHandle_, {1050, 0});
 
 	// 敵HP
@@ -252,13 +141,13 @@ void Game::Update()
 	_enemyHPSprite_->SetSize({300.0f, 30.0f}); // 幅200px、高さ20px
 	_enemyHPSprite_->SetPosition({980, 0});    // 左上少し下に表示
 
-	playerHPHandle_ = TextureManager::Load("Sprites/hp.png");
+	playerHPHandle_ = TextureManager::Load("Sprits/hp.png");
 	playerHPSprite_ = KamataEngine::Sprite::Create(playerHPHandle_, {0, 0});
-	_playerHPHandle_ = TextureManager::Load("Sprites/hp_.png");
+	_playerHPHandle_ = TextureManager::Load("Sprits/hp_.png");
 	_playerHPSprite_ = KamataEngine::Sprite::Create(_playerHPHandle_, {0, 0});
 
 	// プレイヤーHP
-	float hpRatio = (float)player_->GetHP() / (float)player_->GetMaxHP();
+	float hpRatio = (float)player_->P_GetHP() / (float)player_->P_GetMaxHP();
 	hpRatio = std::clamp(hpRatio, 0.0f, 1.0f);
 	playerHPSprite_->SetSize({hpRatio * 300.0f, 30.0f}); // 例：幅200px、高さ20px
 	playerHPSprite_->SetPosition({0, 0});
@@ -268,179 +157,57 @@ void Game::Update()
 
 #pragma endregion
 
-#pragma region 天球
-	// 天球の更新
-	skydome_->Update();
-	skydome2_->Update();
-	skydome3_->Update();
-#pragma endregion
-
 #pragma region 回復アイテム
 
 	recovery_->Update();
 
 #pragma endregion
 
-
-
-
 #pragma region プレイヤー
-
 	player_->Update();
 	player_->RotateX();
 	player_->RotateZ();
-	// プレイヤーの攻撃を呼び出す
-
-	if (Input::GetInstance()->IsTriggerMouse(0))
-	{
-		Audio::GetInstance()->PlayWave(P_Shot_);
-		for (P_Bullet* bullet : bullets_)
-		{
-			if (!bullet->IsActive())
-			{
-
-				bullet->StartAttack_at_Mouse();
-				break;
-			}
-		}
-	}
-
-	/*
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE))
-	{
-	    Audio::GetInstance()->PlayWave(P_Shot_);
-	    for (P_Bullet* bullet : bullets_)
-	    {
-	        if (!bullet->IsActive())
-	        {
-
-	            bullet->StartAttack_at_Mouse();
-
-	            break;
-	        }
-	    }
-	}
-*/
-
-	// プレイヤーの弾を更新
-	for (P_Bullet* bullet : bullets_)
-	{
-		bullet->Update();
-		if (!bullet->GetReflection() && bullet->IsActive()) 
-		{
-			score += 200;
-		}
-		// ImGui::Text("Score x 2 %d", bullet->GetReflection());
-	}
-
-#pragma endregion
-
-#pragma region カーソル
-
-	cursor_->Update();
-	Input::MouseMove mouseMove = Input::GetInstance()->GetMouseMove();
-	ImGui::Text("Mouse Move X: %ld, Y: %ld, Z: %ld", mouseMove.lX, mouseMove.lY, mouseMove.lZ);
-
 #pragma endregion
 
 #pragma region 敵
-
 	enemy_->Update();
-	// 発射タイマーをカウントダウンする
-	fireTimer--;
-
-	if (fireTimer == 0)
-	{
-		EnemyAttack();
-		fireTimer = kFireInterval;
-	}
-
-	// 敵の弾を更新
-	for (E_Bullet* Ebullet : E_bullets_) 
-	{
-		Ebullet->Update();
-	}
-
-	// ImGui::Text("Score %d", score);
-
 #pragma endregion
 
-#pragma region デバッグカメラ
+#pragma region フェーズ
 
-	// カメラコントロール
-	cameraController_->Update();
-	// デバッグカメラの更新
-	debugCamera_->Update();
-
-	switch (phase_)
+	switch (phase_) 
 	{
 	case Phase::kPlay:
 
-		// 全ての当たり判定
-		CheckAllCollisions();
-
-		if (Input::GetInstance()->TriggerKey(DIK_SPACE))
-		{
-			// Audio::GetInstance()->PlayWave(PBSound_);
-		}
-
-		// ゲームプレイフェーズの処理
-		if (player_->IsDead() == true) 
-		{
-			// デス演出フェーズに切り替え
-			phase_ = Phase::kDeath;
-
-			// 自キャラの座標を取得
-			const KamataEngine::Vector3 deathParticlesPosition = player_->GetWorldPosition();
-
-			// パーティクル
-			P_Particles_ = new P_DeathParticle();
-			P_Particles_->Initialize(model_P_Particle_, &camera_, deathParticlesPosition);
-		}
-
-		if (enemy_->IsEnemyDead() == true) 
-		{
-			std::vector<KamataEngine::Vector2> enemyTilePositions;
-
-			// 敵の座標を取得
-			const KamataEngine::Vector3 E_deathParticlesPosition = enemy_->GetWorldPosition();
-
-			// パーティクル
-			E_Particles_ = new E_DeathParticle();
-			E_Particles_->Initialize(model_E_Particle_, &camera_, E_deathParticlesPosition);
-		}
-
-		if (enemy_->IsEnemyDead() == true)
+#pragma region 仮設コード
+		// ゲームクリア(仮)
+		if (Input::GetInstance()->TriggerKey(DIK_C))
 		{
 			phase_ = Phase::kEnemyDeath;
 		}
+		// ゲームオーバー(仮)
+		if (Input::GetInstance()->TriggerKey(DIK_O))
+		{
+			phase_ = Phase::kDeath;
+		}
+#pragma endregion
 
 		break;
 
 	case Phase::kDeath:
-		// デス演出フェーズの処理
 
-		// デスパーティクルの更新
-		P_Particles_->Update();
-		if (P_Particles_ && P_Particles_->isFinished_)
-		{
-			// フェードアウト開始
-			phase_ = Phase::kFadeOut;
-			fade_->Start(Fade::Status::FadeOut, 1.0f);
-		}
+		// フェードアウト開始
+		phase_ = Phase::kFadeOut;
+		fade_->Start(Fade::Status::FadeOut, 1.0f);
 
 		break;
 
 	case Phase::kEnemyDeath:
 
-		// デスパーティクルの更新
-		E_Particles_->Update();
-		if (E_Particles_ && E_Particles_->isFinished_)
-		{
-			// フェードアウト開始
-			phase_ = Phase::kFadeOut2;
-			fade_->Start(Fade::Status::FadeOut, 1.0f);
-		}
+		// フェードアウト開始
+		phase_ = Phase::kFadeOut2;
+		fade_->Start(Fade::Status::FadeOut, 1.0f);
+
 		break;
 
 	case Phase::kFadeIn:
@@ -454,7 +221,7 @@ void Game::Update()
 	case Phase::kFadeOut:
 		// フェード
 		fade_->Update();
-		if (fade_->IsFinished()) 
+		if (fade_->IsFinished())
 		{
 			finishedGAME_ = true;
 		}
@@ -468,279 +235,47 @@ void Game::Update()
 		}
 		break;
 	}
-
-	// ブロックの更新
-	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_)
-	{
-		for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
-		{
-			if (!worldTransformBlock)
-				continue;
-			// アフィン変換行列の作成
-			worldTransformBlock->matWorld_ = MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
-
-			// 定数バッファに転送する
-			worldTransformBlock->TransferMatrix();
-		}
-	}
-
-#ifdef _DEBUG
-	if (Input::GetInstance()->TriggerKey(DIK_0))
-	{
-		isDebugCameraActive_ = !isDebugCameraActive_;
-	}
-
-#endif // _DEBUG
-	ChangePhase();
-	if (isDebugCameraActive_) 
-	{
-		debugCamera_->Update();
-		camera_.matView = debugCamera_->GetCamera().matView;
-		camera_.matProjection = debugCamera_->GetCamera().matProjection;
-		camera_.TransferMatrix();
-	} else 
-	{
-		camera_.TransferMatrix();
-		camera_.UpdateMatrix();
-	}
-
 #pragma endregion
 }
 
-// 敵の攻撃
-
-void Game::EnemyAttack()
+void Game::Draw()
 {
-	fireTimer = kFireInterval;
-
-	// 弾の速度
-	const float kEBulletSpeed = 1.0f;
-	Vector3 E_bulletVelocity = {kEBulletSpeed, 0.0f, 0.0f};
-
-	// 座標を取得(弾を自キャラと同じ位置にする)
-	const KamataEngine::Vector3 enemyBulletPosition = enemy_->GetWorldPosition();
-
-	E_Bullet_ = new E_Bullet();
-	E_Bullet_->Initialize(modelE_Bullet_, &camera_, enemyBulletPosition, E_bulletVelocity);
-
-	E_bullets_.push_back(E_Bullet_);
-}
-
-// フェーズ
-void Game::ChangePhase() 
-{
-
-	switch (phase_)
-	{
-	case Phase::kPlay:
-// ゲームプレイフェーズの処理
-#pragma region プレイヤー
-		if (player_->IsDead() == true) 
-		{
-			// デス演出フェーズに切り替え
-			phase_ = Phase::kDeath;
-
-			// 自キャラの座標を取得
-			const KamataEngine::Vector3 deathParticlesPosition = player_->GetWorldPosition();
-
-			// パーティクル
-			P_Particles_ = new P_DeathParticle();
-			P_Particles_->Initialize(model_P_Particle_, &camera_, deathParticlesPosition);
-		}
-#pragma endregion
-
-#pragma region 敵
-
-		if (enemy_->IsEnemyDead() == true)
-		{
-			// デス演出フェーズに切り替え
-			phase_ = Phase::kEnemyDeath;
-		}
-#pragma endregion
-
-		break;
-
-	case Phase::kDeath:
-		// デス演出フェーズの処理
-
-		if (P_Particles_) 
-		{
-			// シーン終了
-			// ゲームオーバーへ
-			finishedGAME_ = true;
-		}
-
-		break;
-	case Phase::kEnemyDeath:
-
-		// シーン終了
-		// ゲームクリアへ
-		finishedGAME2_ = true;
-
-		break;
-	}
-}
-
-void Game::CheckAllCollisions()
-{
-
-#pragma region プレイヤーの弾と敵
-	// 判定対象1と2の座標
-	AABB aabb1, aabb2;
-
-	for (P_Bullet* bullet : bullets_)
-	{
-		// プレイヤーの弾
-		aabb1 = bullet->GetAABB();
-
-		aabb2 = enemy_->GetAABB();
-		if (IsCollition(aabb1, aabb2)) 
-		{
-			// 自キャラの衝突時関数を呼び出す
-			bullet->OnCollition(enemy_);
-			enemy_->OnCollition(bullet);
-		}
-	}
-
-#pragma endregion
-
-#pragma region 敵の弾とプレイヤー
-	AABB2 aabb3, aabb4;
-
-	for (E_Bullet* Ebullet : E_bullets_)
-	{
-		aabb3 = Ebullet->GetAABB2();
-
-		aabb4 = player_->GetAABB2();
-		if (IsCollition2(aabb3, aabb4))
-		{
-			Ebullet->OnCollition2(player_);
-			player_->OnCollition2(Ebullet);
-		}
-	}
-#pragma endregion
-
-#pragma region 回復アイテムとプレイヤー
-
-	AABB3 aabb5, aabb6;
-
-	aabb5 = player_->GetAABB3();
-	aabb6 = recovery_->GetAABB3();
-
-	if (IsCollition3(aabb5,aabb6))
-	{
-		player_->OnCollition3(recovery_);
-		recovery_->OnCollition3(player_);
-	}
-
-
-#pragma endregion
-}
-
-void Game::Draw() 
-{
-
+	// スプライト
 	Sprite::PreDraw();
 
+#pragma region UI
 	_playerHPSprite_->Draw();
 	_enemyHPSprite_->Draw();
 
 	playerHPSprite_->Draw();
 	enemyHPSprite_->Draw();
+#pragma endregion
 
 	Sprite::PostDraw();
 
+	// モデル
 	Model::PreDraw();
 
-#pragma region カーソル
-	cursor_->Draw();
-#pragma endregion
-
-#pragma region ブロック
-	// ブロックの描画
-	/*
-	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_)
-	{
-	    for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
-	    {
-	        if (!worldTransformBlock)
-	            continue;
-	        modelBlock_->Draw(*worldTransformBlock, camera_);
-	    }
-	}*/
-#pragma endregion
-
 #pragma region 天球
-	skydome_->Draw();
-	skydome2_->Draw();
-	skydome3_->Draw();
+
+	modelSkydome_->Draw(worldTransform_, camera_);
+	modelEarth_->Draw(worldTransform_, camera_);
+	modelMoon_->Draw(worldTransform_, camera_);
+
 #pragma endregion
 
 #pragma region 回復アイテム
-	
 
 	recovery_->Draw();
 
-
 #pragma endregion
 
-
 #pragma region プレイヤー
-
-	if (!player_->IsDead()) 
-	{
-		// 自キャラの描画 下記のフェーズのみ描画
-		if (phase_ == Phase::kPlay || phase_ == Phase::kFadeIn || phase_ == Phase::kEnemyDeath) 
-		{
-			player_->Draw();
-		}
-	}
-
-	// パーティクル(プレイヤー)
-	if (phase_ == Phase::kDeath)
-	{
-		if ("deathParticle", true)
-		{
-			P_Particles_->Draw();
-		}
-	}
-
-	if (phase_ == Phase::kPlay)
-	{
-
-		// 弾の継続時間が0になるまで撃てる
-		for (P_Bullet* bullet : bullets_)
-		{
-			bullet->Draw();
-		}
-	}
-
+	player_->Draw();
 #pragma endregion
 
 #pragma region 敵
-
-	// 敵の描画 下記のフェーズのみ描画
-	if (phase_ == Phase::kPlay || phase_ == Phase::kFadeIn || phase_ == Phase::kDeath) 
-	{
-
-		std::srand(static_cast<unsigned int>(std::time(nullptr)));
-
-		enemy_->Draw();
-
-		for (E_Bullet* Ebullet : E_bullets_)
-		{
-			Ebullet->Draw();
-		}
-	}
-	// パーティクル(敵)
-	if (phase_ == Phase::kEnemyDeath)
-	{
-		if ("E_deathParticle", true)
-		{
-			E_Particles_->Draw();
-		}
-	}
-
+	enemy_->Draw();
 #pragma endregion
 
 	Model::PostDraw();
@@ -748,35 +283,10 @@ void Game::Draw()
 
 Game::~Game()
 {
-	// 3Dモデルデータの解放
-	delete model_;
-	// スプライトの解放
-	delete sprite_;
-#pragma region プレイヤー
-	delete player_;
-
-	for (P_Bullet* bullet : bullets_)
-	{
-		delete bullet;
-	}
-	delete P_Particles_;
-
-#pragma endregion
-
-#pragma region 敵
-
-	delete enemy_;
-	delete E_Particles_;
-
-	for (E_Bullet* Ebullet : E_bullets_) 
-	{
-		delete Ebullet;
-	}
-
-#pragma endregion
+	// フェードの解放
+	delete fade_;
 
 #pragma region UI
-	delete cursor_;
 
 	delete playerHPSprite_;
 	delete _playerHPSprite_;
@@ -786,36 +296,71 @@ Game::~Game()
 
 #pragma endregion
 
-#pragma region 天球
-	delete skydome_;
-	delete skydome2_;
-	delete skydome3_;
-#pragma endregion
+	delete modelSkydome_;
+	delete modelEarth_;
+	delete modelMoon_;
 
 	delete recovery_;
 
-
-#pragma region マップ関係
-
-	// マップチップを解放
-	delete mapChipField_;
-	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_)
-	{
-		for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
-		{
-			delete worldTransformBlock;
-		}
-	}
-	worldTransformBlocks_.clear();
-#pragma endregion
-
-#pragma region フェード・デバッグカメラ
-
-	// フェード
-	delete fade_;
+	// プレイヤーの解放
+	delete player_;
+	// 敵の解放
+	delete enemy_;
 
 	// デバッグカメラの解放
 	delete debugCamera_;
+}
+
+void Game::CheckAllCollisions()
+{
+
+	const std::list<P_Bullet*>& playerBullets = player_->GetBullets();
+	const std::list<E_Bullet*>& enemyBullets = enemy_->GetE_Bullets();
+
+#pragma region[ プレイヤーの弾  <<===>>  敵 ]
+
+	AABB aabb1, aabb2;
+	for (P_Bullet* p_bullet : playerBullets)
+	{
+
+		aabb1 = p_bullet->GetAABB();
+		aabb2 = enemy_->GetAABB();
+		if (IsCollition(aabb1, aabb2)) 
+		{
+			p_bullet->OnCollition(enemy_);
+			enemy_->OnCollition(p_bullet);
+		}
+	}
+
+#pragma endregion
+
+#pragma region[ プレイヤー  <<===>>  敵の弾 ]
+
+	AABB2 aabb3, aabb4;
+	for (E_Bullet* e_bullet : enemyBullets)
+	{
+
+		aabb3 = e_bullet->GetAABB2();
+		aabb4 = player_->GetAABB2();
+		if (IsCollition2(aabb3, aabb4))
+		{
+			e_bullet->OnCollition2(player_);
+			player_->OnCollition2(e_bullet);
+		}
+	}
+
+#pragma endregion
+
+#pragma region[ プレイヤー  <<===>>  回復アイテム ]
+
+	AABB3 aabb5, aabb6;
+	aabb5 = recovery_->GetAABB3();
+	aabb6 = player_->GetAABB3();
+	if (IsCollition3(aabb5, aabb6)) 
+	{
+		recovery_->OnCollition3(player_);
+		player_->OnCollition3(recovery_);
+	}
 
 #pragma endregion
 }

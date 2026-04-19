@@ -1,21 +1,15 @@
+#include "KamataEngine.h"
+
 #include <Windows.h>
-#include"KamataEngine.h"
 
-
-#include"Title.h"
-#include"Tutorial.h"
-#include"Game.h"
-#include"Clear.h"
-#include"Over.h"
-
+#include "Clear.h"
+#include "Game.h"
+#include "Over.h"
+#include "Title.h"
+#include "Tutorial.h"
 
 using namespace KamataEngine;
 
-// DirectXCommonインスタンスの取得
-DirectXCommon* dxCommon = DirectXCommon::GetInstance();
-
-
-#pragma region シーンの設定と生成
 
 
 enum class Scene 
@@ -48,11 +42,7 @@ Clear* gameClear = nullptr;
 // ゲームオーバーシーンの生成
 Over* gameOver = nullptr;
 
-#pragma endregion
-
-
-#pragma region BGM
-
+#pragma region 音声ハンドル
 uint32_t T_Handle_ = 0;
 uint32_t T_Voice_ = 0;
 
@@ -64,22 +54,19 @@ uint32_t C_Voice_ = 0;
 
 uint32_t O_Handle_ = 0;
 uint32_t O_Voice_ = 0;
-
 #pragma endregion
 
-
 // Windowsアプリでのエントリーポイント(main関数)
-int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
+int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) 
 {
 	// タイトルバー
 	KamataEngine::Initialize(L"3163_カーソルシューティング");
+	// DirectXCommonインスタンスの取得
+	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 	// ImGuiManagerインスタンスの取得
 	ImGuiManager* imguiManager = ImGuiManager::GetInstance();
 
-
 #pragma region シーンの初期化
-
-
 	// 最初のシーンの初期化
 	scene = Scene::kTitle;
 	title = new Title;
@@ -93,29 +80,27 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 	// チュートリアルシーンの初期化
 	tutorial->Initialize();
 
-	
 	// ゲームオーバーシーンの初期化
 	gameOver->Initialize();
-	//ゲームクリアシーンの初期化
-	gameClear->Initialize();
 
+	// ゲームクリアシーンの初期化
+	gameClear->Initialize();
 #pragma endregion
 
-#pragma region BGMの読み込み
-
+#pragma region 音声のロード
+	/*
 	T_Handle_ = Audio::GetInstance()->LoadWave("Sounds/bgm/Future_1.mp3");
 	T_Voice_ = Audio::GetInstance()->PlayWave(T_Handle_, true);
 
-	G_Handle_=Audio::GetInstance()->LoadWave("Sounds/bgm/Shooting_01.mp3");
-	
+	G_Handle_ = Audio::GetInstance()->LoadWave("Sounds/bgm/Shooting_01.mp3");
 
 	C_Handle_ = Audio::GetInstance()->LoadWave("Sounds/bgm/Fusion_01.mp3");
 	O_Handle_ = Audio::GetInstance()->LoadWave("Sounds/bgm/Springin_Radio_Ending.mp3");
-
+	*/
 #pragma endregion
 
-
-	while (true) 
+	// メインループ
+	while (true)
 	{
 		// エンジンの更新
 		if (KamataEngine::Update()) 
@@ -125,9 +110,6 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 
 		// シーン切り替え
 		ChangeScene();
-
-
-
 
 		imguiManager->Begin();
 
@@ -148,16 +130,11 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 		dxCommon->PostDraw();
 	}
 
-
-#pragma region シーンの解放
-
-
-
 	// タイトルシーンの解放
 	delete title;
 
 	// チュートリアルシーンの解放
-	if (tutorial)
+	if (tutorial) 
 	{
 		delete tutorial;
 	}
@@ -175,19 +152,15 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 
 	gameScene = nullptr;
 
-
-#pragma endregion
-
-
-
+	// エンジンの終了処理
 	KamataEngine::Finalize();
-
 
 	return 0;
 }
 
 void UpdateScene()
 {
+	
 	switch (scene)
 	{
 	case Scene::kTitle:
@@ -197,9 +170,10 @@ void UpdateScene()
 	case Scene::kTutorial:
 		tutorial->Update();
 		break;
-		
+
 	case Scene::kGame:
 		gameScene->Update();
+
 		break;
 
 	case Scene::kClear:
@@ -218,26 +192,23 @@ void ChangeScene()
 	{
 	case Scene::kTitle:
 
-		if (title->IsFinishedT())
+		if (title->IsFinishedT()) 
 		{
-			
+
 			// シーンの変更
 			scene = Scene::kTutorial;
 			// 新シーンの生成と初期化
 			tutorial = new Tutorial();
 			tutorial->Initialize();
-
-			
 		}
-		
+
 		break;
 	case Scene::kTutorial:
 		if (tutorial->IsFinishedTU())
 		{
 
 			// 音声停止
-			Audio::GetInstance()->StopWave(T_Voice_);
-
+			// Audio::GetInstance()->StopWave(T_Voice_);
 
 			// シーンの変更
 			scene = Scene::kGame;
@@ -250,19 +221,18 @@ void ChangeScene()
 			gameScene->Initialize();
 
 			// ゲームシーンの音楽を再生
-			G_Voice_ = Audio::GetInstance()->PlayWave(G_Handle_, true);
-
+			// G_Voice_ = Audio::GetInstance()->PlayWave(G_Handle_, true);
 		}
 		break;
 
 	case Scene::kGame:
 
 		// ゲームシーンでバリアが破壊された場合
-		if (gameScene->IsFinishedGAME()) 
+		if (gameScene->IsFinishedGAME())
 		{
 
 			// 音声停止
-			Audio::GetInstance()->StopWave(G_Voice_);
+			// Audio::GetInstance()->StopWave(G_Voice_);
 
 			// シーンの変更
 			scene = Scene::kOver;
@@ -276,12 +246,12 @@ void ChangeScene()
 			gameOver->Initialize();
 
 			// ゲームオーバーシーンの音楽を再生
-			O_Voice_ = Audio::GetInstance()->PlayWave(O_Handle_, true);
+			// O_Voice_ = Audio::GetInstance()->PlayWave(O_Handle_, true);
 
 		} else if (gameScene->IsFinishedGAME2())
 		{
 			// 音声停止
-			Audio::GetInstance()->StopWave(G_Voice_);
+			// Audio::GetInstance()->StopWave(G_Voice_);
 
 			// プレイヤーが敵を倒した場合
 			// シーンの変更
@@ -297,16 +267,16 @@ void ChangeScene()
 			gameClear->Initialize();
 
 			// ゲームクリアシーンの音楽を再生
-			C_Voice_ = Audio::GetInstance()->PlayWave(C_Handle_, true);
+			// C_Voice_ = Audio::GetInstance()->PlayWave(C_Handle_, true);
 		}
 		break;
 
 	case Scene::kClear:
 
-		if (gameClear->IsFinishedC()) 
+		if (gameClear->IsFinishedC())
 		{
 			// 音声停止
-			Audio::GetInstance()->StopWave(C_Voice_);
+			// Audio::GetInstance()->StopWave(C_Voice_);
 
 			// シーンの変更
 			scene = Scene::kTitle;
@@ -321,17 +291,17 @@ void ChangeScene()
 			title->Initialize();
 
 			// タイトルの音楽を再生
-			T_Voice_ = Audio::GetInstance()->PlayWave(T_Handle_, true);
+			// T_Voice_ = Audio::GetInstance()->PlayWave(T_Handle_, true);
 		}
 		break;
 
 	case Scene::kOver:
 
-		if (gameOver->IsFinishedO()) 
+		if (gameOver->IsFinishedO())
 		{
 
 			// 音声停止
-			Audio::GetInstance()->StopWave(O_Voice_);
+			// Audio::GetInstance()->StopWave(O_Voice_);
 
 			// シーンの変更
 			scene = Scene::kTitle;
@@ -346,13 +316,13 @@ void ChangeScene()
 			title->Initialize();
 
 			// タイトルの音楽を再生
-			T_Voice_ = Audio::GetInstance()->PlayWave(T_Handle_, true);
+			// T_Voice_ = Audio::GetInstance()->PlayWave(T_Handle_, true);
 		}
 		break;
 	}
 }
 
-void DrawScene()
+void DrawScene() 
 {
 
 	switch (scene)
@@ -364,7 +334,7 @@ void DrawScene()
 	case Scene::kTutorial:
 		tutorial->Draw();
 		break;
-		
+
 	case Scene::kGame:
 		gameScene->Draw();
 		break;

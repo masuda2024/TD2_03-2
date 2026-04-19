@@ -156,7 +156,6 @@
   <ItemGroup>
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="Clear.cpp" />
-    <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="E_Bullet.cpp" />
     <ClCompile Include="E_DeathParticle.cpp" />
@@ -274,7 +273,6 @@
   <ItemGroup>
     <ClInclude Include="CameraController.h" />
     <ClInclude Include="Clear.h" />
-    <ClInclude Include="Cursor.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="E_Bullet.h" />
     <ClInclude Include="E_DeathParticle.h" />
