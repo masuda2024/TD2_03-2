@@ -104,4 +104,7 @@ private:
 
 	// 発射タイマー
 	int32_t fireTimer_ = 0;
+
+
+	float walkTimer_ = 0;
 };

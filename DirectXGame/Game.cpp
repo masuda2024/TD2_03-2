@@ -59,7 +59,7 @@ void Game::Initialize()
 	// 敵の生成
 	enemy_ = new Enemy();
 	// 敵の初期化
-	KamataEngine::Vector3 enemyPosition = {40, 10, 0};
+	KamataEngine::Vector3 enemyPosition = {40, 0, 0};
 	enemy_->Initialize(modelEnemy_, &camera_, enemyPosition);
 #pragma endregion
 

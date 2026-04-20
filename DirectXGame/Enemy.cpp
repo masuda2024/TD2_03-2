@@ -51,6 +51,32 @@ void Enemy::Update()
 		break;
 	case Phase::Attack:
 
+
+
+
+
+
+		#pragma region 敵の上下移動
+
+		// 時間のカウンター
+		walkTimer_ += 5.0f / 60.0f; // フレームごとの時間増分
+		// 上下に揺れるように移動
+		float amplitude = 20.0f; // 上下移動の幅（単位:座標）
+		float speed = 0.1f;      // 速さ
+		// Y方向にsinで移動
+		worldTransform_.translation_.y = sin(walkTimer_ * speed) * amplitude;
+		// X,Y をいじるので一旦変数に出す
+		Vector3& pos = worldTransform_.translation_;
+		pos.y = sin(walkTimer_ * 0.1f) * 10.0f;
+		
+		#pragma endregion
+
+
+
+
+
+
+
 		// 発射タイマーカウントダウン
 		fireTimer_--;
 		// 指定時間に達した
@@ -60,6 +86,11 @@ void Enemy::Update()
 			Fire();
 			// 発射タイマーを初期化
 			fireTimer_ = kFireInterval;
+
+
+
+
+
 		}
 
 		break;
