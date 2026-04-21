@@ -2,7 +2,7 @@
 #include "KamataEngine.h"
 
 #include "MyMath.h"
-
+#include <list>
 
 #include "CameraController.h"
 
@@ -39,6 +39,12 @@ public:
 	// 敵を倒した場合の(クリア)フラグ
 	bool finishedGAME2_ = false;
 	bool IsFinishedGAME2() const { return finishedGAME2_; } ////ゲームクリア
+
+	//タイトルに戻る
+	bool finishedGAME3_ = false;
+	bool IsFinishedGAME3() const { return finishedGAME3_; } ////ゲームクリア
+
+
 
 	// 衝突判定
 	void CheckAllCollisions();
@@ -98,10 +104,13 @@ private:
 
 #pragma region 回復アイテム
 
-	//Recovery* recovery_ = nullptr;
+	Recovery* recovery_ = nullptr;
 	
 	KamataEngine::Model* modelRecovery_ = nullptr;
-
+	
+	
+	//複数の回復アイテム
+	std::list<Recovery*> recoverys_;
 	
 
 #pragma endregion
@@ -119,15 +128,20 @@ private:
 	{
 		kFadeIn,     // フェードイン
 		kPlay,       // ゲームプレイ
+		kPose,
 		kDeath,      // プレイヤーのデス演出
 		kEnemyDeath, // 敵のデス演出
 		kFadeOut,    // フェードアウト(オーバー)
 		kFadeOut2,   // フェードアウト(クリア)
+		kFadeOut3,   // フェードアウト(タイトルに戻る)
 	};
 
 	// ゲームの現在フェーズから開始
 	Phase phase_;
 
+
+	
+	
 	// フェーズの切り替え
 	// void ChangePhase();
 
@@ -145,4 +159,6 @@ private:
 	CameraController* cameraController_ = nullptr;
 
 #pragma endregion
+
+
 };

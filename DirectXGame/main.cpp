@@ -268,6 +268,26 @@ void ChangeScene()
 
 			// ゲームクリアシーンの音楽を再生
 			// C_Voice_ = Audio::GetInstance()->PlayWave(C_Handle_, true);
+		}else if(gameScene->IsFinishedGAME3())
+		{
+			// 音声停止
+			// Audio::GetInstance()->StopWave(G_Voice_);
+
+			// プレイヤーが敵を倒した場合
+			// シーンの変更
+			scene = Scene::kTitle;
+
+			// 旧シーンの解放
+			delete gameScene;
+			gameScene = nullptr;
+
+			// タイトルシーンの生成
+			title = new Title;
+			// タイトルシーンの初期化
+			title->Initialize();
+
+			// タイトルの音楽を再生
+			// T_Voice_ = Audio::GetInstance()->PlayWave(T_Handle_, true);
 		}
 		break;
 

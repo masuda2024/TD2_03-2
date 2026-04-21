@@ -37,8 +37,7 @@ void Game::Initialize()
 
 	modelRecovery_ = KamataEngine::Model::CreateFromOBJ("kaifuku", true);
 	recovery_ = new Recovery();
-	KamataEngine::Vector3 recoveryPosition = {0, 10.0f, 0};
-	
+	KamataEngine::Vector3 recoveryPosition = {0, 0, 0};
 	recovery_->Initialize(modelRecovery_, &camera_, recoveryPosition);
 
 #pragma endregion
@@ -123,8 +122,18 @@ void Game::Update()
 	fade_->Update();
 	ImGui::Text("C : Clear  ,  O : Over");
 	ImGui::Text("0(Zero) : DebugCamera ");
+	
+	
+	if (phase_ == Phase::kPlay)
+	{
+		CheckAllCollisions();
+	}
+	
+	
+	
 
-	CheckAllCollisions();
+
+
 
 #pragma region UI
 
@@ -165,6 +174,8 @@ void Game::Update()
 		recovery_->Update();
 	
 	
+	
+	
 
 #pragma endregion
 
@@ -195,7 +206,29 @@ void Game::Update()
 		{
 			phase_ = Phase::kDeath;
 		}
+
 #pragma endregion
+
+		if (Input::GetInstance()->TriggerKey(DIK_ESCAPE))
+		{
+			phase_ = Phase::kPose;
+		}
+		break;
+
+	case Phase::kPose:
+
+
+		ImGui::Text("T : Title  ,  ESC : Continue");
+		if (Input::GetInstance()->TriggerKey(DIK_T)) 
+		{
+			phase_ = Phase::kFadeOut3;
+		}
+		if (Input::GetInstance()->TriggerKey(DIK_ESCAPE))
+		{
+			phase_ = Phase::kPlay;
+		}
+
+
 
 		break;
 
@@ -204,7 +237,7 @@ void Game::Update()
 		// フェードアウト開始
 		phase_ = Phase::kFadeOut;
 		fade_->Start(Fade::Status::FadeOut, 1.0f);
-
+		
 		break;
 
 	case Phase::kEnemyDeath:
@@ -223,6 +256,8 @@ void Game::Update()
 			phase_ = Phase::kPlay;
 		}
 		break;
+
+
 	case Phase::kFadeOut:
 		// フェード
 		fade_->Update();
@@ -239,6 +274,16 @@ void Game::Update()
 			finishedGAME2_ = true;
 		}
 		break;
+
+	case Phase::kFadeOut3:
+		// フェード
+		fade_->Update();
+		if (fade_->IsFinished())
+		{
+			finishedGAME3_ = true;
+		}
+		break;
+
 	}
 #pragma endregion
 
@@ -252,11 +297,14 @@ void Game::Draw()
 	Sprite::PreDraw();
 
 #pragma region UI
-	_playerHPSprite_->Draw();
-	_enemyHPSprite_->Draw();
+	if (phase_ == Phase::kPlay || phase_ == Phase::kFadeIn || phase_ == Phase::kPose || phase_ == Phase::kDeath || phase_ == Phase::kEnemyDeath)
+	{
+		_playerHPSprite_->Draw();
+		_enemyHPSprite_->Draw();
 
-	playerHPSprite_->Draw();
-	enemyHPSprite_->Draw();
+		playerHPSprite_->Draw();
+		enemyHPSprite_->Draw();
+	}
 #pragma endregion
 
 	Sprite::PostDraw();
@@ -275,6 +323,8 @@ void Game::Draw()
 #pragma region 回復アイテム
 	
 		recovery_->Draw();
+	
+		
 	
 #pragma endregion
 
@@ -307,8 +357,10 @@ Game::~Game()
 	delete modelSkydome_;
 	delete modelEarth_;
 	delete modelMoon_;
-
+	
 	delete recovery_;
+	
+	
 
 	// プレイヤーの解放
 	delete player_;
@@ -324,7 +376,7 @@ void Game::CheckAllCollisions()
 
 	const std::list<P_Bullet*>& playerBullets = player_->GetBullets();
 	const std::list<E_Bullet*>& enemyBullets = enemy_->GetE_Bullets();
-
+	
 #pragma region[ プレイヤーの弾  <<===>>  敵 ]
 
 	AABB aabb1, aabb2;
@@ -362,15 +414,20 @@ void Game::CheckAllCollisions()
 #pragma region[ プレイヤー  <<===>>  回復アイテム ]
 
 	AABB3 aabb5, aabb6;
-	aabb5 = recovery_->GetAABB3();
-	aabb6 = player_->GetAABB3();
+	
+		aabb5 = recovery_->GetAABB3();
+		aabb6 = player_->GetAABB3();
+		if (IsCollition3(aabb5, aabb6)) 
+		{
+			recovery_->OnCollition3(player_);
+			player_->OnCollition3(recovery_);
+
+			
+		}
 	
 	
-	if (IsCollition3(aabb5, aabb6)) 
-	{
-		recovery_->OnCollition3(player_);
-		player_->OnCollition3(recovery_);
-	}
+	
+	
 
 #pragma endregion
 

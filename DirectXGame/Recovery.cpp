@@ -17,8 +17,6 @@ void Recovery::Initialize(Model* model, Camera* camera, Vector3& position)
 	worldTransform_.translation_ = position;
 
 	//textureHandle_ = textureHandle;
-
-	
 }
 
 void Recovery::Update() 
