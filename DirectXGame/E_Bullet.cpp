@@ -68,5 +68,37 @@ AABB2 E_Bullet::GetAABB2()
 }
 
 // プレイヤーと敵の弾の衝突
-void E_Bullet::OnCollition2(const Player* player) { (void)player; }
+void E_Bullet::OnCollition2(const Player* player) 
+{ 
+	(void)player;
+	isDead_eb_ = true;
+}
+#pragma endregion
+
+#pragma region 衝突判定 [ プレイヤーの弾  <<===>>  敵の弾 ]
+
+
+AABB4 E_Bullet::GetAABB4()
+{
+	KamataEngine::Vector3 worldPos = GetWorldPosition();
+
+	AABB4 aabb;
+
+	aabb.min = {worldPos.x - kWidth / 2.0f, worldPos.y - kHeight / 2.0f, worldPos.z - kWidth / 2.0f};
+	aabb.max = {worldPos.x + kWidth / 2.0f, worldPos.y + kHeight / 2.0f, worldPos.z + kWidth / 2.0f};
+
+	return aabb;
+}
+
+// プレイヤーと敵の弾の衝突
+void E_Bullet::OnCollition4(const P_Bullet* p_bullet)
+{
+	(void)p_bullet; 
+
+
+	isDead_eb_ = true;
+
+
+
+}
 #pragma endregion

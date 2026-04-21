@@ -3,6 +3,7 @@
 #include "MyMath.h"
 
 class Player;
+class P_Bullet;
 class E_Bullet
 {
 public:
@@ -31,6 +32,27 @@ public:
 	void OnCollition2(const Player* player);
 
 #pragma endregion
+
+
+#pragma region 衝突判定 [ プレイヤーの弾  <<===>>  敵の弾 ]
+
+
+
+	// AABBを取得
+	AABB4 GetAABB4();
+	// 衝突応答
+	void OnCollition4(const P_Bullet* p_bullet);
+
+
+
+#pragma endregion
+
+
+
+
+
+
+
 
 	// 寿命
 	static const int32_t kLifeTime_E = 60 * 5;

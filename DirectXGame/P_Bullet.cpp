@@ -21,11 +21,13 @@ void P_Bullet::Initialize(KamataEngine::Model* model, const KamataEngine::Vector
 }
 void P_Bullet::Update()
 {
-
+	deathTimer_--;
 	if (--deathTimer_ <= 0)
 	{
 		isDead_pb_ = true;
 	}
+	
+
 
 	// 座標を移動させる (1フレーム分の移動量を足し込む)
 	worldTransform_.translation_.x += PB_velocity_.x;
@@ -65,6 +67,42 @@ AABB P_Bullet::GetAABB()
 }
 
 // 弾と敵の衝突応答
-void P_Bullet::OnCollition(const Enemy* enemy) { (void)enemy; }
+void P_Bullet::OnCollition(const Enemy* enemy) 
+{
+	(void)enemy;
+	isDead_pb_ = true;
+}
 
 #pragma endregion
+
+#pragma region 衝突判定 [ プレイヤーの弾  <<===>>  敵の弾 ]
+
+AABB4 P_Bullet::GetAABB4()
+{
+	KamataEngine::Vector3 worldPos = GetWorldPosition();
+
+	AABB4 aabb;
+
+	aabb.min = {worldPos.x - kWidth / 2.0f, worldPos.y - kHeight / 2.0f, worldPos.z - kWidth / 2.0f};
+	aabb.max = {worldPos.x + kWidth / 2.0f, worldPos.y + kHeight / 2.0f, worldPos.z + kWidth / 2.0f};
+
+	return aabb;
+}
+
+// 弾と敵の衝突応答
+void P_Bullet::OnCollition4(const E_Bullet* e_bullet)
+{ 
+	(void)e_bullet; 
+
+
+	isDead_pb_ = true;
+
+
+
+}
+
+#pragma endregion
+
+
+
+

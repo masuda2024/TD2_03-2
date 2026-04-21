@@ -3,7 +3,7 @@
 #include "MyMath.h"
 
 class Enemy;
-
+class E_Bullet;
 class P_Bullet
 {
 public:
@@ -31,13 +31,25 @@ public:
 
 #pragma endregion
 
+
+
+#pragma region 衝突判定 [ プレイヤーの弾  <<===>>  敵の弾 ]
+
+	// AABBを取得
+	AABB4 GetAABB4();
+	// 衝突応答
+	void OnCollition4(const E_Bullet* e_bullet);
+
+#pragma endregion
+
+
 	const KamataEngine::WorldTransform& GetWorldTransform() const { return worldTransform_; }
 
 	// ワールド変換データ
 	KamataEngine::WorldTransform worldTransform_;
 
 	// 寿命
-	static const int32_t kLifeTime = 60 * 5;
+	static const int32_t kLifeTime = 30 * 5;
 	// デスタイマー
 	int32_t deathTimer_ = kLifeTime;
 	// デスフラグ

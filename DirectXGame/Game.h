@@ -98,8 +98,11 @@ private:
 
 #pragma region 回復アイテム
 
-	Recovery* recovery_ = nullptr;
+	//Recovery* recovery_ = nullptr;
+	
 	KamataEngine::Model* modelRecovery_ = nullptr;
+
+	
 
 #pragma endregion
 

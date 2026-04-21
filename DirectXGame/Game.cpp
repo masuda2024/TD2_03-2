@@ -38,6 +38,7 @@ void Game::Initialize()
 	modelRecovery_ = KamataEngine::Model::CreateFromOBJ("kaifuku", true);
 	recovery_ = new Recovery();
 	KamataEngine::Vector3 recoveryPosition = {0, 10.0f, 0};
+	
 	recovery_->Initialize(modelRecovery_, &camera_, recoveryPosition);
 
 #pragma endregion
@@ -81,6 +82,8 @@ void Game::Initialize()
 	cameraController_->SetMovableArea(cameraArea);
 
 #pragma endregion
+
+
 }
 
 
@@ -158,8 +161,10 @@ void Game::Update()
 #pragma endregion
 
 #pragma region 回復アイテム
-
-	recovery_->Update();
+	
+		recovery_->Update();
+	
+	
 
 #pragma endregion
 
@@ -236,6 +241,9 @@ void Game::Update()
 		break;
 	}
 #pragma endregion
+
+
+
 }
 
 void Game::Draw()
@@ -265,9 +273,9 @@ void Game::Draw()
 #pragma endregion
 
 #pragma region 回復アイテム
-
-	recovery_->Draw();
-
+	
+		recovery_->Draw();
+	
 #pragma endregion
 
 #pragma region プレイヤー
@@ -356,6 +364,8 @@ void Game::CheckAllCollisions()
 	AABB3 aabb5, aabb6;
 	aabb5 = recovery_->GetAABB3();
 	aabb6 = player_->GetAABB3();
+	
+	
 	if (IsCollition3(aabb5, aabb6)) 
 	{
 		recovery_->OnCollition3(player_);
@@ -363,4 +373,32 @@ void Game::CheckAllCollisions()
 	}
 
 #pragma endregion
+
+#pragma region[ プレイヤーの弾  <<===>>  敵の弾 ]
+
+	AABB4 aabb7, aabb8;
+
+	for (P_Bullet* p_bullet : playerBullets)
+	{
+		for (E_Bullet* e_bullet : enemyBullets)
+		{
+
+			aabb7 = p_bullet->GetAABB4();
+			aabb8 = e_bullet->GetAABB4();
+			if (IsCollition4(aabb7, aabb8))
+			{
+				p_bullet->OnCollition4(e_bullet);
+				e_bullet->OnCollition4(p_bullet);
+			}
+		}
+	}
+
+
+
+
+
+
+#pragma endregion
+
+
 }
