@@ -89,6 +89,7 @@ private:
 
 	KamataEngine::WorldTransform worldTransformEarth_;
 	KamataEngine::WorldTransform worldTransformMoon_;
+
 #pragma endregion
 
 #pragma region プレイヤー
