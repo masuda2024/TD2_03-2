@@ -146,6 +146,14 @@ void Player::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& pos
 
 	// シングルトンインスタンスを取得する
 	input_ = KamataEngine::Input::GetInstance();
+
+
+
+
+
+	//P_shotHandle_ = Audio::GetInstance()->LoadWave("Sounds/sound/Shot.mp3");
+
+
 }
 
 void Player::Update() 
@@ -287,6 +295,14 @@ void Player::Update()
 	// 座標移動(ベクトルの加算)
 	worldTransform_.translation_ += move;
 
+	//右クリックで回避
+	if (Input::GetInstance()->IsPressMouse(1))
+	{
+		worldTransform_.translation_ += move * 5;
+	}
+
+
+
 	// 行列更新
 	worldTransform3DReticle_.matWorld_ = MakeAffineMatrix(worldTransform3DReticle_.scale_, worldTransform3DReticle_.rotation_, worldTransform3DReticle_.translation_);
 	worldTransform3DReticle_.TransferMatrix();
@@ -359,6 +375,7 @@ void Player::Attack()
 {
 	if (input_->TriggerKey(DIK_SPACE) || input_->IsTriggerMouse(0))
 	{
+		//P_shotSound_ = Audio::GetInstance()->PlayWave(P_shotHandle_, true);
 
 		const float kBulletSpeed = 1.0f;
 

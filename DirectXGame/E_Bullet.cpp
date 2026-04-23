@@ -32,7 +32,7 @@ void E_Bullet::Update()
 
 	// 座標を移動させる (1フレーム分の移動量)
 	worldTransform_.translation_.x -= EB_velocity_.x;
-
+	
 	// アフィン変換行列
 	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 	// 行列を定数バッファに転送

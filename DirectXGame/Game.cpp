@@ -143,7 +143,7 @@ void Game::Initialize()
 	worldTransform_.Initialize();
 
 	worldTransformEarth_.Initialize();
-	worldTransformEarth_.translation_ = {0, -120, 0};
+	worldTransformEarth_.translation_ = {0, -350, 100};
 
 #pragma region 天球
 
@@ -251,7 +251,7 @@ void Game::Update()
 	worldTransformEarth_.TransferMatrix();
 
 
-	worldTransformEarth_.rotation_.z -= 0.001f;
+	worldTransformEarth_.rotation_.z -= 0.0001f;
 
 
 
@@ -310,7 +310,7 @@ void Game::Update()
 #pragma endregion
 
 #pragma region 敵
-	enemy_->Update();
+		enemy_->Update();
 #pragma endregion
 
 #pragma region フェーズ
