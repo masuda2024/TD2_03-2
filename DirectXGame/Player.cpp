@@ -310,7 +310,7 @@ void Player::Update()
 		hp_ = maxHP_;
 	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_R)) 
+	if (Input::GetInstance()->TriggerKey(DIK_R) && HP_count == 0) 
 	{
 		hp_ += 10000;
 		HP_count++;

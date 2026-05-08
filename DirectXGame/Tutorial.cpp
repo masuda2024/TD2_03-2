@@ -5,7 +5,19 @@ void Tutorial::Initialize()
 {
 	// チュートリアルのスプライト
 	t_Handle_ = TextureManager::Load("Scenes/tdTutorial.png");
-	tutorialSprite_ = KamataEngine::Sprite::Create(t_Handle_, {0, 0});
+	
+	
+	//tutorialSprite_ = KamataEngine::Sprite::Create(t_Handle_, {0,0});
+
+	
+	tutorialPos_.x = 0;
+	tutorialPos_.y = 0;
+	//tutorialPos_ = {0, 0};
+
+	tutorialSprite_ = KamataEngine::Sprite::Create(t_Handle_, tutorialPos_);
+
+
+
 
 	Botan_ = Audio::GetInstance()->LoadWave("Sounds/sound/Decision2.mp3");
 
@@ -23,6 +35,51 @@ void Tutorial::Initialize()
 
 void Tutorial::Update() 
 {
+
+	
+	
+	tutorialSprite_->SetPosition(tutorialPos_);
+
+	
+		if (Input::GetInstance()->TriggerKey(DIK_A) && tutorialPos_.x == 0) 
+		{
+			scroll_L = true;
+		}
+		if (scroll_L) 
+		{
+			tutorialPos_.x -= scrollSpeed_;
+		}
+		if (tutorialPos_.x <= -1280) 
+		{
+			scroll_L = false;
+		}
+	
+	
+
+		if (Input::GetInstance()->TriggerKey(DIK_D) && tutorialPos_.x == -1280)
+		{
+			scroll_R = true;
+		}
+		if (scroll_R) 
+		{
+			tutorialPos_.x += scrollSpeed_;
+		}
+		if (tutorialPos_.x >= 0)
+		{
+			scroll_R = false;
+		}
+	
+
+	
+
+
+
+
+
+
+
+
+
 	switch (phase_) 
 	{
 	case Phase::kMain:

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include"KamataEngine.h"
 #include"Fade.h"
 class Tutorial 
@@ -31,6 +31,17 @@ public:
 	
 	// マップチップフィールド
 	//MapChipField* mapChipField_;
+
+
+
+
+	KamataEngine::Vector2 tutorialPos_ = {0, 0};
+	float scrollSpeed_ = 10.0f;
+
+	bool scroll_L = false;
+
+	bool scroll_R = false;
+
 
 private:
 	// 3Dモデルデータ
