@@ -46,6 +46,7 @@ public:
 	{
 		Approach,
 		Attack,
+		Rage, // HP低いとき
 	};
 	Phase phase_ = Phase::Approach;
 

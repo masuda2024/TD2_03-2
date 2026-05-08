@@ -37,10 +37,19 @@ void Enemy::Update()
 
 #pragma region 敵の行動フェーズ
 
+
+	// HPでフェーズ変更
+	if (E_hp_ < E_maxHP_ * 0.3f && phase_ != Phase::Rage)
+	{
+		phase_ = Phase::Rage;
+	}
+
+
 	// 敵の行動フェーズ
 	switch (phase_)
 	{
 	case Phase::Approach:
+		{
 	default:
 		// 移動(ベクトルを減算)
 		worldTransform_.translation_.x -= 0.2f;
@@ -49,14 +58,11 @@ void Enemy::Update()
 			phase_ = Phase::Attack;
 		}
 		break;
-	case Phase::Attack:
+		}
+	case Phase::Attack: 
+	{
 
-
-
-
-
-
-		#pragma region 敵の上下移動
+#pragma region 敵の上下移動
 
 		// 時間のカウンター
 		walkTimer_ += 5.0f / 60.0f; // フレームごとの時間増分
@@ -68,32 +74,48 @@ void Enemy::Update()
 		// X,Y をいじるので一旦変数に出す
 		Vector3& pos = worldTransform_.translation_;
 		pos.y = sin(walkTimer_ * 0.1f) * 10.0f;
-		
-		#pragma endregion
 
-
-
-
-
-
+#pragma endregion
 
 		// 発射タイマーカウントダウン
 		fireTimer_--;
 		// 指定時間に達した
-		if (fireTimer_ == 0) 
+		if (fireTimer_ == 0)
 		{
 			// 弾を発射
 			Fire();
 			// 発射タイマーを初期化
 			fireTimer_ = kFireInterval;
-
-
-
-
-
 		}
 
 		break;
+	}
+	case Phase::Rage:
+		{
+
+		// 移動スピードアップ
+		worldTransform_.translation_.x -= 0.4f;
+
+		if (worldTransform_.translation_.x < 20.0f)
+		{
+			worldTransform_.translation_.x = 20.0f;
+		}
+
+		// 上下移動激しく
+		walkTimer_ += 10.0f / 60.0f;
+		worldTransform_.translation_.y = sin(walkTimer_ * 0.2f) * 20.0f;
+
+
+		// 発射間隔短くする
+		fireTimer_--;
+		if (fireTimer_ <= 0) 
+		{
+			Fire();
+			fireTimer_ = 10; // ←めっちゃ速くする
+		}
+
+		break;
+		}
 	}
 
 #pragma endregion

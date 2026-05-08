@@ -3,7 +3,6 @@
 #include "MyMath.h"
 #include <random>
 
-
 using namespace KamataEngine;
 using namespace MathUtility;
 
@@ -129,6 +128,9 @@ Matrix4x4 MakeRotateMatrix3(const Vector3& rotation)
 
 void Game::Initialize()
 {
+	
+
+
 
 #pragma region フェーズ・フェード
 	// フェーズインから開始
@@ -156,9 +158,26 @@ void Game::Initialize()
 #pragma region 回復アイテム
 
 	modelRecovery_ = KamataEngine::Model::CreateFromOBJ("kaifuku", true);
+
+
+
+
 	recovery_ = new Recovery();
-	KamataEngine::Vector3 recoveryPosition = {0, 0, 0};
+	KamataEngine::Vector3 recoveryPosition = {-35, 17, 0};
 	recovery_->Initialize(modelRecovery_, &camera_, recoveryPosition);
+
+
+	recovery2_ = new Recovery();
+	KamataEngine::Vector3 recoveryPosition2 = {-31, 17, 0};
+	recovery2_->Initialize(modelRecovery_, &camera_, recoveryPosition2);
+
+
+	recovery3_ = new Recovery();
+	KamataEngine::Vector3 recoveryPosition3 = {-27, 17, 0};
+	recovery3_->Initialize(modelRecovery_, &camera_, recoveryPosition3);
+
+
+
 
 #pragma endregion
 
@@ -241,8 +260,8 @@ void Game::Update()
 #ifdef _DEBUG
 	// フェード
 	fade_->Update();
-	ImGui::Text("C : Clear  ,  O : Over");
-	ImGui::Text("0(Zero) : DebugCamera ");
+	//ImGui::Text("C : Clear  ,  O : Over");
+	//ImGui::Text("0(Zero) : DebugCamera ");
 #endif 	
 	
 
@@ -295,11 +314,33 @@ void Game::Update()
 
 #pragma region 回復アイテム
 	
+
+	
 		recovery_->Update();
 	
+		recovery2_->Update();
+	
+		recovery3_->Update();
 	
 	
-	
+		if (Input::GetInstance()->TriggerKey(DIK_R))
+		{
+		    recovery = false;
+		    R_count++;
+	    }
+
+		if (Input::GetInstance()->TriggerKey(DIK_R) && R_count == 2) 
+		{
+		    recovery2 = false;
+		    R_count++;
+	    }
+
+		if (Input::GetInstance()->TriggerKey(DIK_R) && R_count == 4) 
+		{
+		    recovery3 = false;
+		    R_count++;
+	    }
+
 
 #pragma endregion
 
@@ -343,7 +384,7 @@ void Game::Update()
 	case Phase::kPose:
 
 
-		ImGui::Text("T : Title  ,  ESC : Continue");
+		//ImGui::Text("T : Title  ,  ESC : Continue");
 		if (Input::GetInstance()->TriggerKey(DIK_T)) 
 		{
 			phase_ = Phase::kFadeOut3;
@@ -447,9 +488,21 @@ void Game::Draw()
 
 #pragma region 回復アイテム
 	
-		recovery_->Draw();
 	
+	if (recovery)
+	{
+		recovery_->Draw();
+	}
+
+	if (recovery2)
+	{
+		recovery2_->Draw();
+	}
 		
+	if (recovery3)
+	{
+		recovery3_->Draw();
+	}
 	
 #pragma endregion
 
@@ -484,8 +537,8 @@ Game::~Game()
 	delete modelMoon_;
 	
 	delete recovery_;
-	
-	
+	delete recovery2_;
+	delete recovery3_;
 
 	// プレイヤーの解放
 	delete player_;

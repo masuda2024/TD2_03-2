@@ -1,11 +1,11 @@
 #pragma once
 #include "KamataEngine.h"
-
+#define NOMINMAX
 #include <algorithm>
 #include <cassert>
 #include <list>
 #include <numbers>
-#define NOMINMAX
+
 #include "MyMath.h"
 #include "math.h"
 #include <cmath>
@@ -105,6 +105,9 @@ private:
 
 	int32_t maxHP_ = 10000;
 	int32_t hp_ = maxHP_;
+
+	uint32_t HP_count = 0;
+
 
 	// マウスの切り替え
 	uint32_t OFF_Mouse = true;

@@ -107,6 +107,20 @@ private:
 
 	Recovery* recovery_ = nullptr;
 	
+	Recovery* recovery2_ = nullptr;
+	
+	Recovery* recovery3_ = nullptr;
+	
+
+
+	uint32_t recovery  = true;
+	uint32_t recovery2 = true;
+	uint32_t recovery3 = true;
+
+
+	uint32_t R_count = 0;
+
+
 	KamataEngine::Model* modelRecovery_ = nullptr;
 	
 	
@@ -161,5 +175,5 @@ private:
 
 #pragma endregion
 
-
+	
 };

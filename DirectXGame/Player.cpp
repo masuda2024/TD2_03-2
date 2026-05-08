@@ -1,5 +1,6 @@
 #include"Player.h"
 
+
 #include <algorithm>
 #include <cassert>
 #include <list>
@@ -301,7 +302,39 @@ void Player::Update()
 		worldTransform_.translation_ += move * 5;
 	}
 
+#pragma region 回復
 
+
+	if (hp_ > maxHP_)
+	{
+		hp_ = maxHP_;
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_R)) 
+	{
+		hp_ += 10000;
+		HP_count++;
+
+		
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_R) && HP_count == 2) 
+	{
+		hp_ += 10000;
+		HP_count++;
+
+		
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_R) && HP_count == 4)
+	{
+		hp_ += 10000;
+		HP_count++;
+
+		
+	}
+
+#pragma region
 
 	// 行列更新
 	worldTransform3DReticle_.matWorld_ = MakeAffineMatrix(worldTransform3DReticle_.scale_, worldTransform3DReticle_.rotation_, worldTransform3DReticle_.translation_);
@@ -426,7 +459,7 @@ AABB2 Player::GetAABB2()
 void Player::OnCollition2(const E_Bullet* enemyBullet)
 {
 	(void)enemyBullet;
-	hp_ -= 100;
+	hp_ -= 500;
 	if (hp_ <= 0) 
 	{
 		hp_ = 0;

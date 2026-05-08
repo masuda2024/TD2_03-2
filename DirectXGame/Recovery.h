@@ -29,13 +29,10 @@ public:
 
 
 
-	// 寿命
-	static const int32_t kLifeTime_R = 60 * 5;
-	// デスタイマー
-	int32_t deathTimer_R_ = kLifeTime_R;
-	// デスフラグ
-	bool isDead_recovery_ = false;
-	bool IsDead_Recovery() const { return isDead_recovery_; }
+	
+	// フラグ
+	bool isDelete_recovery_ = false;
+	bool IsDelete_Recovery() const { return isDelete_recovery_; }
 
 
 

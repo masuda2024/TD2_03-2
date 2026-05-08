@@ -21,20 +21,20 @@ void Recovery::Initialize(Model* model, Camera* camera, Vector3& position)
 
 void Recovery::Update() 
 { 
-
-	deathTimer_R_--;
-	if (--deathTimer_R_ <= 0)
+	/*
+	if (Input::GetInstance()->TriggerKey(DIK_R))
 	{
-		isDead_recovery_ = true;
-	}
+		isDelete_recovery_ = true;
+	}*/
 
-
+	// アフィン変換行列
+	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 	worldTransform_.TransferMatrix();
 }
 
 void Recovery::Draw() 
 {
-	if (isDead_recovery_)
+	if (isDelete_recovery_)
 	{
 		return;
 	}
@@ -74,7 +74,7 @@ void Recovery::OnCollition3(const Player* player)
 	(void)player;
 	
 
-
+	//isDelete_recovery_ = true;
 
 
 
