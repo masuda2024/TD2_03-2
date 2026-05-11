@@ -36,11 +36,33 @@ public:
 
 
 	KamataEngine::Vector2 tutorialPos_ = {0, 0};
-	float scrollSpeed_ = 10.0f;
+	KamataEngine::Vector2 tutorialPos_2 = {0, 0};
+	KamataEngine::Vector2 tutorialPos_3 = {0, 0};
+	
+	
+	
+	
+	//KamataEngine::Vector2 tutorialPos_2 = {1280, 0};
+	//KamataEngine::Vector2 tutorialPos_3 = {2560, 0};
 
-	bool scroll_L = false;
 
-	bool scroll_R = false;
+
+	//float scrollSpeed_ = 20.0f;
+
+	//bool scroll_L = false;
+
+	//bool scroll_R = false;
+
+
+
+	enum class Pages 
+	{
+		p1,
+		p2,
+		p3,
+	};
+	Pages page_ = Pages ::p1;
+
 
 
 private:
@@ -59,9 +81,18 @@ private:
 	// 現在のフェーズ
 	Phase phase_ = Phase::kFadeIn;
 
-	
+	//1ページ
 	uint32_t t_Handle_ = 0;
 	KamataEngine::Sprite* tutorialSprite_ = nullptr;
 	
+	// 2ページ
+	uint32_t t_Handle2_ = 0;
+	KamataEngine::Sprite* tutorialSprite2_ = nullptr;
+	
+	// 3ページ
+	uint32_t t_Handle3_ = 0;
+	KamataEngine::Sprite* tutorialSprite3_ = nullptr;
+
+
 	uint32_t Botan_ = 0;
 };
