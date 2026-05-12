@@ -151,7 +151,7 @@ void Player::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& pos
 
 
 
-
+	//効果音ラボ 戦闘[2] ショット(ノーマル弾)
 	//P_shotHandle_ = Audio::GetInstance()->LoadWave("Sounds/sound/Shot.mp3");
 
 
@@ -334,7 +334,7 @@ void Player::Update()
 		
 	}
 
-#pragma region
+#pragma endregion
 
 	// 行列更新
 	worldTransform3DReticle_.matWorld_ = MakeAffineMatrix(worldTransform3DReticle_.scale_, worldTransform3DReticle_.rotation_, worldTransform3DReticle_.translation_);

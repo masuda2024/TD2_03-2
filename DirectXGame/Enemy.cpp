@@ -26,6 +26,13 @@ void Enemy::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& posi
 	camera_ = camera;
 
 	ApproachInitialize();
+
+
+
+	//効果音ラボ  戦闘[1] ドラゴンの鳴き声1 恐竜や怪獣の声にも使える
+	// E_VHandle_ = Audio::GetInstance()->LoadWave("Sounds/sound/Dragon's_Roar1.mp3");
+
+
 }
 
 void Enemy::Update()
@@ -35,14 +42,21 @@ void Enemy::Update()
 	// キャラクターの移動速さ
 	// const float kCharacterSpeed = 0.2f;
 
+
+
+	#ifdef _DEBUG
+	// デバッグ用
+	if (Input::GetInstance()->TriggerKey(DIK_J)) 
+	{
+		E_hp_ = 0;
+	}
+	#endif
+
 #pragma region 敵の行動フェーズ
 
 
-	// HPでフェーズ変更
-	if (E_hp_ < E_maxHP_ * 0.3f && phase_ != Phase::Rage)
-	{
-		phase_ = Phase::Rage;
-	}
+	
+	
 
 
 	// 敵の行動フェーズ
@@ -88,8 +102,16 @@ void Enemy::Update()
 			fireTimer_ = kFireInterval;
 		}
 
+
+		// HPでフェーズ変更
+		if (E_hp_ < E_maxHP_ * 0.3f && phase_ != Phase::Rage)
+		{
+			phase_ = Phase::Rage;
+		}
+
 		break;
 	}
+		
 	case Phase::Rage:
 		{
 
@@ -114,8 +136,37 @@ void Enemy::Update()
 			fireTimer_ = 10; // ←めっちゃ速くする
 		}
 
+
+		
+		if (E_hp_ <= 0)
+		{
+			/// isEnemyDead_ = true;
+			phase_ = Phase::Destroyed;
+			
+		}
+		
+		
+
 		break;
 		}
+	case Phase::Destroyed:
+		{
+
+		
+		worldTransform_.translation_.y -= 0.2f;
+		worldTransform_.rotation_.z += 0.001f;
+		worldTransform_.rotation_.x += 0.2f;
+
+		
+
+		if (worldTransform_.translation_.y == 770.0f)
+		{
+			isEnemyDead_ = true;
+		}
+
+		break;
+		}
+		    
 	}
 
 #pragma endregion
@@ -139,6 +190,9 @@ void Enemy::Update()
 
 #pragma endregion
 
+	
+	
+
 	// アフィン変換行列
 	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 	// 行列を定数バッファに転送
@@ -147,10 +201,10 @@ void Enemy::Update()
 
 void Enemy::Draw()
 {
-	if (isEnemyDead_)
-	{
-		return;
-	}
+	//if (isEnemyDead_)
+	//{
+	//	return;
+	//}
 
 	model_->Draw(worldTransform_, *camera_);
 
@@ -159,10 +213,7 @@ void Enemy::Draw()
 		e_bullet->Draw(*camera_);
 	}
 
-	if (E_hp_ < 0)
-	{
-		isEnemyDead_ = true;
-	}
+	
 }
 
 Enemy::~Enemy()
@@ -228,5 +279,6 @@ void Enemy::OnCollition(const P_Bullet* playerBullet)
 	{
 		E_hp_ = 0;
 		isEnemyDead_ = true;
+		//phase_ = Phase::Destroyed;
 	}
 }

@@ -47,6 +47,7 @@ public:
 		Approach,
 		Attack,
 		Rage, // HP低いとき
+		Destroyed,
 	};
 	Phase phase_ = Phase::Approach;
 
@@ -108,4 +109,10 @@ private:
 
 
 	float walkTimer_ = 0;
+
+
+
+	// 音
+	// uint32_t E_V_Handle_ = 0;
+	// uint32_t E_Voice_ = 0;
 };

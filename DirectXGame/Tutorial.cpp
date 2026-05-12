@@ -7,7 +7,7 @@ void Tutorial::Initialize()
 
 #pragma region 1ページ
 	// チュートリアルのスプライト
-	t_Handle_ = TextureManager::Load("Scenes/tdTutorial.png");
+	t_Handle_ = TextureManager::Load("Scenes/setumei.png");
 	
 	
 	//tutorialSprite_ = KamataEngine::Sprite::Create(t_Handle_, {0,0});
@@ -23,7 +23,7 @@ void Tutorial::Initialize()
 
 #pragma region 2ページ
 	// チュートリアルのスプライト
-	t_Handle2_ = TextureManager::Load("Scenes/tdTutorial2.png");
+	t_Handle2_ = TextureManager::Load("Scenes/tutorial.png");
 
 	//tutorialPos_2.x = 1280;
 	tutorialPos_2.x = 0;
@@ -50,7 +50,7 @@ void Tutorial::Initialize()
 
 
 
-
+	//Springin ボタン・システム(1)　決定2
 	Botan_ = Audio::GetInstance()->LoadWave("Sounds/sound/Decision2.mp3");
 
 	// カメラの初期化

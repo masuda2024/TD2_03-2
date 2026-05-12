@@ -117,4 +117,8 @@ private:
 	//弾の発射音
 	//uint32_t P_shotHandle_ = 0;
 	//uint32_t P_shotSound_ = 0;
+
+
+
+
 };

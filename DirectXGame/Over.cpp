@@ -6,7 +6,7 @@ void Over::Initialize()
 {
 	textureHandle_ = TextureManager::Load("Scenes/gameover.png");
 	overSprite_ = Sprite::Create(textureHandle_, {0, 0});
-
+	// Springin ボタン・システム(1)　決定2
 	Botan_ = Audio::GetInstance()->LoadWave("Sounds/sound/Decision2.mp3");
 
 	// カメラの初期化

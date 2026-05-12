@@ -361,6 +361,7 @@ void Game::Update()
 	case Phase::kPlay:
 		
 		CheckAllCollisions();
+
 #pragma region 仮設コード
 		// ゲームクリア(仮)
 		if (Input::GetInstance()->TriggerKey(DIK_C))
@@ -375,10 +376,28 @@ void Game::Update()
 
 #pragma endregion
 
+
 		if (Input::GetInstance()->TriggerKey(DIK_ESCAPE))
 		{
 			phase_ = Phase::kPose;
 		}
+
+		/*
+		// ゲームプレイフェーズの処理
+		if (player_->IsDead() == true)
+		{
+			// デス演出フェーズに切り替え
+			phase_ = Phase::kDeath;
+		}	
+*/
+
+		if (enemy_->IsEnemyDead() == true)
+		{
+			// デス演出フェーズに切り替え
+			phase_ = Phase::kEnemyDeath;
+		}	
+
+
 		break;
 
 	case Phase::kPose:
