@@ -59,7 +59,6 @@ public:
 	{
 		p1,
 		p2,
-		p3,
 	};
 	Pages page_ = Pages ::p1;
 
@@ -81,6 +80,39 @@ private:
 	// 現在のフェーズ
 	Phase phase_ = Phase::kFadeIn;
 
+
+	
+
+
+	//Skip
+	uint32_t Skip_Handle_ = 0;
+	KamataEngine::Sprite* Skip_Sprite_ = nullptr;
+
+	uint32_t Skip_Handle_2 = 0;
+	KamataEngine::Sprite* Skip_Sprite_2 = nullptr;
+
+
+
+	// Left
+	uint32_t Left_Handle_ = 0;
+	KamataEngine::Sprite* Left_Sprite_ = nullptr;
+
+	uint32_t Left_Handle_2 = 0;
+	KamataEngine::Sprite* Left_Sprite_2 = nullptr;
+
+
+
+
+	// Right
+	uint32_t Right_Handle_ = 0;
+	KamataEngine::Sprite* Right_Sprite_ = nullptr;
+
+	uint32_t Right_Handle_2 = 0;
+	KamataEngine::Sprite* Right_Sprite_2 = nullptr;
+
+
+
+
 	//1ページ
 	uint32_t t_Handle_ = 0;
 	KamataEngine::Sprite* tutorialSprite_ = nullptr;
@@ -89,9 +121,14 @@ private:
 	uint32_t t_Handle2_ = 0;
 	KamataEngine::Sprite* tutorialSprite2_ = nullptr;
 	
-	// 3ページ
-	uint32_t t_Handle3_ = 0;
-	KamataEngine::Sprite* tutorialSprite3_ = nullptr;
+	
+
+
+	bool UI_01 = false;
+	uint32_t UI_01_Handle_ = 0;
+	KamataEngine::Sprite* UI_01_Sprite_ = nullptr;
+
+
 
 
 	uint32_t Botan_ = 0;

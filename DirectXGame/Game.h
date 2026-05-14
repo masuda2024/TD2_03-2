@@ -46,6 +46,11 @@ public:
 
 
 
+	bool gameActive_ = true;
+
+
+
+
 	// 衝突判定
 	void CheckAllCollisions();
 
@@ -63,21 +68,53 @@ private:
 
 #pragma region UI
 
+	#pragma region ポーズ画面
+	
+	//ESC
+	uint32_t ESC_Handle_ = 0;
+	KamataEngine::Sprite* ESC_Sprite_ = nullptr;
+
+
+	// ESC
+	uint32_t ESC_Handle_2 = 0;
+	KamataEngine::Sprite* ESC_Sprite_2 = nullptr;
+
+
+
+	//ポーズ画面時のUI
+	uint32_t PoseUI_Handle_ = 0;
+	KamataEngine::Sprite* PoseUI_Sprite_ = nullptr;
+
+	uint32_t PoseUI_Handle_2 = 0;
+	KamataEngine::Sprite* PoseUI_Sprite_2 = nullptr;
+
+
+	uint32_t PoseUI2_Handle_ = 0;
+	KamataEngine::Sprite* PoseUI2_Sprite_ = nullptr;
+
+	uint32_t PoseUI2_Handle_2 = 0;
+	KamataEngine::Sprite* PoseUI2_Sprite_2 = nullptr;
+
+	#pragma endregion
+
+
+
+
 	// プレイヤーのHP
 	uint32_t playerHPHandle_ = 0;
-	Sprite* playerHPSprite_ = nullptr;
+	KamataEngine::Sprite* playerHPSprite_ = nullptr;
 
 	uint32_t _playerHPHandle_ = 0;
-	Sprite* _playerHPSprite_ = nullptr;
+	KamataEngine::Sprite* _playerHPSprite_ = nullptr;
 
 	// 敵のHP
 	//  敵HPテクスチャハンドル
 	uint32_t enemyHPHandle_ = 0;
 	// スプライト
-	Sprite* enemyHPSprite_ = nullptr;
+	KamataEngine::Sprite* enemyHPSprite_ = nullptr;
 
 	uint32_t _enemyHPHandle_ = 0;
-	Sprite* _enemyHPSprite_ = nullptr;
+	KamataEngine::Sprite* _enemyHPSprite_ = nullptr;
 
 #pragma endregion
 

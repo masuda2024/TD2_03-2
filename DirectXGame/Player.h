@@ -55,6 +55,10 @@ public:
 	bool IsDead() const { return isDead_; }
 	// デスフラグ
 	bool isDead_ = false;
+	
+	
+	//回復アイテムの使用状態
+	//bool canUseRecovery = true;
 
 #pragma endregion
 

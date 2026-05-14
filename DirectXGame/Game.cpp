@@ -199,7 +199,7 @@ void Game::Initialize()
 	enemy_ = new Enemy();
 	// 敵の初期化
 	KamataEngine::Vector3 enemyPosition = {40, 0, 0};
-	enemy_->Initialize(modelEnemy_, &camera_, enemyPosition);
+	enemy_->Initialize(modelEnemy_, &camera_, enemyPosition, player_);
 #pragma endregion
 
 #pragma region カメラ関係
@@ -280,6 +280,36 @@ void Game::Update()
 
 #pragma region UI
 
+
+	// ESCのスプライト
+	ESC_Handle_ = TextureManager::Load("UI/ESC.png");
+	ESC_Sprite_ = KamataEngine::Sprite::Create(ESC_Handle_, {10, 100});
+
+	ESC_Handle_2 = TextureManager::Load("UI/Pushed_ESC.png");
+	ESC_Sprite_2 = KamataEngine::Sprite::Create(ESC_Handle_2, {10, 100});
+
+
+
+
+
+	PoseUI_Handle_ = TextureManager::Load("UI/Pose_UI.png");
+	PoseUI_Sprite_ = KamataEngine::Sprite::Create(PoseUI_Handle_, {448, 164});
+
+	PoseUI_Handle_2 = TextureManager::Load("UI/Pushed_Pose_UI.png");
+	PoseUI_Sprite_2 = KamataEngine::Sprite::Create(PoseUI_Handle_2, {448, 164});
+
+
+
+	PoseUI2_Handle_ = TextureManager::Load("UI/Pose_UI_2.png");
+	PoseUI2_Sprite_ = KamataEngine::Sprite::Create(PoseUI2_Handle_, {448, 364});
+
+	PoseUI2_Handle_2 = TextureManager::Load("UI/Pushed_Pose_UI_2.png");
+	PoseUI2_Sprite_2 = KamataEngine::Sprite::Create(PoseUI2_Handle_2, {448, 364});
+	
+
+
+
+
 	// enemyHPのスプライト
 	enemyHPHandle_ = TextureManager::Load("Sprits/Ehp.png");
 	enemyHPSprite_ = KamataEngine::Sprite::Create(enemyHPHandle_, {1050, 0});
@@ -312,7 +342,11 @@ void Game::Update()
 
 #pragma endregion
 
-#pragma region 回復アイテム
+
+	//ポーズ画面では、プレイヤー、敵、回復アイテムの動作が停止する
+	if (gameActive_)
+	{
+		#pragma region 回復アイテム
 	
 
 	
@@ -344,15 +378,19 @@ void Game::Update()
 
 #pragma endregion
 
-#pragma region プレイヤー
+		#pragma region プレイヤー
 	player_->Update();
 	player_->RotateX();
 	player_->RotateZ();
 #pragma endregion
 
-#pragma region 敵
+		#pragma region 敵
 		enemy_->Update();
 #pragma endregion
+	}
+
+
+
 
 #pragma region フェーズ
 
@@ -403,17 +441,22 @@ void Game::Update()
 	case Phase::kPose:
 
 
+		gameActive_ = false;
+
+
+		if (Input::GetInstance()->TriggerKey(DIK_ESCAPE))
+		{
+			phase_ = Phase::kPlay;
+			gameActive_ = true;
+		}
+
 		//ImGui::Text("T : Title  ,  ESC : Continue");
 		if (Input::GetInstance()->TriggerKey(DIK_T)) 
 		{
 			phase_ = Phase::kFadeOut3;
 		}
-		if (Input::GetInstance()->TriggerKey(DIK_ESCAPE))
-		{
-			phase_ = Phase::kPlay;
-		}
-
-
+		
+		
 
 		break;
 
@@ -484,12 +527,40 @@ void Game::Draw()
 #pragma region UI
 	if (phase_ == Phase::kPlay || phase_ == Phase::kFadeIn || phase_ == Phase::kPose || phase_ == Phase::kDeath || phase_ == Phase::kEnemyDeath)
 	{
+		ESC_Sprite_->Draw();
+
+		if (Input::GetInstance()->PushKey(DIK_ESCAPE)) 
+		{
+			ESC_Sprite_2->Draw();
+		}
+
+
 		_playerHPSprite_->Draw();
 		_enemyHPSprite_->Draw();
 
 		playerHPSprite_->Draw();
 		enemyHPSprite_->Draw();
 	}
+
+	// ポーズ画面
+	if (phase_ == Phase::kPose)
+	{
+		PoseUI_Sprite_->Draw();
+		PoseUI2_Sprite_->Draw();
+		
+		if (Input::GetInstance()->PushKey(DIK_ESCAPE)) 
+		{
+			PoseUI_Sprite_2->Draw();
+		}
+
+		if (Input::GetInstance()->PushKey(DIK_T)) 
+		{
+			PoseUI2_Sprite_2->Draw();
+		}
+	}
+
+
+
 #pragma endregion
 
 	Sprite::PostDraw();
@@ -542,6 +613,15 @@ Game::~Game()
 	delete fade_;
 
 #pragma region UI
+
+	delete ESC_Sprite_;
+	delete ESC_Sprite_2;
+
+	delete PoseUI_Sprite_;
+	delete PoseUI_Sprite_2;
+
+	delete PoseUI2_Sprite_;
+	delete PoseUI2_Sprite_2;
 
 	delete playerHPSprite_;
 	delete _playerHPSprite_;

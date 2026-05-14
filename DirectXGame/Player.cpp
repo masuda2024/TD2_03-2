@@ -313,7 +313,7 @@ void Player::Update()
 	if (Input::GetInstance()->TriggerKey(DIK_R) && HP_count == 0) 
 	{
 		hp_ += 10000;
-		HP_count++;
+		HP_count+=2;
 
 		
 	}
@@ -321,7 +321,7 @@ void Player::Update()
 	if (Input::GetInstance()->TriggerKey(DIK_R) && HP_count == 2) 
 	{
 		hp_ += 10000;
-		HP_count++;
+		HP_count+=2;
 
 		
 	}
@@ -329,9 +329,7 @@ void Player::Update()
 	if (Input::GetInstance()->TriggerKey(DIK_R) && HP_count == 4)
 	{
 		hp_ += 10000;
-		HP_count++;
-
-		
+		HP_count+=2;
 	}
 
 #pragma endregion
