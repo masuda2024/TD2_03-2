@@ -303,34 +303,25 @@ void Player::Update()
 	}
 
 #pragma region 回復
-
+	
 
 	if (hp_ > maxHP_)
 	{
 		hp_ = maxHP_;
 	}
-
-	if (Input::GetInstance()->TriggerKey(DIK_R) && HP_count == 0) 
+	
+	if (Input::GetInstance()->TriggerKey(DIK_R) && canUseRecovery == 1)
 	{
 		hp_ += 10000;
-		HP_count+=2;
-
-		
+		recoveryCount += 1;
 	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_R) && HP_count == 2) 
+	if (recoveryCount == 3)
 	{
-		hp_ += 10000;
-		HP_count+=2;
-
-		
+		canUseRecovery = false;
 	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_R) && HP_count == 4)
-	{
-		hp_ += 10000;
-		HP_count+=2;
-	}
+
 
 #pragma endregion
 

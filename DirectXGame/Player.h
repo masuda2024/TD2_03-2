@@ -58,7 +58,10 @@ public:
 	
 	
 	//回復アイテムの使用状態
-	//bool canUseRecovery = true;
+	bool canUseRecovery = true;
+	uint32_t recoveryCount = 0;
+
+
 
 #pragma endregion
 
@@ -110,7 +113,7 @@ private:
 	int32_t maxHP_ = 10000;
 	int32_t hp_ = maxHP_;
 
-	uint32_t HP_count = 0;
+	
 
 
 	// マウスの切り替え
