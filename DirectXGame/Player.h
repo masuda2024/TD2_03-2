@@ -59,10 +59,17 @@ public:
 	
 	//回復アイテムの使用状態
 	bool canUseRecovery = true;
-	uint32_t recoveryCount = 0;
+	uint32_t recoveryCount = 3;
 
-
-
+	// 行動フェーズ
+	enum class Phase
+	{
+		Approach,
+		Attack,
+		Destroyed,
+	};
+	Phase phase_ = Phase::Approach;
+	uint32_t overTimer = 0;
 #pragma endregion
 
 #pragma region 衝突判定 [ プレイヤー  <<===>>  敵の弾 ]

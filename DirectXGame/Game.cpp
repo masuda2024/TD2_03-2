@@ -188,7 +188,7 @@ void Game::Initialize()
 	// プレイヤーの生成
 	player_ = new Player();
 	// プレイヤーの初期化
-	KamataEngine::Vector3 playerPosition = {-20, 0, 0};
+	KamataEngine::Vector3 playerPosition = {-40, 0, 0};
 	player_->Initialize(modelPlayer_, &camera_, playerPosition);
 
 #pragma endregion
@@ -376,13 +376,13 @@ void Game::Update()
 	    }
 
 
-#pragma endregion
+		#pragma endregion
 
 		#pragma region プレイヤー
 	player_->Update();
 	player_->RotateX();
 	player_->RotateZ();
-#pragma endregion
+		#pragma endregion
 
 		#pragma region 敵
 		enemy_->Update();
@@ -420,14 +420,14 @@ void Game::Update()
 			phase_ = Phase::kPose;
 		}
 
-		/*
+
 		// ゲームプレイフェーズの処理
 		if (player_->IsDead() == true)
 		{
 			// デス演出フェーズに切り替え
 			phase_ = Phase::kDeath;
 		}	
-*/
+
 
 		if (enemy_->IsEnemyDead() == true)
 		{

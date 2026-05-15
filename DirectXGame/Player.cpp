@@ -159,7 +159,34 @@ void Player::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& pos
 
 void Player::Update() 
 {
-	Attack();
+	
+
+
+	switch (phase_)
+	{ 
+	case Phase::Approach:
+	{
+
+
+
+		// 移動(ベクトルを減算)
+		worldTransform_.translation_.x += 0.2f;
+
+		if (worldTransform_.translation_.x > -20.0f)
+		{
+			phase_ = Phase::Attack;
+		}
+
+
+		break;
+	}
+		
+
+	case Phase::Attack:
+	{
+
+#pragma region プレイヤーの行動
+Attack();
 #pragma region プレイヤーの移動
 
 	// キャラクターの移動ベクトル
@@ -313,10 +340,10 @@ void Player::Update()
 	if (Input::GetInstance()->TriggerKey(DIK_R) && canUseRecovery == 1)
 	{
 		hp_ += 10000;
-		recoveryCount += 1;
+		recoveryCount -= 1;
 	}
 
-	if (recoveryCount == 3)
+	if (recoveryCount == 0)
 	{
 		canUseRecovery = false;
 	}
@@ -324,6 +351,40 @@ void Player::Update()
 
 
 #pragma endregion
+
+	#pragma endregion
+		if (hp_ <= 0) 
+		{
+			/// isEnemyDead_ = true;
+			phase_ = Phase::Destroyed;
+		}
+		break;
+	}
+
+	case Phase::Destroyed:
+	{
+
+		
+		worldTransform_.translation_.y -= 0.2f;
+		worldTransform_.rotation_.z += 0.001f;
+		worldTransform_.rotation_.x += 0.2f;
+
+		overTimer += 10;
+		if (overTimer == 1000)
+		{
+			isDead_ = true;
+		}
+
+		break;
+	}
+
+	}
+
+
+
+
+
+
 
 	// 行列更新
 	worldTransform3DReticle_.matWorld_ = MakeAffineMatrix(worldTransform3DReticle_.scale_, worldTransform3DReticle_.rotation_, worldTransform3DReticle_.translation_);
@@ -337,10 +398,11 @@ void Player::Update()
 
 void Player::Draw() 
 {
+	/*
 	if (isDead_) 
 	{
 		return;
-	}
+	}*/
 
 	model_->Draw(worldTransform_, *camera_);
 
@@ -349,7 +411,18 @@ void Player::Draw()
 		p_bullet->Draw(*camera_);
 	}
 
-	modelCursor_->Draw(worldTransform3DReticle_, *camera_);
+	
+
+
+	if (phase_ == Phase::Attack)
+	{
+		modelCursor_->Draw(worldTransform3DReticle_, *camera_);
+	}
+	
+		
+
+
+
 }
 
 Player::~Player() 
@@ -449,11 +522,12 @@ void Player::OnCollition2(const E_Bullet* enemyBullet)
 {
 	(void)enemyBullet;
 	hp_ -= 500;
+	/*
 	if (hp_ <= 0) 
 	{
 		hp_ = 0;
 		isDead_ = true;
-	}
+	}*/
 }
 #pragma endregion
 

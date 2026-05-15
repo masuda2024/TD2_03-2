@@ -51,6 +51,8 @@ public:
 	};
 	Phase phase_ = Phase::Approach;
 
+	uint32_t clearTimer = 0;
+
 #pragma endregion
 
 #pragma region 衝突判定 [ プレイヤーの弾  <<===>>  敵 ]

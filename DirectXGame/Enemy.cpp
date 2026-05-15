@@ -205,9 +205,9 @@ void Enemy::Update()
 		worldTransform_.rotation_.z += 0.001f;
 		worldTransform_.rotation_.x += 0.2f;
 
-		
+		clearTimer += 10;
 
-		if (worldTransform_.translation_.y == 770.0f)
+		if (clearTimer==1000)
 		{
 			isEnemyDead_ = true;
 		}
