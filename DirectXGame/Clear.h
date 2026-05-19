@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include"KamataEngine.h"
 #include"Fade.h"
 class Clear
@@ -28,21 +28,38 @@ public:
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0;
 	// スプライト
-	KamataEngine::Sprite* clearSprite_ = nullptr;
-
+	
 	// マップチップフィールド
 	//MapChipField* mapChipField_;
 
 private:
 	// 3Dモデルデータ
 	KamataEngine::Model* model_ = nullptr;
-	// モデルプレイヤー
-	// KamataEngine::Model* modelPlayer_ = nullptr;
 	// カメラ
 	KamataEngine::Camera camera_;
 	// ワールドトランスフォーム
 	KamataEngine::WorldTransform worldTransform_;
-	KamataEngine::WorldTransform worldTransformPlayer_;
+	
+
+
+
+	KamataEngine::Model* modelSky_ = nullptr;
+	KamataEngine::WorldTransform worldTransformSky_;
+
+	KamataEngine::Model* modelGround_ = nullptr;
+	KamataEngine::WorldTransform worldTransformGround_;
+
+
+	KamataEngine::Model* modelEnemy2_ = nullptr;
+	KamataEngine::WorldTransform worldTransformEnemy2_;
+
+
+	uint32_t ClearFontHandle_ = 0;
+	KamataEngine::Sprite* ClearFontSprite_ = nullptr;
+
+
+
+
 
 	// フェード
 	Fade* fade_ = nullptr;

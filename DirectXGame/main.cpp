@@ -23,6 +23,9 @@ enum class Scene
 };
 Scene scene = Scene::kUnknown;
 
+
+
+
 void ChangeScene();
 void UpdateScene();
 void DrawScene();

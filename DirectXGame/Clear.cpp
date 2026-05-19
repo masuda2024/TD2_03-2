@@ -1,12 +1,17 @@
 #include "Clear.h"
+#include <cassert>
+#include "MyMath.h"
+#include "math.h"
 
 using namespace KamataEngine;
 
 
 void Clear::Initialize() 
 {
-	textureHandle_ = TextureManager::Load("Scenes/ClearScene.png");
-	clearSprite_ = Sprite::Create(textureHandle_, {0, 0});
+	
+	ClearFontHandle_ = TextureManager::Load("UI/GAME_CLEAR.png");
+	ClearFontSprite_ = Sprite::Create(ClearFontHandle_, {283, 20});
+	
 	// Springin ボタン・システム(1)　決定2
 	Botan_ = Audio::GetInstance()->LoadWave("Sounds/sound/Decision2.mp3");
 
@@ -14,7 +19,30 @@ void Clear::Initialize()
 	camera_.Initialize();
 	// ワールド変換の初期化
 	worldTransform_.Initialize();
-	worldTransformPlayer_.Initialize();
+	
+
+
+	worldTransformSky_.Initialize();
+	worldTransformSky_.translation_ = {0, 0, 0};
+	modelSky_ = Model::CreateFromOBJ("Sky_Sphere", true);
+
+	worldTransformGround_.Initialize();
+	worldTransformGround_.translation_ = {0, -1, -45};
+	modelGround_ = Model::CreateFromOBJ("Ground", true);
+
+	worldTransformEnemy2_.Initialize();
+	worldTransformEnemy2_.translation_ = {0.0f, -1.3f, -45.0f};
+	worldTransformEnemy2_.rotation_.x = 0.7f;
+	worldTransformEnemy2_.rotation_.y = 3.0f;
+	worldTransformEnemy2_.rotation_.z = 1.0f;
+	worldTransformEnemy2_.scale_ = {0.5f, 0.5f, 0.5f};
+	modelEnemy2_ = Model::CreateFromOBJ("kaizyu1", true);
+
+
+
+
+
+
 
 	// フェード
 	fade_ = new Fade();
@@ -24,6 +52,25 @@ void Clear::Initialize()
 
 void Clear::Update()
 {
+
+
+	ClearFontSprite_->SetSize({704, 352});
+
+	
+
+
+
+	worldTransformSky_.matWorld_ = MakeAffineMatrix(worldTransformSky_.scale_, worldTransformSky_.rotation_, worldTransformSky_.translation_);
+	worldTransformSky_.TransferMatrix();
+
+	worldTransformGround_.matWorld_ = MakeAffineMatrix(worldTransformGround_.scale_, worldTransformGround_.rotation_, worldTransformGround_.translation_);
+	worldTransformGround_.TransferMatrix();
+
+	worldTransformEnemy2_.matWorld_ = MakeAffineMatrix(worldTransformEnemy2_.scale_, worldTransformEnemy2_.rotation_, worldTransformEnemy2_.translation_);
+	worldTransformEnemy2_.TransferMatrix();
+
+
+
 	switch (phase_)
 	{
 	case Phase::kMain:
@@ -63,15 +110,21 @@ void Clear::Draw()
 	// DirectXCommonインスタンスの取得
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
-	// 3Dモデル描画前処理
+	
 	Model::PreDraw();
 
-	// 3Dモデル描画後処理
+	
+	modelSky_->Draw(worldTransformSky_, camera_);
+	modelGround_->Draw(worldTransformGround_, camera_);
+	modelEnemy2_->Draw(worldTransformEnemy2_, camera_);
+
 	Model::PostDraw();
 
 	Sprite::PreDraw(dxCommon->GetCommandList());
 
-	clearSprite_->Draw();
+	
+
+	ClearFontSprite_->Draw();
 
 	Sprite::PostDraw();
 
@@ -82,7 +135,12 @@ void Clear::Draw()
 Clear::~Clear() 
 {
 
+	delete modelSky_;
+	delete modelGround_;
+	delete modelEnemy2_;
+
+
 	//  フェード
 	delete fade_;
-	delete clearSprite_;
+	delete ClearFontSprite_;
 }

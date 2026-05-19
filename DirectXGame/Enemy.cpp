@@ -11,7 +11,8 @@
 using namespace KamataEngine;
 using namespace MathUtility;
 
-void Enemy::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& position, Player* player) {
+void Enemy::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& position, Player* player) 
+{
 	// NULLポイントチェック
 	assert(model);
 
@@ -45,14 +46,6 @@ void Enemy::Update()
 	// const float kCharacterSpeed = 0.2f;
 
 
-
-	#ifdef _DEBUG
-	// デバッグ用
-	if (Input::GetInstance()->TriggerKey(DIK_J)) 
-	{
-		E_hp_ = 0;
-	}
-	#endif
 
 #pragma region 敵の行動フェーズ
 

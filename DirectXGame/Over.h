@@ -1,10 +1,10 @@
-﻿#pragma once
+#pragma once
 #include "Fade.h"
 #include "KamataEngine.h"
 class Over
 {
 public:
-	enum class Phase 
+	enum class Phase
 	{
 		kFadeIn,  // フェードイン
 		kMain,    // メイン部
@@ -27,22 +27,39 @@ public:
 
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0;
-	// スプライト
-	KamataEngine::Sprite* overSprite_ = nullptr;
-
-	// マップチップフィールド
-	// MapChipField* mapChipField_;
 
 private:
 	// 3Dモデルデータ
 	KamataEngine::Model* model_ = nullptr;
-	// モデルプレイヤー
-	// KamataEngine::Model* modelPlayer_ = nullptr;
+	
+	
 	// カメラ
 	KamataEngine::Camera camera_;
 	// ワールドトランスフォーム
 	KamataEngine::WorldTransform worldTransform_;
-	KamataEngine::WorldTransform worldTransformPlayer_;
+	
+	#pragma region 
+
+	KamataEngine::Model* modelSky_ = nullptr;
+	KamataEngine::WorldTransform worldTransformSky_;
+
+	KamataEngine::Model* modelRunway_ = nullptr;
+	KamataEngine::WorldTransform worldTransformRunway_;
+
+
+	KamataEngine::Model* modelPlayer2_ = nullptr;
+	KamataEngine::WorldTransform worldTransformPlayer2_;
+
+
+
+	#pragma endregion
+
+	
+	uint32_t OverFontHandle_ = 0;
+	KamataEngine::Sprite* OverFontSprite_ = nullptr;
+
+
+
 
 	// フェード
 	Fade* fade_ = nullptr;

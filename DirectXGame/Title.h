@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "KamataEngine.h"
 #include "Fade.h"
 
@@ -32,12 +32,32 @@ public:
 
 	
 private:
-	
+	KamataEngine::Model* model_;
 	// カメラ
 	KamataEngine::Camera camera_;
 	// ワールドトランスフォーム
 	KamataEngine::WorldTransform worldTransform_;
 	
+
+
+	KamataEngine::Model* MS_title_ = nullptr;
+	KamataEngine::WorldTransform WTS_title_;
+
+
+
+	KamataEngine::Model* MP_title_ = nullptr;
+	KamataEngine::WorldTransform WTP_title_;
+
+	
+	KamataEngine::Model* ME_title_ = nullptr;
+	KamataEngine::WorldTransform WTE_title_;
+
+
+	KamataEngine::Model* M_Cursor_title_ = nullptr;
+	KamataEngine::WorldTransform WT_Cursor_title_;
+
+
+
 
 	// フェード
 	Fade* fade_ = nullptr;
