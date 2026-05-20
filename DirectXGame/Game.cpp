@@ -147,6 +147,25 @@ void Game::Initialize()
 	worldTransformEarth_.Initialize();
 	worldTransformEarth_.translation_ = {0, -350, 100};
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #pragma region 天球
 
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
@@ -379,9 +398,9 @@ void Game::Update()
 		#pragma endregion
 
 		#pragma region プレイヤー
-	player_->Update();
-	player_->RotateX();
-	player_->RotateZ();
+		player_->Update();
+		player_->RotateX();
+		player_->RotateZ();
 		#pragma endregion
 
 		#pragma region 敵

@@ -115,6 +115,7 @@ private:
 	Player* player_ = nullptr;
 
 	// 音
-	// uint32_t E_V_Handle_ = 0;
-	// uint32_t E_Voice_ = 0;
+	bool isE_V_Played_ = false;
+	uint32_t E_V_Handle_ = 0;
+	uint32_t E_Voice_ = 0;
 };

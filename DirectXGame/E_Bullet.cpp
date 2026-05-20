@@ -4,7 +4,7 @@ using namespace KamataEngine;
 
 void E_Bullet::Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity)
 {
-	assert(model);
+	//assert(model);
 
 	model_ = model;
 

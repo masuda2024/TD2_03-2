@@ -12,8 +12,27 @@ void Clear::Initialize()
 	ClearFontHandle_ = TextureManager::Load("UI/GAME_CLEAR.png");
 	ClearFontSprite_ = Sprite::Create(ClearFontHandle_, {283, 20});
 	
+
+
+
+
 	// Springin ボタン・システム(1)　決定2
 	Botan_ = Audio::GetInstance()->LoadWave("Sounds/sound/Decision2.mp3");
+
+
+
+
+	
+
+	// 効果音ラボ 戦闘[2] 爆発4
+	Explosion_Handle_ = Audio::GetInstance()->LoadWave("Sounds/sound/Explosion4.mp3");
+
+
+
+
+
+
+
 
 	// カメラの初期化
 	camera_.Initialize();
@@ -52,6 +71,19 @@ void Clear::Initialize()
 
 void Clear::Update()
 {
+
+	//爆発音
+	if (isExplosionPlayed_ == 0)
+	{
+		Explosion_Sound_ = Audio::GetInstance()->PlayWave(Explosion_Handle_, false);
+		isExplosionPlayed_ = true;
+	}
+
+
+
+
+
+
 
 
 	ClearFontSprite_->SetSize({704, 352});

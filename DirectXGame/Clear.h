@@ -67,4 +67,10 @@ private:
 	Phase phase_ = Phase::kFadeIn;
 
 	uint32_t Botan_ = 0;
+
+
+	// 爆発音
+	bool isExplosionPlayed_ = false;
+	uint32_t Explosion_Handle_ = 0;
+	uint32_t Explosion_Sound_ = 0;
 };

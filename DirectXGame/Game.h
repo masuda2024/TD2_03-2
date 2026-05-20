@@ -118,6 +118,8 @@ private:
 
 #pragma endregion
 
+	
+
 #pragma region 天球
 
 	KamataEngine::Model* modelSkydome_ = nullptr;

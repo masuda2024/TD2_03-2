@@ -33,7 +33,7 @@ void Enemy::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& posi
 
 
 	//効果音ラボ  戦闘[1] ドラゴンの鳴き声1 恐竜や怪獣の声にも使える
-	// E_VHandle_ = Audio::GetInstance()->LoadWave("Sounds/sound/Dragon's_Roar1.mp3");
+	E_V_Handle_ = Audio::GetInstance()->LoadWave("Sounds/sound/Dragon's_Roar1.mp3");
 
 
 }
@@ -71,7 +71,7 @@ void Enemy::Update()
 	case Phase::Attack: 
 	{
 
-#pragma region 敵の上下移動
+		#pragma region 敵の上下移動
 
 		// 時間のカウンター
 		walkTimer_ += 5.0f / 60.0f; // フレームごとの時間増分
@@ -84,7 +84,7 @@ void Enemy::Update()
 		Vector3& pos = worldTransform_.translation_;
 		pos.y = sin(walkTimer_ * 0.1f) * 10.0f;
 
-#pragma endregion
+		#pragma endregion
 
 		// 発射タイマーカウントダウン
 		fireTimer_--;
@@ -113,6 +113,15 @@ void Enemy::Update()
 		
 	case Phase::Rage:
 		{
+
+
+		// 咆哮
+		if (isE_V_Played_ == 0) 
+		{
+			E_Voice_ = Audio::GetInstance()->PlayWave(E_V_Handle_, false);
+			isE_V_Played_ = true;
+		}
+
 
 		// 移動スピードアップ
 		worldTransform_.translation_.x -= 0.4f;
@@ -339,7 +348,7 @@ KamataEngine::Vector3 Enemy::GetWorldPosition()
 	return worldPos;
 }
 
-#pragma endregion
+
 AABB Enemy::GetAABB()
 {
 	KamataEngine::Vector3 worldPos = GetWorldPosition();
@@ -364,3 +373,5 @@ void Enemy::OnCollition(const P_Bullet* playerBullet)
 		//phase_ = Phase::Destroyed;
 	}
 }
+
+#pragma endregion

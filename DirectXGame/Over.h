@@ -67,4 +67,11 @@ private:
 	Phase phase_ = Phase::kFadeIn;
 
 	uint32_t Botan_ = 0;
+
+
+	// 飛行機音
+	bool isPlanePlayed_ = false;
+	uint32_t Plane_Handle_ = 0;
+	uint32_t Plane_Sound_ = 0;
+
 };

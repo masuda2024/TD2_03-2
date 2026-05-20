@@ -10,8 +10,21 @@ void Over::Initialize()
 	OverFontHandle_ = TextureManager::Load("UI/GAME_OVER.png");
 	OverFontSprite_ = Sprite::Create(OverFontHandle_, {283, 20});
 	
+
+
+
+
 	// Springin ボタン・システム(1)　決定2
 	Botan_ = Audio::GetInstance()->LoadWave("Sounds/sound/Decision2.mp3");
+
+
+	
+
+	// 効果音ラボ 機械・乗り物[1] 戦闘機上空通過1
+	Plane_Handle_ = Audio::GetInstance()->LoadWave("Sounds/sound/FighterjetsFlyOverhead1.mp3");
+
+
+
 
 	// カメラの初期化
 	camera_.Initialize();
@@ -46,10 +59,18 @@ void Over::Initialize()
 void Over::Update() 
 {
 
+	//飛行機音
+	if (isPlanePlayed_ == 0) 
+	{
+		Plane_Sound_ = Audio::GetInstance()->PlayWave(Plane_Handle_, false);
+		isPlanePlayed_ = true;
+	}
+
+
+
 	OverFontSprite_->SetSize({704, 352});
 
 	
-
 
 
 	worldTransformSky_.matWorld_ = MakeAffineMatrix(worldTransformSky_.scale_, worldTransformSky_.rotation_, worldTransformSky_.translation_);

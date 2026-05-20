@@ -150,10 +150,16 @@ void Player::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& pos
 
 
 
+	
+	// 効果音ラボ 戦闘[2] ショット(ノーマル弾)
+	P_shotHandle_ = Audio::GetInstance()->LoadWave("Sounds/sound/Shot.mp3");
 
-	//効果音ラボ 戦闘[2] ショット(ノーマル弾)
-	//P_shotHandle_ = Audio::GetInstance()->LoadWave("Sounds/sound/Shot.mp3");
 
+	// 効果音ラボ 機械・乗り物[1] ロボット起動2
+	Recovery_Handle_ = Audio::GetInstance()->LoadWave("Sounds/sound/RobotStart2.mp3");
+
+
+	
 
 }
 
@@ -185,9 +191,9 @@ void Player::Update()
 	case Phase::Attack:
 	{
 
-#pragma region プレイヤーの行動
-Attack();
-#pragma region プレイヤーの移動
+		#pragma region プレイヤーの行動
+		Attack();
+		#pragma region プレイヤーの移動
 
 	// キャラクターの移動ベクトル
 	Vector3 move = {0, 0, 0};
@@ -221,7 +227,7 @@ Attack();
 
 #pragma endregion
 
-#pragma region プレイヤーの攻撃
+		#pragma region プレイヤーの攻撃
 	;
 
 	for (P_Bullet* p_bullet : p_bullets_) 
@@ -241,7 +247,7 @@ Attack();
 
 #pragma endregion
 
-#pragma region 3Dレティクルのモード切替
+		#pragma region 3Dレティクルのモード切替
 
 	if (Input::GetInstance()->TriggerKey(DIK_M))
 	{
@@ -320,39 +326,52 @@ Attack();
 
 #pragma endregion
 
-	// 座標移動(ベクトルの加算)
-	worldTransform_.translation_ += move;
-
-	//右クリックで回避
-	if (Input::GetInstance()->IsPressMouse(1))
-	{
-		worldTransform_.translation_ += move * 5;
-	}
-
-#pragma region 回復
+	
 	
 
-	if (hp_ > maxHP_)
-	{
-		hp_ = maxHP_;
-	}
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE) || Input::GetInstance()->IsTriggerMouse(0))
+		{
+			P_shotSound_ = Audio::GetInstance()->PlayWave(P_shotHandle_, false);
+		}
+
+
+
+
+		// 座標移動(ベクトルの加算)
+		worldTransform_.translation_ += move;
+
+		//右クリックで回避
+		if (Input::GetInstance()->IsPressMouse(1))
+		{
+			worldTransform_.translation_ += move * 5;
+		}
+
+		#pragma region 回復
 	
-	if (Input::GetInstance()->TriggerKey(DIK_R) && canUseRecovery == 1)
-	{
-		hp_ += 10000;
-		recoveryCount -= 1;
-	}
 
-	if (recoveryCount == 0)
-	{
-		canUseRecovery = false;
-	}
+		if (hp_ > maxHP_)
+		{
+			hp_ = maxHP_;
+		}
+		
+		if (Input::GetInstance()->TriggerKey(DIK_R) && canUseRecovery == 1)
+		{
+			Recovery_Sound_ = Audio::GetInstance()->PlayWave(Recovery_Handle_, false);
+			
+			hp_ += 10000;
+			recoveryCount -= 1;
+		}
+
+		if (recoveryCount == 0)
+		{
+			canUseRecovery = false;
+		}
 
 
 
-#pragma endregion
+		#pragma endregion
 
-	#pragma endregion
+		#pragma endregion
 		if (hp_ <= 0) 
 		{
 			/// isEnemyDead_ = true;
@@ -419,8 +438,6 @@ void Player::Draw()
 		modelCursor_->Draw(worldTransform3DReticle_, *camera_);
 	}
 	
-		
-
 
 
 }
@@ -470,8 +487,7 @@ void Player::Attack()
 {
 	if (input_->TriggerKey(DIK_SPACE) || input_->IsTriggerMouse(0))
 	{
-		//P_shotSound_ = Audio::GetInstance()->PlayWave(P_shotHandle_, true);
-
+		
 		const float kBulletSpeed = 1.0f;
 
 		Vector3 velocity(kBulletSpeed, 0, 0);
@@ -486,6 +502,9 @@ void Player::Attack()
 		newBullet->Initialize(model_, worldTransform_.translation_, velocity);
 
 		p_bullets_.push_back(newBullet);
+
+		
+	
 	}
 }
 

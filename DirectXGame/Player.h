@@ -128,11 +128,13 @@ private:
 	uint32_t ON_Mouse = false;
 
 
-	//弾の発射音
-	//uint32_t P_shotHandle_ = 0;
-	//uint32_t P_shotSound_ = 0;
+	// 弾の発射音
+	uint32_t P_shotHandle_ = 0;
+	uint32_t P_shotSound_ = 0;
 
-
+	// 回復音
+	uint32_t Recovery_Handle_ = 0;
+	uint32_t Recovery_Sound_ = 0;
 
 
 };
