@@ -8,9 +8,22 @@ using namespace KamataEngine;
 void Over::Initialize() 
 {
 	OverFontHandle_ = TextureManager::Load("UI/GAME_OVER.png");
-	OverFontSprite_ = Sprite::Create(OverFontHandle_, {283, 20});
+	OverFontSprite_ = Sprite::Create(OverFontHandle_, {187, 20});
+	
+	O_TextHandle_ = TextureManager::Load("UI/GameOverText.png");
+	O_TextSprite_ = Sprite::Create(O_TextHandle_, {448, 512});
 	
 
+	
+	UI_R_Handle_ = TextureManager::Load("UI/R_Retry.png");
+	UI_RSprite_ = Sprite::Create(UI_R_Handle_, {246, 614});
+	UI_R_Handle_2 = TextureManager::Load("UI/Pushed_R_Retry.png");
+	UI_RSprite_2 = Sprite::Create(UI_R_Handle_2, {246, 614});
+
+	UI_T_Handle_ = TextureManager::Load("UI/T_Title.png");
+	UI_TSprite_ = Sprite::Create(UI_T_Handle_, {650, 614});
+	UI_T_Handle_2 = TextureManager::Load("UI/Pushed_T_Title.png");
+	UI_TSprite_2 = Sprite::Create(UI_T_Handle_2, {650, 614});
 
 
 
@@ -68,7 +81,7 @@ void Over::Update()
 
 
 
-	OverFontSprite_->SetSize({704, 352});
+	OverFontSprite_->SetSize({896, 352});
 
 	
 
@@ -90,13 +103,22 @@ void Over::Update()
 	case Phase::kMain:
 
 		// タイトルシーンの終了条件
-		if (Input::GetInstance()->TriggerKey(DIK_SPACE) || Input::GetInstance()->IsTriggerMouse(0))
+		if (Input::GetInstance()->TriggerKey(DIK_T))
 		{
 			Audio::GetInstance()->PlayWave(Botan_);
 			// フェードアウト開始
 			phase_ = Phase::kFadeOut;
 			fade_->Start(Fade::Status::FadeOut, 1.0f);
 			finishedO_ = true;
+		}
+		// リトライ
+		if (Input::GetInstance()->TriggerKey(DIK_R))
+		{
+			Audio::GetInstance()->PlayWave(Botan_);
+			// フェードアウト開始
+			phase_ = Phase::kFadeOut;
+			fade_->Start(Fade::Status::FadeOut, 1.0f);
+			finishedO_2 = true;
 		}
 
 		break;
@@ -141,6 +163,22 @@ void Over::Draw()
 	Sprite::PreDraw(dxCommon->GetCommandList());
 
 	OverFontSprite_->Draw();
+	O_TextSprite_->Draw();
+
+
+	UI_RSprite_->Draw();
+	if (Input::GetInstance()->PushKey(DIK_R))
+	{
+		UI_RSprite_2->Draw();
+	}
+
+	UI_TSprite_->Draw();
+	if (Input::GetInstance()->PushKey(DIK_T))
+	{
+		UI_TSprite_2->Draw();
+	}
+
+
 
 	Sprite::PostDraw();
 
@@ -163,4 +201,11 @@ Over::~Over()
 	delete modelPlayer2_;
 	
 	delete OverFontSprite_;
+	delete O_TextSprite_;
+
+
+	delete UI_RSprite_;
+	delete UI_RSprite_2;
+	delete UI_TSprite_;
+	delete UI_TSprite_2;
 }

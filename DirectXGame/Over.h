@@ -13,8 +13,14 @@ public:
 
 	// 終了フラグ
 	bool finishedO_ = false;
-	// デスフラグのgetter
 	bool IsFinishedO() const { return finishedO_; }
+	// リトライ
+	bool finishedO_2 = false;
+	bool IsFinishedO2() const { return finishedO_2; }
+
+
+
+
 
 	void Initialize();
 	void Update();
@@ -57,6 +63,22 @@ private:
 	
 	uint32_t OverFontHandle_ = 0;
 	KamataEngine::Sprite* OverFontSprite_ = nullptr;
+
+	uint32_t O_TextHandle_ = 0;
+	KamataEngine::Sprite* O_TextSprite_ = nullptr;
+
+
+	
+	uint32_t UI_R_Handle_ = 0;
+	KamataEngine::Sprite* UI_RSprite_ = nullptr;
+	uint32_t UI_R_Handle_2 = 0;
+	KamataEngine::Sprite* UI_RSprite_2 = nullptr;
+
+	uint32_t UI_T_Handle_ = 0;
+	KamataEngine::Sprite* UI_TSprite_ = nullptr;
+	uint32_t UI_T_Handle_2 = 0;
+	KamataEngine::Sprite* UI_TSprite_2 = nullptr;
+
 
 
 

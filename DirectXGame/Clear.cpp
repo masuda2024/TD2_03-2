@@ -10,8 +10,26 @@ void Clear::Initialize()
 {
 	
 	ClearFontHandle_ = TextureManager::Load("UI/GAME_CLEAR.png");
-	ClearFontSprite_ = Sprite::Create(ClearFontHandle_, {283, 20});
+	ClearFontSprite_ = Sprite::Create(ClearFontHandle_, {187, 20});
 	
+	C_TextHandle_ = TextureManager::Load("UI/GameClearText.png");
+	C_TextSprite_ = Sprite::Create(C_TextHandle_, {448, 512});
+	
+
+
+
+	
+	UI_R_Handle_ = TextureManager::Load("UI/R_Retry.png");
+	UI_RSprite_ = Sprite::Create(UI_R_Handle_, {246, 614});
+	UI_R_Handle_2 = TextureManager::Load("UI/Pushed_R_Retry.png");
+	UI_RSprite_2 = Sprite::Create(UI_R_Handle_2, {246, 614});
+
+
+
+	UI_T_Handle_ = TextureManager::Load("UI/T_Title.png");
+	UI_TSprite_ = Sprite::Create(UI_T_Handle_, {650, 614});
+	UI_T_Handle_2 = TextureManager::Load("UI/Pushed_T_Title.png");
+	UI_TSprite_2 = Sprite::Create(UI_T_Handle_2, {650, 614});
 
 
 
@@ -86,7 +104,7 @@ void Clear::Update()
 
 
 
-	ClearFontSprite_->SetSize({704, 352});
+	ClearFontSprite_->SetSize({896, 352});
 
 	
 
@@ -107,8 +125,8 @@ void Clear::Update()
 	{
 	case Phase::kMain:
 
-		// タイトルシーンの終了条件
-		if (Input::GetInstance()->TriggerKey(DIK_SPACE) || Input::GetInstance()->IsTriggerMouse(0))
+		// シーンの終了条件
+		if (Input::GetInstance()->TriggerKey(DIK_T))
 		{
 			Audio::GetInstance()->PlayWave(Botan_);
 			// フェードアウト開始
@@ -116,6 +134,17 @@ void Clear::Update()
 			fade_->Start(Fade::Status::FadeOut, 1.0f);
 			finishedC_ = true;
 		}
+		//リトライ
+		if (Input::GetInstance()->TriggerKey(DIK_R))
+		{
+			Audio::GetInstance()->PlayWave(Botan_);
+			// フェードアウト開始
+			phase_ = Phase::kFadeOut;
+			fade_->Start(Fade::Status::FadeOut, 1.0f);
+			finishedC_2 = true;
+		}
+
+
 
 		break;
 	case Phase::kFadeIn:
@@ -157,6 +186,26 @@ void Clear::Draw()
 	
 
 	ClearFontSprite_->Draw();
+	C_TextSprite_->Draw();
+
+
+
+
+	UI_RSprite_->Draw();
+	if (Input::GetInstance()->PushKey(DIK_R))
+	{
+		UI_RSprite_2->Draw();
+	}
+
+	UI_TSprite_->Draw();
+	if (Input::GetInstance()->PushKey(DIK_T))
+	{
+		UI_TSprite_2->Draw();
+	}
+
+
+
+
 
 	Sprite::PostDraw();
 
@@ -175,4 +224,13 @@ Clear::~Clear()
 	//  フェード
 	delete fade_;
 	delete ClearFontSprite_;
+	delete C_TextSprite_;
+
+
+
+	delete UI_RSprite_;
+	delete UI_RSprite_2;
+	delete UI_TSprite_;
+	delete UI_TSprite_2;
+
 }

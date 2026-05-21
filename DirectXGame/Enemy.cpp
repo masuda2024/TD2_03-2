@@ -34,6 +34,9 @@ void Enemy::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& posi
 
 	//効果音ラボ  戦闘[1] ドラゴンの鳴き声1 恐竜や怪獣の声にも使える
 	E_V_Handle_ = Audio::GetInstance()->LoadWave("Sounds/sound/Dragon's_Roar1.mp3");
+	
+	// 効果音ラボ  戦闘[1] 火炎魔法1 火の玉を飛ばす
+	E_A_Handle_ = Audio::GetInstance()->LoadWave("Sounds/sound/FlameMagic1.mp3");
 
 
 }
@@ -91,10 +94,16 @@ void Enemy::Update()
 		// 指定時間に達した
 		if (fireTimer_ == 0)
 		{
+
+			
+				
+
 			// 弾を発射
 			// 50%の確率で撃つ
 			if (rand() % 2 == 0) 
 			{
+				E_Attack_ = Audio::GetInstance()->PlayWave(E_A_Handle_, false);
+			
 				Fire();
 			}
 			// 発射タイマーを初期化
@@ -201,7 +210,12 @@ void Enemy::Update()
 		}
 	case Phase::Destroyed:
 		{
-
+		    // 咆哮
+		    if (isE_V_Played_ == 0) 
+			{
+			    E_Voice_ = Audio::GetInstance()->PlayWave(E_V_Handle_, false);
+			    isE_V_Played_ = true;
+		    }
 		
 		worldTransform_.translation_.y -= 0.2f;
 		worldTransform_.rotation_.z += 0.001f;

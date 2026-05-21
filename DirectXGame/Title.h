@@ -27,9 +27,7 @@ public:
 
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0;
-	// スプライト
-	KamataEngine::Sprite* titleSprite_ = nullptr;
-
+	
 	
 private:
 	KamataEngine::Model* model_;
@@ -57,6 +55,11 @@ private:
 	KamataEngine::WorldTransform WT_Cursor_title_;
 
 
+	uint32_t T_FontHandle_ = 0;
+	KamataEngine::Sprite* T_FontSprite_ = nullptr;
+
+	uint32_t CreditsHandle_ = 0;
+	KamataEngine::Sprite* CreditsSprite_ = nullptr;
 
 
 	// フェード

@@ -315,7 +315,24 @@ void ChangeScene()
 
 			// タイトルの音楽を再生
 			// T_Voice_ = Audio::GetInstance()->PlayWave(T_Handle_, true);
+		}else if (gameClear->IsFinishedC2())
+		{
+			// シーンの変更
+			scene = Scene::kGame;
+			
+			// 旧シーンの解放
+			delete gameClear;
+			gameClear = nullptr;
+
+			// 新シーンの生成と初期化
+			gameScene = new Game();
+			gameScene->Initialize();
 		}
+
+
+
+
+
 		break;
 
 	case Scene::kOver:
@@ -340,6 +357,18 @@ void ChangeScene()
 
 			// タイトルの音楽を再生
 			// T_Voice_ = Audio::GetInstance()->PlayWave(T_Handle_, true);
+		} else if (gameOver->IsFinishedO2()) 
+		{
+			// シーンの変更
+			scene = Scene::kGame;
+
+			// 旧シーンの解放
+			delete gameOver;
+			gameOver = nullptr;
+
+			// 新シーンの生成と初期化
+			gameScene = new Game();
+			gameScene->Initialize();
 		}
 		break;
 	}
