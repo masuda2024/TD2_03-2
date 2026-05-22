@@ -91,6 +91,15 @@ private:
 	uint32_t Skip_Handle_2 = 0;
 	KamataEngine::Sprite* Skip_Sprite_2 = nullptr;
 
+	//Start
+	uint32_t Start_Handle_ = 0;
+	KamataEngine::Sprite* Start_Sprite_ = nullptr;
+
+	uint32_t Start_Handle_2 = 0;
+	KamataEngine::Sprite* Start_Sprite_2 = nullptr;
+
+
+
 
 
 	// Left
@@ -109,6 +118,11 @@ private:
 
 	uint32_t Right_Handle_2 = 0;
 	KamataEngine::Sprite* Right_Sprite_2 = nullptr;
+
+
+
+
+
 
 
 

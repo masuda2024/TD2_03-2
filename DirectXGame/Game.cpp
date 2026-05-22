@@ -469,7 +469,7 @@ void Game::Update()
 			gameActive_ = true;
 		}
 
-		//ImGui::Text("T : Title  ,  ESC : Continue");
+		
 		if (Input::GetInstance()->TriggerKey(DIK_T)) 
 		{
 			phase_ = Phase::kFadeOut3;

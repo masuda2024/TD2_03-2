@@ -19,6 +19,17 @@ void Tutorial::Initialize()
 		Skip_Sprite_2 = KamataEngine::Sprite::Create(Skip_Handle_2, {576, 656});
 	}
 
+	// Startのスプライト
+	Start_Handle_ = TextureManager::Load("UI/Start.png");
+	{
+		Start_Sprite_ = KamataEngine::Sprite::Create(Start_Handle_, {576, 656});
+	}
+
+	Start_Handle_2 = TextureManager::Load("UI/Pushed_Start.png");
+	{
+		Start_Sprite_2 = KamataEngine::Sprite::Create(Start_Handle_2, {576, 656});
+	}
+
 
 
 
@@ -121,24 +132,6 @@ void Tutorial::Update()
 	{ 
 	case Pages::p1:
 		
-		/*
-		//2ページへ
-		if (Input::GetInstance()->TriggerKey(DIK_D) && tutorialPos_.x == 0 && tutorialPos_2.x == 1280 && tutorialPos_3.x == 2560) 
-		{
-			scroll_L = true;
-		}
-		if (scroll_L) 
-		{
-			tutorialPos_.x -= scrollSpeed_;
-			tutorialPos_2.x -= scrollSpeed_;
-			tutorialPos_3.x -= scrollSpeed_;
-		}
-		if (tutorialPos_.x <= -1280 && tutorialPos_2.x <= 0 && tutorialPos_3.x <= 1280) 
-		{
-			scroll_L = false;
-			page_ = Pages::p2;
-		}
-*/
 		
 
 		// 2ページへ
@@ -172,50 +165,10 @@ void Tutorial::Update()
 			page_ = Pages::p1;
 		}
 		
-		
-
-
-		/*
-		// 1ページへ
-		if (Input::GetInstance()->TriggerKey(DIK_A) && tutorialPos_.x == -1280 && tutorialPos_2.x == 0 && tutorialPos_3.x == 1280)
-		{
-			scroll_R = true;
-		}
-		if (scroll_R)
-		{
-			tutorialPos_.x += scrollSpeed_;
-			tutorialPos_2.x += scrollSpeed_;
-			tutorialPos_3.x += scrollSpeed_;
-		}
-		if (tutorialPos_.x >= 0 && tutorialPos_2.x >= 1280 && tutorialPos_3.x >= 2560)
-		{
-			scroll_R = false;
-			page_ = Pages::p1;
-		}
-
-		// 3ページへ
-		if (Input::GetInstance()->TriggerKey(DIK_D) && tutorialPos_.x == -1280 && tutorialPos_2.x == 0 && tutorialPos_3.x == 1280)
-		{
-			scroll_L = true;
-		}
-		if (scroll_L) 
-		{
-			tutorialPos_.x -= scrollSpeed_;
-			tutorialPos_2.x -= scrollSpeed_;
-			tutorialPos_3.x -= scrollSpeed_;
-		}
-		if (tutorialPos_.x <= -2560 && tutorialPos_2.x <= -1280 && tutorialPos_3.x <= 0)
-		{
-			scroll_L = false;
-			page_ = Pages::p3;
-		}
-
-
-
-*/
+	
 
 		// シーンの終了条件
-		if (Input::GetInstance()->TriggerKey(DIK_SPACE) || Input::GetInstance()->IsTriggerMouse(0))
+		if (Input::GetInstance()->IsTriggerMouse(0))
 		{
 			Audio::GetInstance()->PlayWave(Botan_);
 			// フェードアウト開始
@@ -249,7 +202,7 @@ void Tutorial::Update()
 	switch (phase_) 
 	{
 	case Phase::kMain:
-		
+		/*
 		// シーンの終了条件(チュートリアルをスキップ)
 		if (Input::GetInstance()->TriggerKey(DIK_S))
 		{
@@ -258,7 +211,7 @@ void Tutorial::Update()
 			phase_ = Phase::kFadeOut;
 			fade_->Start(Fade::Status::FadeOut, 1.0f);
 			finishedTU_ = true;
-		}
+		}*/
 
 		break;
 	case Phase::kFadeIn:
@@ -300,7 +253,13 @@ void Tutorial::Draw()
 			Right_Sprite_2->Draw();
 		}
 
-
+		
+		Skip_Sprite_->Draw();
+		if (Input::GetInstance()->PushKey(DIK_S))
+		{
+			Skip_Sprite_2->Draw();
+			UI_01 = true;
+		}
 
 		break;
 	case Pages::p2:
@@ -313,17 +272,21 @@ void Tutorial::Draw()
 			Left_Sprite_2->Draw();
 		}
 
+		
+		
+		Start_Sprite_->Draw();
+		if (Input::GetInstance()->IsPressMouse(0))
+		{
+			Start_Sprite_2->Draw();
+			UI_01 = true;
+		}
+
+
 		break;
 	}
 	
 
 
-	Skip_Sprite_->Draw();
-	if (Input::GetInstance()->PushKey(DIK_S))
-	{
-		Skip_Sprite_2->Draw();
-		UI_01 = true;
-	}
 	
 
 	if (UI_01)
@@ -352,6 +315,9 @@ Tutorial::~Tutorial()
 
 	delete Skip_Sprite_;
 	delete Skip_Sprite_2;
+
+	delete Start_Sprite_;
+	delete Start_Sprite_2;
 
 
 	delete Left_Sprite_;

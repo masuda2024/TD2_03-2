@@ -43,11 +43,7 @@ void Enemy::Initialize(Model* model, Camera* camera, KamataEngine::Vector3& posi
 
 void Enemy::Update()
 {
-	// キャラクターの移動ベクトル
-	// Vector3 move = {0, 0, 0};
-	// キャラクターの移動速さ
-	// const float kCharacterSpeed = 0.2f;
-
+	
 
 
 #pragma region 敵の行動フェーズ

@@ -58,6 +58,17 @@ private:
 	uint32_t T_FontHandle_ = 0;
 	KamataEngine::Sprite* T_FontSprite_ = nullptr;
 
+
+
+
+	uint32_t T_StartHandle_ = 0;
+	KamataEngine::Sprite* T_StartSprite_ = nullptr;
+	uint32_t T_StartHandle_2 = 0;
+	KamataEngine::Sprite* T_StartSprite_2 = nullptr;
+
+
+
+
 	uint32_t CreditsHandle_ = 0;
 	KamataEngine::Sprite* CreditsSprite_ = nullptr;
 

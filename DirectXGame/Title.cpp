@@ -14,7 +14,17 @@ void Title::Initialize()
 	T_FontHandle_ = TextureManager::Load("UI/TitleFont.png");
 	T_FontSprite_ = KamataEngine::Sprite::Create(T_FontHandle_, {256, 50});
 	
-	
+
+
+	T_StartHandle_ = TextureManager::Load("UI/TitleUI.png");
+	T_StartSprite_ = KamataEngine::Sprite::Create(T_StartHandle_, {448, 364});
+
+	T_StartHandle_2 = TextureManager::Load("UI/Pushed_TitleUI.png");
+	T_StartSprite_2 = KamataEngine::Sprite::Create(T_StartHandle_2, {448, 364});
+
+
+
+
 	CreditsHandle_ = TextureManager::Load("Scenes/Credits.png");
 	CreditsSprite_ = KamataEngine::Sprite::Create(CreditsHandle_, {10, 518});
 	
@@ -147,6 +157,18 @@ void Title::Draw()
 	Sprite::PreDraw();
 
 	T_FontSprite_->Draw();
+
+
+
+	T_StartSprite_->Draw();
+	if (Input::GetInstance()->IsPressMouse(0))
+	{
+		T_StartSprite_2->Draw();
+	}
+	
+
+
+
 	CreditsSprite_->Draw();
 
 	Sprite::PostDraw();
@@ -166,6 +188,10 @@ Title::~Title()
 	delete fade_;
 	// タイトルのスプライト
 	delete T_FontSprite_;
+
+	delete T_StartSprite_;
+	delete T_StartSprite_2;
+
 	//クレジット
 	delete CreditsSprite_;
 }
