@@ -94,10 +94,6 @@ void Enemy::Update()
 		// 指定時間に達した
 		if (fireTimer_ == 0)
 		{
-
-			
-				
-
 			// 弾を発射
 			// 50%の確率で撃つ
 			if (rand() % 2 == 0) 
@@ -111,11 +107,18 @@ void Enemy::Update()
 		}
 
 
-		// HPでフェーズ変更
-		if (E_hp_ < E_maxHP_ * 0.3f && phase_ != Phase::Rage)
+		// HP60%以下
+		if (E_hp_ < E_maxHP_ * 0.6f)
 		{
 			phase_ = Phase::Rage;
 		}
+
+		// HP30%以下
+		/*
+		if (E_hp_ < E_maxHP_ * 0.3f) 
+		{
+			phase_ = Phase::Berserk;
+		}*/
 
 		break;
 	}
@@ -208,6 +211,23 @@ void Enemy::Update()
 
 		break;
 		}
+
+		/*
+	case Phase::Berserk:
+	{
+
+
+
+
+		if (E_hp_ <= 0) 
+		{    
+			phase_ = Phase::Destroyed;
+		}
+
+	break;
+	}
+		*/
+
 	case Phase::Destroyed:
 		{
 		    // 咆哮

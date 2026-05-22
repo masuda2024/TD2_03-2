@@ -46,7 +46,8 @@ public:
 	{
 		Approach,
 		Attack,
-		Rage, // HP低いとき
+		Rage, // HP60%以下
+		//Berserk, // HP30%以下 
 		Destroyed,
 	};
 	Phase phase_ = Phase::Approach;
@@ -114,7 +115,7 @@ private:
 
 	Player* player_ = nullptr;
 
-	// 咆哮音
+	// 咆哮
 	bool isE_V_Played_ = false;
 	uint32_t E_V_Handle_ = 0;
 	uint32_t E_Voice_ = 0;
