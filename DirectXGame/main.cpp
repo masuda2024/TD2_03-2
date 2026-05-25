@@ -91,10 +91,10 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 #pragma endregion
 
 #pragma region 音声のロード
-	
+	// Springin BGM[1] フューチャー1
 	T_Handle_ = Audio::GetInstance()->LoadWave("Sounds/bgm/Future_1.mp3");
 	T_Voice_ = Audio::GetInstance()->PlayWave(T_Handle_, true);
-	
+	//Springin BGM[2] シューティング1
 	G_Handle_ = Audio::GetInstance()->LoadWave("Sounds/bgm/Shooting_01.mp3");
 
 	/*

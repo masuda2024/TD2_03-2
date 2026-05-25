@@ -192,7 +192,15 @@ void Player::Update()
 	{
 
 		#pragma region プレイヤーの行動
+
+
+
+
 		Attack();
+
+
+
+
 		#pragma region プレイヤーの移動
 
 	// キャラクターの移動ベクトル
@@ -334,7 +342,7 @@ void Player::Update()
 			P_shotSound_ = Audio::GetInstance()->PlayWave(P_shotHandle_, false);
 		}
 
-
+		
 
 
 		// 座標移動(ベクトルの加算)
@@ -504,7 +512,7 @@ void Player::Attack()
 		p_bullets_.push_back(newBullet);
 
 		
-	
+		
 	}
 }
 
@@ -541,12 +549,7 @@ void Player::OnCollition2(const E_Bullet* enemyBullet)
 {
 	(void)enemyBullet;
 	hp_ -= 500;
-	/*
-	if (hp_ <= 0) 
-	{
-		hp_ = 0;
-		isDead_ = true;
-	}*/
+	
 }
 #pragma endregion
 

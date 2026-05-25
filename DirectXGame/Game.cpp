@@ -544,7 +544,14 @@ void Game::Draw()
 	Sprite::PreDraw();
 
 #pragma region UI
-	if (phase_ == Phase::kPlay || phase_ == Phase::kFadeIn || phase_ == Phase::kPose || phase_ == Phase::kDeath || phase_ == Phase::kEnemyDeath)
+	if
+		(
+			phase_ == Phase::kPlay || 
+			phase_ == Phase::kFadeIn || 
+			phase_ == Phase::kPose || 
+			phase_ == Phase::kDeath || 
+			phase_ == Phase::kEnemyDeath
+		)
 	{
 		ESC_Sprite_->Draw();
 

@@ -61,6 +61,10 @@ public:
 	bool canUseRecovery = true;
 	uint32_t recoveryCount = 3;
 
+
+
+	
+
 	// 行動フェーズ
 	enum class Phase
 	{

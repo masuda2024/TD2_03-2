@@ -7,7 +7,7 @@ class P_Bullet;
 class E_Bullet
 {
 public:
-	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity);
+	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity, float scale = 1.0f);
 	void Update();
 	void Draw(const KamataEngine::Camera& camera);
 
@@ -16,13 +16,24 @@ public:
 	// 速度
 	KamataEngine::Vector3 EB_velocity_;
 
+
+	float bulletScale_ = 1.0f;
+
+
 	const KamataEngine::WorldTransform& GetWorldTransform() const { return worldTransform_; }
+
+
+
+
 
 #pragma region 衝突判定 [ プレイヤー  <<===>>  敵の弾 ]
 
 	// 当たり判定サイズ
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
+
+
+
 	// ワールド座標を取得
 	KamataEngine::Vector3 GetWorldPosition();
 

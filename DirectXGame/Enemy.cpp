@@ -104,10 +104,19 @@ void Enemy::Update()
 
 
 		// HP60%以下
+		/*
 		if (E_hp_ < E_maxHP_ * 0.6f)
 		{
 			phase_ = Phase::Rage;
+		}*/
+
+		// HPでフェーズ変更
+		if (E_hp_ < E_maxHP_ * 0.3f && phase_ != Phase::Rage)
+		{
+			phase_ = Phase::Rage;
 		}
+
+
 
 		// HP30%以下
 		/*
@@ -141,7 +150,7 @@ void Enemy::Update()
 
 		// 上下移動激しく
 		walkTimer_ += 10.0f / 60.0f;
-		worldTransform_.translation_.y = sin(walkTimer_ * 0.2f) * 20.0f;
+		worldTransform_.translation_.y = sin(walkTimer_ * 0.2f) * 15.0f;
 
 
 		// 発射間隔短くする
@@ -179,7 +188,20 @@ void Enemy::Update()
 			// 弾生成
 			E_Bullet* new_e_Bullet = new E_Bullet();
 
-			new_e_Bullet->Initialize(model_, worldTransform_.translation_, velocity);
+
+			int randNum = rand() % 10;
+
+			float scale = 1.0f;
+
+			if (randNum == 0)
+			{
+				scale = 3.0f;
+			}
+
+
+
+
+			new_e_Bullet->Initialize(model_, worldTransform_.translation_, velocity, scale);
 
 			e_bullets_.push_back(new_e_Bullet);
 
@@ -191,11 +213,14 @@ void Enemy::Update()
 
 
 			Fire();
-			fireTimer_ = 10; // ←めっちゃ速くする
+			fireTimer_ = 15; // ←めっちゃ速くする
 		}
 
 
-		
+
+
+
+
 		if (E_hp_ <= 0)
 		{
 			/// isEnemyDead_ = true;
@@ -230,7 +255,8 @@ void Enemy::Update()
 		    if (isE_V_Played_ == 0) 
 			{
 			    E_Voice_ = Audio::GetInstance()->PlayWave(E_V_Handle_, false);
-			    isE_V_Played_ = true;
+			    
+				isE_V_Played_ = true;
 		    }
 		
 		worldTransform_.translation_.y -= 0.2f;
@@ -395,12 +421,12 @@ AABB Enemy::GetAABB()
 void Enemy::OnCollition(const P_Bullet* playerBullet)
 {
 	(void)playerBullet;
-	E_hp_ -= 100;
+	E_hp_ -= 150;
 	if (E_hp_ <= 0) 
 	{
 		E_hp_ = 0;
 		isEnemyDead_ = true;
-		//phase_ = Phase::Destroyed;
+		
 	}
 }
 
