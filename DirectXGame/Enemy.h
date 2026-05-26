@@ -59,8 +59,11 @@ public:
 #pragma region 衝突判定 [ プレイヤーの弾  <<===>>  敵 ]
 
 	// キャラクターの当たり判定サイズ
-	static inline const float kWidth = 1.5f;
-	static inline const float kHeight = 2.5f;
+	//static inline const float kWidth = 1.5f;
+	//static inline const float kHeight = 2.5f;
+
+	static inline const float kWidth = 3.0f;
+	static inline const float kHeight = 4.0f;
 
 	// void OnCollisionE();
 	const std::list<E_Bullet*>& GetE_Bullets() const { return e_bullets_; }
@@ -104,7 +107,10 @@ private:
 
 	KamataEngine::Vector3 velocity_ = {};
 
-	int32_t E_maxHP_ = 10000;
+	//int32_t E_maxHP_ = 10000;
+
+	int32_t E_maxHP_ = 25000;
+
 	int32_t E_hp_ = E_maxHP_;
 
 	// 発射タイマー

@@ -110,8 +110,12 @@ void E_Bullet::OnCollition4(const P_Bullet* p_bullet)
 {
 	(void)p_bullet; 
 
-
-	isDead_eb_ = true;
+	/*
+	if (rand() % 70 == 0)
+	{
+		isDead_eb_ = true;
+	}*/
+	
 
 
 

@@ -93,9 +93,12 @@ AABB4 P_Bullet::GetAABB4()
 void P_Bullet::OnCollition4(const E_Bullet* e_bullet)
 { 
 	(void)e_bullet; 
-
-
-	isDead_pb_ = true;
+	/*
+	if (rand() % 5 == 0)
+	{
+		isDead_pb_ = true;
+	}*/
+	
 
 
 

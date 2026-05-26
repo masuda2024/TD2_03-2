@@ -265,7 +265,7 @@ void Enemy::Update()
 
 		clearTimer += 10;
 
-		if (clearTimer==1000)
+		if (clearTimer==500)
 		{
 			isEnemyDead_ = true;
 		}
@@ -285,7 +285,8 @@ void Enemy::Update()
 		e_bullet->Update();
 	}
 
-	e_bullets_.remove_if([](E_Bullet* e_bullet){
+	e_bullets_.remove_if
+	([](E_Bullet* e_bullet){
 		if (e_bullet->IsDead_EB())
 		{
 			delete e_bullet;
@@ -421,11 +422,18 @@ AABB Enemy::GetAABB()
 void Enemy::OnCollition(const P_Bullet* playerBullet)
 {
 	(void)playerBullet;
-	E_hp_ -= 150;
+	E_hp_ -= 100;
+
+	//Rageモードでは防御力が上がる
+	if (phase_ == Phase::Rage)
+	{
+		E_hp_ -= 75;
+	}
+
 	if (E_hp_ <= 0) 
 	{
 		E_hp_ = 0;
-		isEnemyDead_ = true;
+		
 		
 	}
 }

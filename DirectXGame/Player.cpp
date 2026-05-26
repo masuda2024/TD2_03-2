@@ -397,7 +397,7 @@ void Player::Update()
 		worldTransform_.rotation_.x += 0.2f;
 
 		overTimer += 10;
-		if (overTimer == 1000)
+		if (overTimer == 500)
 		{
 			isDead_ = true;
 		}
